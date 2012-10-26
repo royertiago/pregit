@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/dix/dix_2010-09-02/transformacao/dix.xml"?>
+<página nome="TiagoRoyer">
+
+	<aplique nome="UmAplique" linguagem="Java" classe="apliques.UmAplique" altura="0" largura="0" />
+
+</página>
