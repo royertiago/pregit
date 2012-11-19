@@ -6,7 +6,7 @@
 
 package visao;
 
-import modelo.estruturasDeDados.Coordenada;
+import modelo.Coordenada;
 
 public interface TipoImagem {
 
