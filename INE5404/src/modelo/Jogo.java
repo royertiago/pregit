@@ -17,7 +17,7 @@ public final class Jogo {
     
     public static void Jogar(Aplique a)
     {
-        Imagem imBola = new Imagem(a.obterPaginaDix(),origem,"recursos/bola.png",25, 25);
+        Imagem imBola = new Imagem(a.obterPaginaDix(),origem, "recursos/Bola.png",25, 25);
         
         Circular mBola = new Circular(new Coordenada(350, 200), 13);
         Bola bola = new Bola(mBola, new VetorMovimento(1, 1));

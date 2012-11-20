@@ -38,14 +38,15 @@ public class Bola extends ObservadoFisicoAbstrato implements Atualizavel,
 
     @Override
     public void escutar(Colisao c) {
-        System.out.println("Escutei colisao ângulo " + c.angulo); //TODO: remover
         if (itsMe(c)) // Mario!!
         {
             movimento = movimento.colidirSeCom(c.angulo);
-            System.out.println("Meu vetor de movimento agora é: " + movimento); //TODO: remover
         }
     }
 
+    /**
+     * Diz se sou eu que estou colidindo.
+     */
     private boolean itsMe(Colisao c) {
         return c.colisor1 == this || c.colisor2 == this;
     }
