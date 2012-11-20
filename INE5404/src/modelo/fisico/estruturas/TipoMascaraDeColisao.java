@@ -18,7 +18,7 @@ public interface TipoMascaraDeColisao {
      *            A coordenada a ser analisado.
      * @return <b>true</b> se estiver contido, <b>false</b> caso contrário.
      */
-    public boolean estaDentro(Coordenada c);
+    public abstract boolean estaDentro(Coordenada c);
 
     /**
      * Obtêm uma lista de coordenadas, que representam as extremidades da
@@ -26,7 +26,7 @@ public interface TipoMascaraDeColisao {
      * 
      * @return Uma lista de Coordenadas, que estão nas extremidades da máscara.
      */
-    public ListaLegivel<Coordenada> obterPontosExtremidades();
+    public abstract ListaLegivel<Coordenada> obterPontosExtremidades();
 
     /**
      * Cria uma coordenada que representa o centro da máscara de colisão.
@@ -34,7 +34,7 @@ public interface TipoMascaraDeColisao {
      * @return Um objeto Coordenada que representa o centro da máscara de
      *         colisão.
      */
-    public Coordenada obterCentro();
+    public abstract Coordenada obterCentro();
 
     /**
      * Retorna o ângulo de colisão com o ponto p. Por exemplo, se o ponto
@@ -48,46 +48,6 @@ public interface TipoMascaraDeColisao {
      *            Ponto contra o qual será calculado o ângulo de colisão.
      * @return O ângulo de colisão, em radianos.
      */
-    public double anguloColisao(Coordenada p);
-
-    /**
-     * Retorna uma máscara de colisão <b>quantidade</b> para cima. Se o valor
-     * for negativo, a máscara estará movida para baixo.
-     * 
-     * @param quantidade
-     *            O quanto a máscara deve se mover para cima.
-     * @return Uma nova máscara de colisão, movida.
-     */
-    public TipoMascaraDeColisao moverAcima(double quantidade);
-
-    /**
-     * Retorna uma máscara de colisão <b>quantidade</b> para baixo. Se o valor
-     * for negativo, a máscara estará movida para cima.
-     * 
-     * @param quantidade
-     *            O quanto a máscara deve se mover para baixo.
-     * @return Uma nova máscara de colisão, movida.
-     */
-    public TipoMascaraDeColisao moverAbaixo(double quantidade);
-
-    /**
-     * Retorna uma máscara de colisão <b>quantidade</b> à direita. Se o valor
-     * for negativo, a máscara estará movida à esquerda.
-     * 
-     * @param quantidade
-     *            O quanto a máscara deve se mover à direita.
-     * @return Uma nova máscara de colisão, movida.
-     */
-    public TipoMascaraDeColisao moverDireita(double quantidade);
-
-    /**
-     * Retorna uma máscara de colisão <b>quantidade</b> à esquerda. Se o valor
-     * for negativo, a máscara estará movida à direita.
-     * 
-     * @param quantidade
-     *            O quanto a máscara deve se mover à esquerda.
-     * @return Uma nova máscara de colisão, movida.
-     */
-    public TipoMascaraDeColisao moverEsquerda(double quantidade);
+    public abstract double anguloColisao(Coordenada p);
 
 }

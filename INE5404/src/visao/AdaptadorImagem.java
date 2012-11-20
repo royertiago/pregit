@@ -29,10 +29,6 @@ public class AdaptadorImagem implements TipoImagem {
      *            Posição inicial da imagem
      * @param fonte
      *            fonte do arquivo que será mostrado na tela.
-     * @param largura
-     *            Largura da imagem.
-     * @param altura
-     *            Altura da imagem.
      */
     public AdaptadorImagem(PaginaDix tela, Coordenada posicao, String fonte,
             int largura, int altura) {
@@ -44,9 +40,10 @@ public class AdaptadorImagem implements TipoImagem {
 
     @Override
     public AdaptadorImagem centrarSeEm(Coordenada posicao) {
-        imagem.fixarCoordenadas(new Coordenadas((int) (posicao.x - imagem
-                .obterLargura() / 2),
-                (int) (posicao.y - imagem.obterAltura() / 2)));
+        imagem.fixarCoordenadas(new Coordenadas(
+                (int) Math.round(posicao.x - imagem.obterLargura() / 2),
+                (int) Math.round(posicao.y - imagem.obterAltura() / 2 ))
+                );
         return this;
     }
 
@@ -65,7 +62,7 @@ public class AdaptadorImagem implements TipoImagem {
      * @return Um objeto Coordenadas equivalente a <u>c</u>
      */
     protected static final Coordenadas converterCoordenada(Coordenada c) {
-        return new Coordenadas((int) c.x, (int) c.y);
+        return new Coordenadas((int)c.x, (int)c.y);
     }
 
     /**

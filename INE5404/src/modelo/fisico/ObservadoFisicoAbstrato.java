@@ -8,7 +8,7 @@ import modelo.fisico.estruturas.TipoMascaraDeColisao;
 public abstract class ObservadoFisicoAbstrato implements ObservadoFisico {
 
     private Set<ObservadorFisico> observadores = new HashSet<ObservadorFisico>();
-    
+
     @Override
     public abstract TipoMascaraDeColisao obterMascara();
 
@@ -21,12 +21,13 @@ public abstract class ObservadoFisicoAbstrato implements ObservadoFisico {
     public final void removerObservador(ObservadorFisico o) {
         observadores.remove(o);
     }
-    
+
     /**
-     * Notifica todos os observadores que estão registrados neste ObservadoFisico.
+     * Notifica todos os observadores que estão registrados neste
+     * ObservadoFisico.
      */
     protected final void notificarObservadores() {
-        for( ObservadorFisico o: observadores)
+        for (ObservadorFisico o : observadores)
             o.notificar(this);
     }
 

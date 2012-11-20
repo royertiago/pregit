@@ -1,5 +1,7 @@
 package modelo.fisico.estruturas;
 
+import modelo.fisico.colisoes.Colisao;
+
 public interface TipoVetorMovimento {
 
     /**
@@ -9,7 +11,7 @@ public interface TipoVetorMovimento {
      * @param m
      * @return
      */
-    public TipoMascaraDeColisao moverMascara(TipoMascaraDeColisao m);
+    public TipoMascaraDeColisaoMovel moverMascara(TipoMascaraDeColisaoMovel m);
 
     /**
      * Retorna um novo vetor de movimento, que é resultado da colisão deste
@@ -23,11 +25,11 @@ public interface TipoVetorMovimento {
 
     /**
      * Retorna um novo vetor de movimento, que é resultado da colisão deste
-     * vetor com uma parede do ângulo correspondente a <b>i</b>.
+     * vetor com o ângulo armazenado em <b>c</b>.
      * 
-     * @param i
-     *            Interseção contra a qual será efetuada a colisão.
+     * @param c
+     *            Evento de colisão a ser tratado
      * @return um novo TipoVetorMovimento, com direção/sentido alterados.
      */
-    public TipoVetorMovimento colidirSeCom(Intersecao i);
+    public TipoVetorMovimento colidirSeCom(Colisao c);
 }

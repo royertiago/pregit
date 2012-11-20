@@ -5,6 +5,7 @@
 package modelo.fisico.estruturas;
 
 import modelo.Coordenada;
+import modelo.fisico.colisoes.Colisao;
 
 public class VetorMovimento implements TipoVetorMovimento {
 
@@ -22,29 +23,26 @@ public class VetorMovimento implements TipoVetorMovimento {
      *            O quanto a máscara de colisão deve ser movida à esquerda ao
      *            atualizar; Caso negativo, será movida para a direita.
      */
-    public VetorMovimento(double movimentoVertical, double movimentoHorizontal) {
+    public VetorMovimento(double movimentoHorizontal, double movimentoVertical) {
         this.movimentoHorizontal = movimentoHorizontal;
         this.movimentoVertical = movimentoVertical;
     }
     
     @Override
-    public TipoMascaraDeColisao moverMascara(TipoMascaraDeColisao m) {
-        return m.moverAbaixo(movimentoVertical).moverEsquerda(movimentoHorizontal);
+    public TipoMascaraDeColisaoMovel moverMascara(TipoMascaraDeColisaoMovel m) {
+        return m.moverAbaixo(movimentoVertical).moverDireita(movimentoHorizontal);
     }
 
     @Override
-    public TipoVetorMovimento colidirSeCom(double angulo) {
-        //Obter a norma da colisão
-        double a = angulo + Math.PI/2;
-        // Para poder usar as funções de rotação da classe Coordenada
+    public VetorMovimento colidirSeCom(double angulo) {
+        // Para poder usar a função de rotação da classe Coordenada
         Coordenada c = new Coordenada(this.movimentoHorizontal, this.movimentoVertical);
-        // Girar para o eixo X
-        c = c.girarEmTornoDe(Coordenada.origem, -a);
-        // Espelhar em torno da origem
-        c = new Coordenada(-c.x, c.y);
-        //Girar de volta para o ângulo normal
-        c = c.girarEmTornoDe(Coordenada.origem, a);
-        //Devolver em forma de VetorMovimento
+        // Girar para a origem:
+        c = c.girarEmTornoDe(Coordenada.origem, -angulo);
+        // Espelhar em torno de X:
+        c = new Coordenada( c.x, -c.y);
+        // Girar para o ângulo original
+        c = c.girarEmTornoDe(Coordenada.origem, angulo);
         return new VetorMovimento(c.x, c.y);
     }
     
@@ -55,7 +53,7 @@ public class VetorMovimento implements TipoVetorMovimento {
     }
 
     @Override
-    public TipoVetorMovimento colidirSeCom(Intersecao i) {
-        return this.colidirSeCom(i.angulo);
+    public VetorMovimento colidirSeCom(Colisao c) {
+        return this.colidirSeCom(c.angulo);
     }
 }
