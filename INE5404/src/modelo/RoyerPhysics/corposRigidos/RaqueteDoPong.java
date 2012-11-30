@@ -1,0 +1,29 @@
+package modelo.RoyerPhysics.corposRigidos;
+
+import modelo.RoyerPhysics.Coordenada;
+import modelo.RoyerPhysics.Vetor;
+import modelo.RoyerPhysics.corposRigidos.mascaras.Barra;
+
+public class RaqueteDoPong extends CorpoRigidoPadrao {
+
+    public RaqueteDoPong(Vetor v, double massa, Coordenada centro, double altura,
+            double largura) {
+        super(new Barra(centro, altura, largura), v, massa);
+    }
+    
+    @Override
+    public void espelharVetorMovimento(double angulo)
+    {
+        // Vamos nos mover somente sobre a reta vertical sobre a qual iniciamos.
+        v = new Vetor(0, v.espelharSeSobre(angulo).y);
+    }
+    
+    @Override
+    public void fixarVetorMovimento( Vetor v )
+    {
+        v = new Vetor(0, v.y);
+    }
+    
+    
+
+}

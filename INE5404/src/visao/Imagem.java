@@ -5,11 +5,10 @@
 package visao;
 
 import edugraf.jadix.fachada.PaginaDix;
-import modelo.Coordenada;
-import modelo.fisico.ObservadoFisico;
-import modelo.fisico.ObservadorFisico;
+import modelo.RoyerPhysics.Coordenada;
+import modelo.RoyerPhysics.ObservadorDeCorpos;
 
-public class Imagem implements ObservadorFisico {
+public class Imagem implements ObservadorDeCorpos {
 
     private TipoImagem img;
     
@@ -42,8 +41,8 @@ public class Imagem implements ObservadorFisico {
     }
     
     @Override
-    public void notificar(ObservadoFisico o) {
-        img.centrarSeEm(o.obterMascara().obterCentro());
+    public void notificar(Coordenada centro) {
+        img.centrarSeEm(centro);
     }
 
 }

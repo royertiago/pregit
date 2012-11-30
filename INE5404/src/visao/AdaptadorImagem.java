@@ -6,7 +6,7 @@
 
 package visao;
 
-import modelo.Coordenada;
+import modelo.RoyerPhysics.Coordenada;
 import edugraf.jadix.fachada.ComponenteDix;
 import edugraf.jadix.fachada.PaginaDix;
 import edugraf.jadix.fachada.TiposDeComponentesDix;

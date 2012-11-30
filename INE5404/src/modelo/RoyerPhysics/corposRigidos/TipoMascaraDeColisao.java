@@ -2,10 +2,11 @@
  * Representa uma máscara de colisão genérica.
  */
 
-package modelo.fisico.estruturas;
+package modelo.RoyerPhysics.corposRigidos;
 
-import modelo.Coordenada;
-import modelo.ListaLegivel;
+import modelo.RoyerPhysics.Coordenada;
+import modelo.RoyerPhysics.Vetor;
+import modelo.estruturasDeDados.ListaLegivel;
 
 public interface TipoMascaraDeColisao {
 
@@ -49,5 +50,14 @@ public interface TipoMascaraDeColisao {
      * @return O ângulo de colisão, em radianos.
      */
     public abstract double anguloColisao(Coordenada p);
+    
+    /**
+     * Desloca a máscara de colisão, de acordo com o vetor de movimento que lhe
+     * for passado.
+     * 
+     * Por exemplo, se o vetor contém (1, 1), o corpo deve ser deslocado uma
+     * unidade para a esquerda e uma abaixo.
+     */
+    public abstract void mover(Vetor movimento);
 
 }

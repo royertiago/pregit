@@ -3,7 +3,7 @@
  * novos valores no final.
  */
 
-package modelo;
+package modelo.estruturasDeDados;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,6 +11,8 @@ import java.util.List;
 
 public class Lista<Tipo> implements ListaLegivel<Tipo> {
 
+    //TODO: implementar obterListaDeTuplas
+    
     private List<Tipo> lista;
     private Iterator<Tipo> leitor;
 
@@ -19,7 +21,6 @@ public class Lista<Tipo> implements ListaLegivel<Tipo> {
      */
     public Lista() {
         lista = new ArrayList<Tipo>();
-        leitor = lista.iterator();
     }
 
     @Override
@@ -46,13 +47,29 @@ public class Lista<Tipo> implements ListaLegivel<Tipo> {
     public void adicionarItem(Tipo i) {
         lista.add(i);
     }
-    
-    public String toString()
-    {
+
+    /**
+     * Remove a primeira ocorrência do item <b>i</b> da lista.
+     * 
+     * Caso o item não exista, nada é feito.
+     * 
+     * @param i
+     *            Item a ser removido.
+     */
+    public void removerItem(Tipo i) {
+        lista.remove(i);
+    }
+
+    public String toString() {
         String out = "";
-        for( Tipo t: lista)
+        for (Tipo t : lista)
             out = out + t + "\n";
-        
+
         return out;
+    }
+
+    @Override
+    public Iterator<Tipo> iterator() {
+        return new IteradorLista<Tipo>(this);
     }
 }

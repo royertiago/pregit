@@ -6,7 +6,7 @@
 
 package visao;
 
-import modelo.Coordenada;
+import modelo.RoyerPhysics.Coordenada;
 
 public interface TipoImagem {
 

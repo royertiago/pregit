@@ -1,13 +1,12 @@
+package modelo.RoyerPhysics;
+
 /**
- * Esta classe representa um ponto no plano cartesiano. O canto superior esquerdo
- * é a origem (0,0). Indo à direita aumenta-se o valor da abscissa (eixo X), descendo 
- * umenta-se a ordenada (eixo Y).
+ * Esta classe representa um ponto no plano. O sistema de coordesadas é
+ * espelhado em relação ao eixo X, se comparado com o modelo cartesiano
+ * matemático.
  * 
  * @author Tiago Royer
  */
-
-package modelo;
-
 public final class Coordenada {
 
     public final double x, y;
@@ -25,6 +24,20 @@ public final class Coordenada {
     public Coordenada(double x, double y) {
         this.x = x;
         this.y = y;
+    }
+
+    /**
+     * Desloca esta coordenada de acordo com o vetor <b>v</b>.
+     * 
+     * Por exemplo, se o vetor contém (2, 0) a coordenada será deslocada 2
+     * unidades para a esquerda.
+     * 
+     * @param v
+     *            Vetor que "comandará" o deslocamento.
+     * @return Uma nova coordenada, deslocada.
+     */
+    public Coordenada deslocar(Vetor v) {
+        return new Coordenada(this.x + v.x, this.y + v.y);
     }
 
     /**
@@ -97,7 +110,8 @@ public final class Coordenada {
     }
 
     /**
-     * Retorna uma representação em string da coordenada. Formato: (x,y), precisão: 3 casas decimais.
+     * Retorna uma representação em string da coordenada. Formato: (x,y),
+     * precisão: 3 casas decimais.
      * 
      * @return Uma representação em string do ponto.
      */
@@ -108,7 +122,27 @@ public final class Coordenada {
 
     /**
      * Informa o ângulo da inclinação da reta que passa por esse ponto e por
-     * <b>c</b>.
+     * <b>c</b>. O ângulo é positivo no sentido horário, e negativo no sentido
+     * anti-horário.
+     * 
+     * Essa função tem um conjunto de retornos semelhante à função atan2, mas,
+     * como o sistema de coordenadas é invertido, a saída é, geralmente,
+     * invertida.
+     * 
+     * Casos:
+     * <ul>
+     * <li><b>c</b> está perfeitamente acima desta coordenada: retorna π/2.</li>
+     * <li><b>c</b> está perfeitamente abaixo: retorna -π/2.</li>
+     * <li><b>c</b> está perfeitamente à esquerda: retorna 0.</li>
+     * <li><b>c</b> está perfeitamente à direita: retorna π.</li>
+     * <li><b>c</b> está acima e à esquerda: retorna um valor entre 0 e π/2.</li>
+     * <li><b>c</b> está acima e à direita: retorna um valor entre π/2 e π.</li>
+     * <li><b>c</b> está abaixo e à esquerda: retorna um valor entre -π/2 e 0.</li>
+     * <li><b>c</b> está abaixo e à direita: retorna um valor entre -π e -π/2.</li>
+     * </ul>
+     * 
+     * Embora caso as duas coordenadas sejam coincidentes não haja uma reta, o
+     * valor retornado é π/2. Note que a função nunca retorna -π.
      * 
      * @param c
      *            Coordenada com a qual será obtido o ângulo.
@@ -116,11 +150,22 @@ public final class Coordenada {
      *         <b>c</b>.
      */
     public double obterAnguloCom(Coordenada c) {
-        /*if (c.x == this.x)
-            return Math.PI / 2;
+        double vX = c.x - this.x;
+        double vY = this.y - c.y;
+        if (vX == 0)
+            return (vY >= 0 ? Math.PI / 2 : -Math.PI / 2);
+        else if (vX > 0)
+            return Math.atan(vY / vX);
         else
-            return Math.atan((this.y - c.y) / (this.x - c.x));
-        */
-        return Math.atan2(this.y - c.y, this.x - c.x);
+            return Math.atan(vY / vX) + (vY > 0 ? Math.PI : -Math.PI);
+    }
+
+    /**
+     * Converte esta coordenada para um Vetor.
+     * 
+     * @return um Vetor com os mesmos valores que esta coordenada.
+     */
+    public Vetor paraVetor() {
+        return new Vetor(x, y);
     }
 }

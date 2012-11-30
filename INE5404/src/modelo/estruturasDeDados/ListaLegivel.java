@@ -2,10 +2,10 @@
  * Represena uma lista genérica que pode ser lida.
  */
 
-package modelo;
+package modelo.estruturasDeDados;
 
-public interface ListaLegivel<Tipo> {
-    
+public interface ListaLegivel<Tipo> extends Iterable<Tipo> {
+
     /**
      * Reinicia a leitura da lista.
      */
@@ -25,6 +25,5 @@ public interface ListaLegivel<Tipo> {
      * @return O próximo ponto da lista.
      */
     public Tipo obterProximoItem();
-
 
 }

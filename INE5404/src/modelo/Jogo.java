@@ -1,52 +1,70 @@
-/**
- * Classe "vazia"; simplesmente constrói e executa o jogo.
- */
-
 package modelo;
 
-import visao.Imagem;
 import edugraf.jadix.Aplique;
 import edugraf.jadix.fachada.Pichador;
-import static modelo.Coordenada.*;
-import modelo.fisico.*;
-import modelo.fisico.colisoes.controladorDeColisoes.*;
-import modelo.fisico.estruturas.*;
-import modelo.fisico.estruturas.mascarasDeColisao.*;
+import visao.Imagem;
+import modelo.RoyerPhysics.*;
+import modelo.estruturasDeDados.*;
+import static modelo.RoyerPhysics.Coordenada.*;
+import modelo.RoyerPhysics.corposRigidos.mascaras.*;
+import modelo.RoyerPhysics.corposRigidos.*;
+import modelo.RoyerPhysics.executivo.*;
+import modelo.RoyerPhysics.legislativo.*;
+import modelo.RoyerPhysics.*;
 
-public final class Jogo {
+@SuppressWarnings("unused")
+public class Jogo {
+
+    public static void main(String[] args) {
+        Jogar (null); //Para debugging
+    }
     
     public static void Jogar(Aplique a)
     {
-        Imagem imBola = new Imagem(a.obterPaginaDix(),origem, "recursos/Bola.png",25, 25);
-        
-        Circular mBola = new Circular(new Coordenada(350, 200), 13);
-        Bola bola = new Bola(mBola, new VetorMovimento(1, 1));
+        Coordenada cA = new Coordenada(350, 0),
+                   cB = new Coordenada(700, 200),
+                   cC = new Coordenada(350, 400),
+                   cD = new Coordenada(0, 200);
 
-        bola.registrarObservador(imBola);
+        AplicadorIneficiente controlador = new AplicadorIneficiente();
         
-        Parede pA = new Parede(new ParedeDaDireita(new Coordenada(0,200))),
-               pB = new Parede(new ParedeDaEsquerda(new Coordenada(700, 200))),
-               pC = new Parede(new ParedeDeCima(new Coordenada(350,0))),
-               pD = new Parede(new ParedeDeBaixo(new Coordenada(350,400)));
+        ParedeAvancada p1 = new ParedeAvancada(cA, cB);
+        ParedeAvancada p2 = new ParedeAvancada(cB, cC);
+        ParedeAvancada p3 = new ParedeAvancada(cC, cD);
+        ParedeAvancada p4 = new ParedeAvancada(cD, cA);
+        /*ParedeDeCima p1 = new ParedeDeCima(cA);
+        ParedeDaEsquerda p2 = new ParedeDaEsquerda(cB);
+        ParedeDeBaixo p3 = new ParedeDeBaixo(cC);
+        ParedeDaDireita p4 = new ParedeDaDireita(cD);*/
         
-        FachadaColisor LHC = new FachadaColisor();
+        CorpoRigidoImovel pA = new CorpoRigidoImovel(p1);
+        CorpoRigidoImovel pC = new CorpoRigidoImovel(p3);
+        CorpoRigidoImovel pD = new CorpoRigidoImovel(p4);
+        CorpoRigidoImovel pB = new CorpoRigidoImovel(p2);
         
-        LHC.adicionarObservado(bola);
-        LHC.adicionarObservado(pA);
-        LHC.adicionarObservado(pB);
-        LHC.adicionarObservado(pC);
-        LHC.adicionarObservado(pD);
+        controlador.adicionarCorpoRigido(pA);
+        controlador.adicionarCorpoRigido(pB);
+        controlador.adicionarCorpoRigido(pC);
+        controlador.adicionarCorpoRigido(pD);
         
-        LHC.adicionarEscutador(bola);
-
+        Imagem imBola = a != null? new Imagem(a.obterPaginaDix(),origem, "recursos/Bola.png",25, 25) : null;
+        Circular mBola = new Circular(new Coordenada(350, 200), 13, 40);
+        CorpoRigidoPadrao bola = new CorpoRigidoPadrao(mBola, new Vetor(1, 1), 1);
+        if( a != null) bola.adicionarObservador(imBola);
+        controlador.adicionarCorpoRigido(bola);
+        
+        Movimento mov = new Movimento();
+        ColisaoSemMomento c = new ColisaoSemMomento();
+        controlador.adicionarLei(c);
+        controlador.adicionarLei(mov); //TODO: criar uma fachada para o colisor.
+        
         System.out.println("Jogo criado");
         
-        Pichador alce = new Pichador();
+        Pichador alce = a!= null? new Pichador() : null;
         while (!false)
         {
-            bola.atualizar();
-            alce.descansar(0.01);
+            controlador.aplicarLeis();
+            if( a!=null) alce.descansar(0.02);
         }
     }
-
 }
