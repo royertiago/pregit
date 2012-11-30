@@ -25,7 +25,6 @@ public class Jogador implements Atualizavel {
         this.input = input;
         this.raquete = raquete;
         this.forca = forca;
-        System.out.println("Forca: " + forca);
     }
 
     @Override

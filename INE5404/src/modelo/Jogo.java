@@ -44,7 +44,7 @@ public class Jogo {
         
         Imagem imBola = new Imagem(a.obterPaginaDix(),origem, "recursos/Bola.png",25, 25);
         Circular mBola = new Circular(new Coordenada(350, 200), 13, 40);
-        CorpoRigidoPadrao bola = new CorpoRigidoPadrao(mBola, new Vetor(1, 1), 1);
+        CorpoRigidoPadrao bola = new CorpoRigidoPadrao(mBola, new Vetor(2, 2), 1);
         bola.adicionarObservador(imBola);
         controlador.adicionarCorpoRigido(bola);
         
