@@ -60,8 +60,7 @@ public class CorpoRigidoPadrao implements CorpoObservavel, TipoCorpoRigido {
 
     @Override
     public void fixarVetorMovimento(Vetor v) {
-        if (v != null)
-            this.v = v;
+        this.v = v;
     }
 
     @Override
@@ -86,8 +85,8 @@ public class CorpoRigidoPadrao implements CorpoObservavel, TipoCorpoRigido {
     
     protected final void avisarObservadores()
     {
-        for( ObservadorDeCorpos urubu: observadores)
-            urubu.notificar(m.obterCentro());
+        for( ObservadorDeCorpos observador: observadores)
+            observador.notificar(m.obterCentro());
     }
 
 }

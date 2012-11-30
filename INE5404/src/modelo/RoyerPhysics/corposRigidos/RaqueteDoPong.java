@@ -21,7 +21,7 @@ public class RaqueteDoPong extends CorpoRigidoPadrao {
     @Override
     public void fixarVetorMovimento( Vetor v )
     {
-        v = new Vetor(0, v.y);
+        this.v = new Vetor(0, v.y);
     }
     
     
