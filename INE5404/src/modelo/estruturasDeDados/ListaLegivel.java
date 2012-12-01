@@ -25,5 +25,4 @@ public interface ListaLegivel<Tipo> extends Iterable<Tipo> {
      * @return O próximo ponto da lista.
      */
     public Tipo obterProximoItem();
-
 }

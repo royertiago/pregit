@@ -18,8 +18,21 @@ import modelo.RoyerPhysics.*;
 @SuppressWarnings("unused")
 public class Jogo {
     
+    public static void main ( String[] args )
+    {
+        Lista<String> l = new Lista<String>();
+        l.adicionarItem("A");
+        l.adicionarItem("B");
+        l.adicionarItem("C");
+        l.adicionarItem("D");
+        l.adicionarItem("E");
+
+        System.out.println(l.obterTuplasUnicas(3));
+    }
+    
     public static void Jogar(Aplique a)
     {
+        //FIXME: usar fábricas.
         Coordenada cA = new Coordenada(0, 0),
                    cB = new Coordenada(700, 0),
                    cC = new Coordenada(700, 400),

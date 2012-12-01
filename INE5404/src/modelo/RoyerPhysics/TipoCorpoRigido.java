@@ -1,7 +1,7 @@
 package modelo.RoyerPhysics;
 
 import modelo.estruturasDeDados.ListaLegivel;
-
+//FIXME: o corpo rígido atual é um corpo rígido móvel; tenho de criar outra interface chamada "CorpoRigidoEstrutural".
 /**
  * Representa um corpo rígido (que não se deforma). Todo corpo rígido tem:
  * <ul>
