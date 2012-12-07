@@ -45,6 +45,7 @@ public class CorpoRigidoPadrao implements CorpoObservavel, CorpoRigidoMovel {
     @Override
     public void mover() {
         m.mover(v);
+        System.out.println("Novo local: " + m.obterCentro() + " - Vetor: " + v);
         this.avisarObservadores();
     }
 
@@ -71,6 +72,7 @@ public class CorpoRigidoPadrao implements CorpoObservavel, CorpoRigidoMovel {
     @Override
     public void adicionarObservador(ObservadorDeCorpos o) {
         observadores.adicionarItem(o);
+        o.notificar(m.obterCentro());
     }
 
     @Override

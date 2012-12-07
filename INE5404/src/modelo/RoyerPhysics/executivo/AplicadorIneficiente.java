@@ -94,9 +94,9 @@ public class AplicadorIneficiente implements TipoAplicadorDeLeis {
 
     @Override
     public void aplicarLeis() {
-        aplicarLeisMoveis(); //As interações primeiro.
-        aplicarLeisBinarias();
         aplicarLeisUnarias();
+        aplicarLeisBinarias();
+        aplicarLeisMoveis();
     }
 
     /**
