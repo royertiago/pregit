@@ -2,8 +2,8 @@ package modelo.RoyerPhysics.corposRigidos;
 
 import modelo.RoyerPhysics.Coordenada;
 import modelo.RoyerPhysics.CorpoObservavel;
+import modelo.RoyerPhysics.CorpoRigidoMovel;
 import modelo.RoyerPhysics.ObservadorDeCorpos;
-import modelo.RoyerPhysics.TipoCorpoRigido;
 import modelo.RoyerPhysics.Vetor;
 import modelo.estruturasDeDados.Lista;
 import modelo.estruturasDeDados.ListaLegivel;
@@ -14,7 +14,7 @@ import modelo.estruturasDeDados.ListaLegivel;
  * @author Tiago Royer
  * 
  */
-public class CorpoRigidoPadrao implements CorpoObservavel, TipoCorpoRigido {
+public class CorpoRigidoPadrao implements CorpoObservavel, CorpoRigidoMovel {
 
     private Lista<ObservadorDeCorpos> observadores = new Lista<ObservadorDeCorpos>();
     protected TipoMascaraDeColisao m;
@@ -35,11 +35,6 @@ public class CorpoRigidoPadrao implements CorpoObservavel, TipoCorpoRigido {
     @Override
     public ListaLegivel<Coordenada> obterPontosExtremidades() {
         return m.obterPontosExtremidades();
-    }
-
-    @Override
-    public Coordenada obterCentro() {
-        return m.obterCentro();
     }
 
     @Override
@@ -85,7 +80,7 @@ public class CorpoRigidoPadrao implements CorpoObservavel, TipoCorpoRigido {
     
     protected final void avisarObservadores()
     {
-        for( ObservadorDeCorpos observador: observadores)
+        for(ObservadorDeCorpos observador: observadores)
             observador.notificar(m.obterCentro());
     }
 

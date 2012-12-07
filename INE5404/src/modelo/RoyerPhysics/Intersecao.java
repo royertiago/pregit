@@ -28,5 +28,12 @@ public class Intersecao {
         this.origem = origem;
         this.angulo = angulo;
     }
-
+    
+    public String toString()
+    {
+        if (this == semIntersecao)
+            return "Sem Intersecao";
+        else
+            return origem + " - Ângulo: " + angulo;
+    }
 }

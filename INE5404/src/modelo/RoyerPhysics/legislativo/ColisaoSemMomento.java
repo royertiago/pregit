@@ -2,10 +2,10 @@ package modelo.RoyerPhysics.legislativo;
 
 import modelo.RoyerPhysics.Coordenada;
 import modelo.RoyerPhysics.Intersecao;
-import static modelo.RoyerPhysics.Intersecao.semIntersecao;
 import modelo.RoyerPhysics.TipoCorpoRigido;
+import static modelo.RoyerPhysics.Intersecao.semIntersecao;
+import modelo.RoyerPhysics.CorpoRigidoMovel;
 import modelo.estruturasDeDados.ListaLegivel;
-import modelo.estruturasDeDados.Tupla;
 
 /**
  * Esta é uma versão da lei de colisões que desconsidera momento linear.
@@ -13,32 +13,35 @@ import modelo.estruturasDeDados.Tupla;
  * @author Tiago Royer
  * 
  */
-public class ColisaoSemMomento implements TipoLei {
+public class ColisaoSemMomento implements TipoLeiBinaria  {
 
     @Override
-    public void aplicarLei(Tupla<TipoCorpoRigido> o) {
-        if (o.tamanho() != 2)
-            throw new IllegalArgumentException(
-                    "Deve haver dois e somente dois corpos rígidos como argumento.");
-        else {
-            Intersecao c = testarColisao(o.obter(0), o.obter(1));
-            if (c != semIntersecao) {
-                // Se ocorreu interseção, alterar o vetor de movimento de ambos
-                // os corpos.
-                o.obter(0).espelharVetorMovimento(c.angulo);
-                o.obter(1).espelharVetorMovimento(c.angulo);
-            }
+    public void aplicarLei(CorpoRigidoMovel c, TipoCorpoRigido d) {
+        Intersecao i = testarColisao(c, d); //TODO: Jogar esse teste para dentro dos corpos rígidos.
+        if (i != semIntersecao) {
+            // Se ocorreu interseção, alterar o vetor de movimento de ambos
+            // os corpos.
+            c.espelharVetorMovimento(i.angulo);
+        }
+    }
+    
+
+    @Override
+    public void aplicarLei(CorpoRigidoMovel c, CorpoRigidoMovel d) {
+        Intersecao i = testarColisao(c, d);
+        if (c != semIntersecao) {
+            // Se ocorreu interseção, alterar o vetor de movimento de ambos
+            // os corpos.
+            c.espelharVetorMovimento(i.angulo);
+            d.espelharVetorMovimento(i.angulo);
         }
     }
 
-    @Override
-    public int obterNumeroParametros() {
-        return 2;
-    }
-
     /**
-     * Método interno que testa se os dois objetos estão intersectando. Ele
-     * pede, a cada um, se eles contêm pontos um do outro. No caso afirmativo,
+     * Método interno que testa se os dois objetos estão intersectando. Essa
+     * variação testa entre dois corpos rígidos móveis.
+     * 
+     * Ele pede, a cada um, se eles contêm pontos um do outro. No caso afirmativo,
      * há interseção; o método pede àquele que não é "dono" do ponto qual é o
      * ângulo da interseção, e gera uma interseção com o ângulo e com o ponto em
      * que ocorreu a colisão. Caso não haja interseção, o método retorna
@@ -51,8 +54,8 @@ public class ColisaoSemMomento implements TipoLei {
      * @return Um objeto <b>Intersecao</b> caso haja colisão; e
      *         <b>Intersecao.semIntersecao</b> caso não haja.
      */
-    protected static Intersecao testarColisao(TipoCorpoRigido a,
-            TipoCorpoRigido b) {
+    protected static Intersecao testarColisao(CorpoRigidoMovel a,
+            CorpoRigidoMovel b) {
         ListaLegivel<Coordenada> cA = a.obterPontosExtremidades(), cB = b
                 .obterPontosExtremidades();
 
@@ -76,6 +79,36 @@ public class ColisaoSemMomento implements TipoLei {
         // detectada nos laços, então concluímos que não deve ter ocorrida
         // nenhuma colisão.
 
+        return semIntersecao;
+
+    }
+
+    /**
+     * Método interno que testa se os dois objetos estão intersectando. Essa
+     * variação testa entre um corpo rígido móvel e um não-móvel.
+     * 
+     * Ele pede ao não-móvel se ele contêm pontos do móvel. No caso afirmativo,
+     * há interseção; o método pede ao não-móvel qual é o
+     * ângulo da interseção, e gera uma interseção com o ângulo e com o ponto em
+     * que ocorreu a colisão. Caso não haja interseção, o método retorna
+     * Intersecao.semIntersecao.
+     * 
+     * @param movel
+     *            Primeiro objeto a ser testado
+     * @param fixo
+     *            Segundo objeto a ser testado
+     * @return Um objeto <b>Intersecao</b> caso haja colisão; e
+     *         <b>Intersecao.semIntersecao</b> caso não haja.
+     */
+    protected static Intersecao testarColisao(CorpoRigidoMovel movel,
+            TipoCorpoRigido fixo) {
+        
+        ListaLegivel<Coordenada> cMovel = movel.obterPontosExtremidades();
+        
+        for( Coordenada c: cMovel )
+            if( fixo.estaDentro(c) )
+                return new Intersecao(c, fixo.anguloColisao(c));
+        
         return semIntersecao;
 
     }

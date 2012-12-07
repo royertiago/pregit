@@ -1,24 +1,14 @@
 package modelo.RoyerPhysics.legislativo;
 
-import modelo.RoyerPhysics.TipoCorpoRigido;
-import modelo.estruturasDeDados.Tupla;
+import modelo.RoyerPhysics.CorpoRigidoMovel;
 
-public class Movimento implements TipoLei {
+public class Movimento implements TipoLeiMoveisUnaria {
     
     public Movimento() {}
-    
-    @Override
-    public void aplicarLei(Tupla<TipoCorpoRigido> o) {
-        if (o.tamanho() != 1)
-            throw new IllegalArgumentException(
-                    "Deve haver um e somente um corpo rígido como argumento.");
-        else
-            o.obter(0).mover();
-    }
 
     @Override
-    public int obterNumeroParametros() {
-        return 1;
+    public void aplicarLei(CorpoRigidoMovel c) {
+        c.mover();
     }
 
 }

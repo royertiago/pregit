@@ -1,12 +1,11 @@
 package modelo;
 
+import modelo.RoyerPhysics.CorpoRigidoMovel;
 import modelo.RoyerPhysics.Vetor;
-import modelo.RoyerPhysics.corposRigidos.RaqueteDoPong;
-
 public class Jogador implements Atualizavel {
 
     private TipoEntradasJogador input;
-    private RaqueteDoPong raquete;
+    private CorpoRigidoMovel raquete;
     private double forca;
     
     /**
@@ -20,7 +19,7 @@ public class Jogador implements Atualizavel {
      * @param raquete Barra do jogador.
      * @param forca Força imprimida por rodada.
      */
-    public Jogador( TipoEntradasJogador input, RaqueteDoPong raquete, double forca)
+    public Jogador( TipoEntradasJogador input, CorpoRigidoMovel raquete, double forca)
     {
         this.input = input;
         this.raquete = raquete;

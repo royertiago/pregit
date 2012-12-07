@@ -1,8 +1,9 @@
 package modelo.RoyerPhysics;
 
+
 /**
  * Representa alguém que é capaz de observar um CorpoObservado. O corpo
- * observado informarǻ, a cada atualização, o centro de si para o observador
+ * observado informará, a cada atualização, o centro de si para o observador
  * (uma imagem, por exemplo).
  * 
  * @author Tiago Royer

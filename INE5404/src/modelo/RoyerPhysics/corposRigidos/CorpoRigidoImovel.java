@@ -1,28 +1,24 @@
 package modelo.RoyerPhysics.corposRigidos;
 
-import modelo.RoyerPhysics.Vetor;
+import modelo.RoyerPhysics.Coordenada;
+import modelo.RoyerPhysics.TipoCorpoRigido;
 
-public class CorpoRigidoImovel extends CorpoRigidoPadrao {
+public class CorpoRigidoImovel implements TipoCorpoRigido {
+
+    protected TipoMascaraDeColisao m;
 
     public CorpoRigidoImovel(TipoMascaraDeColisao m) {
-        super(m, Vetor.semMovimento, -1);
-    }
-    
-    @Override
-    public void mover() {
-        //Não nos moveremos.
-    }
-    
-    @Override
-    public void fixarVetorMovimento(Vetor v) {
-        //Não aceitaremos outro vetor de movimento.
-    }
-    
-    public void espelharVetorMovimento(double angulo) {
-        //Não alteraremos o vetor de movimento.
+        this.m = m;
     }
 
-    
-    
+    @Override
+    public boolean estaDentro(Coordenada c) {
+        return m.estaDentro(c);
+    }
+
+    @Override
+    public double anguloColisao(Coordenada p) {
+        return m.anguloColisao(p);
+    }
 
 }

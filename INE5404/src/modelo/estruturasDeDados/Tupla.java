@@ -1,7 +1,7 @@
 package modelo.estruturasDeDados;
 
 /**
- * Classe que representa uma tupla ordanada.
+ * Classe que representa uma tupla ordanada, que tem apenas um tipo de objeto.
  * 
  * @author Tiago Royer
  * 

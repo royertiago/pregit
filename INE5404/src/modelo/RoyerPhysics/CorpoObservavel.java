@@ -24,5 +24,4 @@ public interface CorpoObservavel {
      *            Observador a ser removido.
      */
     public void removerObservador(ObservadorDeCorpos o);
-
 }

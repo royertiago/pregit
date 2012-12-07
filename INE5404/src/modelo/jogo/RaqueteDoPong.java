@@ -1,8 +1,8 @@
-package modelo.RoyerPhysics.corposRigidos;
+package modelo.jogo;
 
 import modelo.RoyerPhysics.Coordenada;
 import modelo.RoyerPhysics.Vetor;
-import modelo.RoyerPhysics.corposRigidos.mascaras.Barra;
+import modelo.RoyerPhysics.corposRigidos.CorpoRigidoPadrao;
 
 public class RaqueteDoPong extends CorpoRigidoPadrao {
 
