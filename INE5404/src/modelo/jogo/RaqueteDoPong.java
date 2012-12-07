@@ -22,7 +22,6 @@ public class RaqueteDoPong extends CorpoRigidoPadrao {
     public void fixarVetorMovimento( Vetor v )
     {
         this.v = new Vetor(0, v.y);
-        System.out.println("Mudando para: " + v); //TODO: remover
     }
     
     

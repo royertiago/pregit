@@ -112,8 +112,8 @@ public class Jogo {
         Movimento mov = new Movimento();
         ColisaoSemMomento c = new ColisaoSemMomento();
         controlador.adicionarLei(c);
-        controlador.adicionarLei(mov); // TODO: criar uma fachada para o
-                                       // colisor.
+        controlador.adicionarLei(mov);
+        // TODO: criar uma fachada para o colisor.
 
         System.out.println("Jogo criado.");
 
