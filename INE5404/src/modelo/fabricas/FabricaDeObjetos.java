@@ -14,13 +14,18 @@ import modelo.RoyerPhysics.legislativo.Movimento;
 import modelo.jogo.RaqueteDoPong;
 
 /**
- * Uma fábrica que cria objetos. Precisa de uma fábrica de imagens para
- * auxiliá-la.
+ * Essa classe é de uma fábrica que é responsável por prover objetos ao jogo.
  * 
+ * A fábrica é ser capaz de criar a bola, as raquetes, e um colisor
+ * "equipado" com as quatro paredes e um controle de colisões.
+ * 
+ * Para a raquete e a bola, esses objetos já terão registrado as imagens
+ * como observadores, por isso que a fábrica precisa de uma fábrica de imagens acoplada.
+ *  
  * @author Tiago Royer
  * 
  */
-public class FabricaDeObjetos implements TipoFabricaDeObjetos {
+public class FabricaDeObjetos {
 
     private TipoFabricaDeImagens grafica;
 
@@ -35,7 +40,13 @@ public class FabricaDeObjetos implements TipoFabricaDeObjetos {
         this.grafica = grafica;
     }
 
-    @Override
+    /**
+     * Cria uma bola no centro do campo com uma imagem apropriada.
+     * 
+     * @param v
+     *            Vetor de movimento da bola.
+     * @return Uma bola.
+     */
     public CorpoRigidoMovel fabricarBola(Vetor v) {
         Circular mBola = new Circular(new Coordenada(350, 200), 13, 40);
         CorpoRigidoPadrao bola = new CorpoRigidoPadrao(mBola, v, 1);
@@ -43,7 +54,11 @@ public class FabricaDeObjetos implements TipoFabricaDeObjetos {
         return bola;
     }
 
-    @Override
+    /**
+     * Cria uma raquete para o jogador da direita, com uma imagem apropriada.
+     * 
+     * @return Uma raquete.
+     */
     public CorpoRigidoMovel fabricarRaqueteDireita() {
         RaqueteDoPong raquete = new RaqueteDoPong(Vetor.semMovimento, 1,
                 new Coordenada(60, 200), 100, 15);
@@ -51,7 +66,11 @@ public class FabricaDeObjetos implements TipoFabricaDeObjetos {
         return raquete;
     }
 
-    @Override
+    /**
+     * Cria uma raquete para o jogador da esquerda, com uma imagem apropriada.
+     * 
+     * @return Uma raquete.
+     */
     public CorpoRigidoMovel fabricarRaqueteEsquerda() {
         RaqueteDoPong raquete = new RaqueteDoPong(Vetor.semMovimento, 1,
                 new Coordenada(720, 200), 100, 15);
@@ -59,8 +78,14 @@ public class FabricaDeObjetos implements TipoFabricaDeObjetos {
         return raquete;
     }
 
-    @Override
+    /**
+     * Cria um TipoAplicadorDeLeis, com as leis de movimento e colisão
+     * devidamente adicionadas, e com as quatro paredes externas já criadas.
+     * 
+     * @return um TipoAplicadorDeLeis equipado com colisões e paredes.
+     */
     public TipoAplicadorDeLeis fabricarColisorEquipado() {
+      //TODO: prover uma fachada para o colisor e remover esse método daqui.
         Coordenada cA = new Coordenada(0, 0), cB = new Coordenada(700, 0), cC = new Coordenada(
                 700, 400), cD = new Coordenada(0, 400);
 
@@ -87,7 +112,6 @@ public class FabricaDeObjetos implements TipoFabricaDeObjetos {
         controlador.adicionarLei(mov);
 
         return controlador;
-
-    }
+    } 
 
 }
