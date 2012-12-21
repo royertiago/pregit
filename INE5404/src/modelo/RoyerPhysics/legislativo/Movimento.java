@@ -9,9 +9,7 @@ import modelo.RoyerPhysics.CorpoRigidoMovel;
  * @author Tiago Royer
  * 
  */
-public class Movimento extends LeiUnaria implements LeiSensivelAoTempo {
-
-    private double _tempo = 1;
+public class Movimento extends LeiUnariaTemporal {
 
     /**
      * Cria uma lei de movimento.
@@ -20,17 +18,12 @@ public class Movimento extends LeiUnaria implements LeiSensivelAoTempo {
      *            Tempo que deve passar entre as atualizações.
      */
     public Movimento(double tempo) {
-        _tempo = tempo;
+        super(tempo);
     }
 
     @Override
     public void aplicarLeiA(CorpoRigidoMovel c) {
         c.mover(_tempo);
-    }
-
-    @Override
-    public void informarTempo(double tempo) {
-        _tempo = tempo;
     }
 
 }

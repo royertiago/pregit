@@ -11,6 +11,7 @@ import modelo.RoyerPhysics.executivo.AplicadorDeLeis;
 import modelo.RoyerPhysics.executivo.TipoAplicadorDeLeis;
 import modelo.RoyerPhysics.legislativo.ColisaoSemMomento;
 import modelo.RoyerPhysics.legislativo.LeiDeForcas;
+import modelo.RoyerPhysics.legislativo.LeiUnariaTemporal;
 import modelo.RoyerPhysics.legislativo.Movimento;
 import modelo.jogo.RaqueteDoPong;
 
@@ -109,7 +110,7 @@ public class FabricaDeObjetos {
         controlador.adicionarCorpoRigido(pC);
         controlador.adicionarCorpoRigido(pD);
 
-        Movimento mov = new Movimento(tempo);
+        LeiUnariaTemporal mov = new Movimento(tempo);
         ColisaoSemMomento c = new ColisaoSemMomento();
         LeiDeForcas f = new LeiDeForcas(tempo);
         controlador.adicionarLei(c);

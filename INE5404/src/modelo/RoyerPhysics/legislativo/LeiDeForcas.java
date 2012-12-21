@@ -10,9 +10,7 @@ import modelo.RoyerPhysics.Vetor;
  * @author Tiago Royer
  * 
  */
-public class LeiDeForcas extends LeiUnaria implements LeiSensivelAoTempo {
-
-    private double _tempo;
+public class LeiDeForcas extends LeiUnariaTemporal {
 
     /**
      * Cria uma lei de forças.
@@ -21,7 +19,7 @@ public class LeiDeForcas extends LeiUnaria implements LeiSensivelAoTempo {
      *            Tempo que se passa ao atualizar as forças.
      */
     public LeiDeForcas(double tempo) {
-        _tempo = tempo;
+        super(tempo);
     }
 
     @Override
