@@ -7,7 +7,7 @@ import modelo.RoyerPhysics.corposRigidos.CorpoRigidoImovel;
 import modelo.RoyerPhysics.corposRigidos.CorpoRigidoPadrao;
 import modelo.RoyerPhysics.corposRigidos.mascaras.Circular;
 import modelo.RoyerPhysics.corposRigidos.mascaras.Parede;
-import modelo.RoyerPhysics.executivo.AplicadorIneficiente;
+import modelo.RoyerPhysics.executivo.AplicadorDeLeis;
 import modelo.RoyerPhysics.executivo.TipoAplicadorDeLeis;
 import modelo.RoyerPhysics.legislativo.ColisaoSemMomento;
 import modelo.RoyerPhysics.legislativo.LeiDeForcas;
@@ -92,7 +92,7 @@ public class FabricaDeObjetos {
         Coordenada cA = new Coordenada(0, 0), cB = new Coordenada(700, 0), cC = new Coordenada(
                 700, 400), cD = new Coordenada(0, 400);
 
-        AplicadorIneficiente controlador = new AplicadorIneficiente(tempo);
+        AplicadorDeLeis controlador = new AplicadorDeLeis(tempo);
 
         Parede p1 = new Parede(cA, cB);
         Parede p2 = new Parede(cB, cC);

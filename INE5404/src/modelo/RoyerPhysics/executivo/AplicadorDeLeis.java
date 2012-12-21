@@ -14,7 +14,7 @@ import modelo.estruturasDeDados.Lista;
  * @author Tiago Royer
  * 
  */
-public class AplicadorIneficiente implements TipoAplicadorDeLeis {
+public class AplicadorDeLeis implements TipoAplicadorDeLeis {
 
     /**
      * Lista de corpos rígidos móveis.
@@ -40,17 +40,17 @@ public class AplicadorIneficiente implements TipoAplicadorDeLeis {
      * Tempo a ser passado às leis sensíveis ao tempo.
      */
     protected double tempo;
-    
+
     /**
      * Gera um aplicador de leis.
      * 
-     * @param tempo Tempo a ser passado para as leis.
+     * @param tempo
+     *            Tempo a ser passado para as leis.
      */
-    public AplicadorIneficiente( double tempo )
-    {
+    public AplicadorDeLeis(double tempo) {
         this.tempo = tempo;
     }
-    
+
     @Override
     public void adicionarCorpoRigido(CorpoRigidoMovel c) {
         corposMoveis.adicionarItem(c);
@@ -74,7 +74,7 @@ public class AplicadorIneficiente implements TipoAplicadorDeLeis {
     @Override
     public void adicionarLei(TipoLei l) {
         legislacao.adicionarItem(l);
-        if( l instanceof LeiSensivelAoTempo ) {
+        if (l instanceof LeiSensivelAoTempo) {
             cronos.adicionarItem((LeiSensivelAoTempo) l);
             ((LeiSensivelAoTempo) l).informarTempo(tempo);
         }
@@ -87,18 +87,17 @@ public class AplicadorIneficiente implements TipoAplicadorDeLeis {
 
     @Override
     public void aplicarLeis() {
-        for( TipoLei l: legislacao )
-        {
+        for (TipoLei l : legislacao) {
             l.aplicarLei(corposMoveis);
-            
-            if( l instanceof TipoLeiEstruturas )
-                ((TipoLeiEstruturas)l).aplicarLei(corposMoveis, paredes);
+
+            if (l instanceof TipoLeiEstruturas)
+                ((TipoLeiEstruturas) l).aplicarLei(corposMoveis, paredes);
         }
     }
 
     @Override
     public void alterarTempo(double t) {
-        for( LeiSensivelAoTempo l: cronos)
+        for (LeiSensivelAoTempo l : cronos)
             l.informarTempo(t);
     }
 

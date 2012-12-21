@@ -112,11 +112,8 @@ public class CorpoRigidoPadrao implements CorpoObservavel, CorpoRigidoMovel {
     @Override
     public Vetor obterSomatorioForcas() {
         Vetor soma = vetorNulo;
-        int teste = 0;
-        for (Vetor v : forcas) {
-            System.out.println(teste++);
+        for (Vetor v : forcas)
             soma = soma.somarCom(v);
-        }
 
         return soma;
     }

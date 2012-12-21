@@ -40,7 +40,7 @@ public class Jogo {
         controlador.adicionarCorpoRigido(rP1);
         controlador.adicionarCorpoRigido(rP2);
 
-        System.out.println("Jogo criado.");
+        System.out.println("Jogo criado. Este jogo usa RoyerPhysics - A Leading Computational Engine");
 
         Pichador alce = new Pichador();
         while (!false) {
