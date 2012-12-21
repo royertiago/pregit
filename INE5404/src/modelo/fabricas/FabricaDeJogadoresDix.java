@@ -17,12 +17,12 @@ import edugraf.jadix.fachada.PaginaDix;
  */
 public class FabricaDeJogadoresDix {
 
-    private ControladorTeclado input;
+    private ControladorTeclado _input;
 
     public FabricaDeJogadoresDix(PaginaDix p) {
         ComponenteDix teclado = p.criarProcuradorDeComponente("teclado");
-        ControladorTeclado input = new ControladorTeclado();
-        teclado.adicionarTratadorDeEventos(input);
+        _input = new ControladorTeclado();
+        teclado.adicionarTratadorDeEventos(_input);
     };
 
     /**
@@ -36,7 +36,7 @@ public class FabricaDeJogadoresDix {
      * @return um jogador.
      */
     public Jogador FabricarJogadorDireita(CorpoRigidoMovel raquete, double forca) {
-        ControleJogador controle = new ControleJogador(input, Tecla.SHIFT,
+        ControleJogador controle = new ControleJogador(_input, Tecla.SHIFT,
                 Tecla.CONTROL);
         return new Jogador(controle, raquete, forca);
     }
@@ -53,7 +53,7 @@ public class FabricaDeJogadoresDix {
      */
     public Jogador FabricarJogadorEsquerda(CorpoRigidoMovel raquete,
             double forca) {
-        ControleJogador controle = new ControleJogador(input, Tecla.SETA_CIMA,
+        ControleJogador controle = new ControleJogador(_input, Tecla.SETA_CIMA,
                 Tecla.SETA_BAIXO);
         return new Jogador(controle, raquete, forca);
     }

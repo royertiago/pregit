@@ -6,9 +6,9 @@ import modelo.estruturasDeDados.TipoEditor;
 
 public class Jogador implements Atualizavel {
 
-    private TipoEntradasJogador input;
-    private CorpoRigidoMovel raquete;
-    private double forca;
+    private TipoEntradasJogador _input;
+    private CorpoRigidoMovel _raquete;
+    private double _forca;
 
     /**
      * Cria um jogador.
@@ -27,22 +27,22 @@ public class Jogador implements Atualizavel {
      */
     public Jogador(TipoEntradasJogador input, CorpoRigidoMovel raquete,
             double forca) {
-        this.input = input;
-        this.raquete = raquete;
-        this.forca = forca;
+        _input = input;
+        _raquete = raquete;
+        _forca = forca;
     }
 
     @Override
     public void atualizar() {
-
-        if (input.comandoSubir()) {
-            TipoEditor<Vetor> e = raquete.obterForca("ForcaCima");
-            e.alterar(new Vetor(0, -forca));
+        
+        if (_input.comandoSubir()) {
+            TipoEditor<Vetor> e = _raquete.obterForca("ForcaCima");
+            e.alterar(new Vetor(0, -_forca));
         }
 
-        if (input.comandoDescer()) {
-            TipoEditor<Vetor> e = raquete.obterForca("ForcaCima");
-            e.alterar(new Vetor(0, forca));
+        if (_input.comandoDescer()) {
+            TipoEditor<Vetor> e = _raquete.obterForca("ForcaCima");
+            e.alterar(new Vetor(0, _forca));
         }
     }
 

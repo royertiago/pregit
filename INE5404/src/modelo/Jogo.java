@@ -19,17 +19,7 @@ import modelo.RoyerPhysics.*;
 
 @SuppressWarnings("unused")
 public class Jogo {
-    
-    public static void main(String[] args) {
-        ListaComEditor<Vetor> forcas = new ListaComEditor<Vetor>();
-        forcas.inserirPar("oo", vetorNulo);
-        forcas.inserirPar("ooo", vetorNulo);
-        forcas.inserirPar("oooo" ,vetorNulo);
-        
-        for(Vetor v: forcas)
-            System.out.println( v);
-    }
-    
+
     public static void Jogar(Aplique a) {
 
         GraficaDix grafica = new GraficaDix(a.obterPaginaDix());
@@ -44,8 +34,8 @@ public class Jogo {
         CorpoRigidoMovel rP1 = fabrica.fabricarRaqueteDireita();
         CorpoRigidoMovel rP2 = fabrica.fabricarRaqueteEsquerda();
 
-        Jogador player1 = academia.FabricarJogadorDireita(rP1, 0.2);
-        Jogador player2 = academia.FabricarJogadorDireita(rP2, 0.2);
+        Jogador player1 = academia.FabricarJogadorDireita(rP1, 20);
+        Jogador player2 = academia.FabricarJogadorDireita(rP2, 20);
         
         controlador.adicionarCorpoRigido(rP1);
         controlador.adicionarCorpoRigido(rP2);
@@ -54,8 +44,8 @@ public class Jogo {
 
         Pichador alce = new Pichador();
         while (!false) {
-            //player1.atualizar();
-            //player2.atualizar();
+            player1.atualizar();
+            player2.atualizar();
             controlador.aplicarLeis();
             alce.descansar(0.05);
         }
