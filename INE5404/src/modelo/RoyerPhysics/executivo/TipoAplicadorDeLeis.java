@@ -2,9 +2,7 @@ package modelo.RoyerPhysics.executivo;
 
 import modelo.RoyerPhysics.CorpoRigidoMovel;
 import modelo.RoyerPhysics.TipoCorpoRigido;
-import modelo.RoyerPhysics.legislativo.TipoLeiBinaria;
-import modelo.RoyerPhysics.legislativo.TipoLeiMoveisBinaria;
-import modelo.RoyerPhysics.legislativo.TipoLeiMoveisUnaria;
+import modelo.RoyerPhysics.legislativo.TipoLei;
 
 /**
  * Essa classe é responsável por aplicar as leis nos corpos rígidos.
@@ -61,26 +59,7 @@ public interface TipoAplicadorDeLeis {
      * @param l
      *            Lei a ser adicionada.
      */
-    public abstract void adicionarLei(TipoLeiMoveisUnaria l);
-
-    /**
-     * Adiciona uma lei, para ser aplicada a pares de corpos rígidos móveis de
-     * cada vez, à lista de leis.
-     * 
-     * @param l
-     *            Lei a ser adicionada.
-     */
-    public abstract void adicionarLei(TipoLeiMoveisBinaria l);
-
-    /**
-     * Adiciona uma lei, para ser aplicada tanto entre um corpo rígido móvel e
-     * um TipoCorpoRigido (não-móvel) e a pares de corpos rígidos móveis, à
-     * lista de leis.
-     * 
-     * @param l
-     *            Lei a ser adicionada.
-     */
-    public abstract void adicionarLei(TipoLeiBinaria l);
+    public abstract void adicionarLei(TipoLei l);
 
     /**
      * Remove um TipoLeiMoveisUnaria da lista de leis.
@@ -90,31 +69,19 @@ public interface TipoAplicadorDeLeis {
      * @param l
      *            Lei a ser removida.
      */
-    public abstract void removerLei(TipoLeiMoveisUnaria l);
+    public abstract void removerLei(TipoLei l);
 
     /**
-     * Remove um TipoLeiMoveisBinaria da lista de leis.
-     * 
-     * Nada acontece se a lei não estiver presente na lista de leis.
-     * 
-     * @param l
-     *            Lei a ser removida.
-     */
-    public abstract void removerLei(TipoLeiMoveisBinaria l);
-
-    /**
-     * Remove um TipoLeiBinaria da lista de leis.
-     * 
-     * Nada acontece se a lei não estiver presente na lista de leis.
-     * 
-     * @param l
-     *            Lei a ser removida.
-     */
-    public abstract void removerLei(TipoLeiBinaria l);
-
-    /**
-     * Aplica leis adicionadas aos corpos rígidos adicionados.
+     * Aplica as leis aos corpos rígidos existentes.
      */
     public abstract void aplicarLeis();
 
+    /**
+     * Informa às leis quanto tempo deve-se passar entre essa e a próxima
+     * aplicação das leis.
+     * 
+     * @param t
+     *            Novo tempo a ser considerado.
+     */
+    public abstract void alterarTempo(double t);
 }

@@ -7,6 +7,7 @@ import edugraf.jadix.Aplique;
 import edugraf.jadix.fachada.ComponenteDix;
 import edugraf.jadix.fachada.TiposDeComponentesDix;
 
+@SuppressWarnings("unused")
 public class UmAplique extends Aplique {
 
 	@Override
@@ -16,11 +17,4 @@ public class UmAplique extends Aplique {
 	    Jogo.Jogar(this);
 	}
 	
-	static public void main( String[] args)
-	{
-	    Coordenada[] c = {new Coordenada(10, 4), new Coordenada(10, 4)};
-	    Coordenada[] d = {new Coordenada(10, 4), new Coordenada(10, 4)};
-	    Tupla<Coordenada[]> t = new Tupla<Coordenada[]>(c, d);
-	    System.out.println(t);
-	}
 }

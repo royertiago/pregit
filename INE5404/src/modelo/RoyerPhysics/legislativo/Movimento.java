@@ -2,13 +2,35 @@ package modelo.RoyerPhysics.legislativo;
 
 import modelo.RoyerPhysics.CorpoRigidoMovel;
 
-public class Movimento implements TipoLeiMoveisUnaria {
-    
-    public Movimento() {}
+/**
+ * É uma lei que vai atualizar as posições dos corpos, de acordo com o tempo
+ * passado.
+ * 
+ * @author Tiago Royer
+ * 
+ */
+public class Movimento extends LeiUnaria implements LeiSensivelAoTempo {
+
+    private double _tempo = 1;
+
+    /**
+     * Cria uma lei de movimento.
+     * 
+     * @param tempo
+     *            Tempo que deve passar entre as atualizações.
+     */
+    public Movimento(double tempo) {
+        _tempo = tempo;
+    }
 
     @Override
-    public void aplicarLei(CorpoRigidoMovel c) {
-        c.mover();
+    public void aplicarLeiA(CorpoRigidoMovel c) {
+        c.mover(_tempo);
+    }
+
+    @Override
+    public void informarTempo(double tempo) {
+        _tempo = tempo;
     }
 
 }

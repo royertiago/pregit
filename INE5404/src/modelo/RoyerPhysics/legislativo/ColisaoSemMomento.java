@@ -13,10 +13,10 @@ import modelo.estruturasDeDados.ListaLegivel;
  * @author Tiago Royer
  * 
  */
-public class ColisaoSemMomento implements TipoLeiBinaria  {
+public class ColisaoSemMomento extends LeiBinariaEstrutural  {
 
     @Override
-    public void aplicarLei(CorpoRigidoMovel c, TipoCorpoRigido d) {
+    public void aplicarLeiA(CorpoRigidoMovel c, TipoCorpoRigido d) {
         Intersecao i = testarColisao(c, d); //TODO: Jogar esse teste para dentro dos corpos rígidos.
         if (i != semIntersecao) {
             // Se ocorreu interseção, alterar o vetor de movimento de ambos
@@ -27,7 +27,7 @@ public class ColisaoSemMomento implements TipoLeiBinaria  {
     
 
     @Override
-    public void aplicarLei(CorpoRigidoMovel c, CorpoRigidoMovel d) {
+    public void aplicarLeiA(CorpoRigidoMovel c, CorpoRigidoMovel d) {
         Intersecao i = testarColisao(c, d);
         if (c != semIntersecao) {
             // Se ocorreu interseção, alterar o vetor de movimento de ambos

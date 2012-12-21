@@ -11,8 +11,8 @@ import static modelo.RoyerPhysics.Coordenada.*;
  */
 public class Vetor {
 
-    public static final Vetor semMovimento = new Vetor(0,0);
-    
+    public static final Vetor vetorNulo = new Vetor(0, 0);
+
     public final double x;
     public final double y;
 
@@ -20,13 +20,10 @@ public class Vetor {
      * Cria um vetor.
      * 
      * @param x
-     *            O quanto a máscara de colisão deve ser movida à esquerda ao
-     *            atualizar; Caso negativo, será movida para a direita.
+     *            Abcissa da grandeza representada.
      * 
      * @param y
-     *            O quanto a máscara de colisão deve descer ao atualizar; Caso
-     *            for negativo, será movido abaixo.
-     * 
+     *            Ordenada da grandeza representada.
      */
     public Vetor(double x, double y) {
         this.x = x;
@@ -77,6 +74,17 @@ public class Vetor {
      */
     public Vetor somarCom(Vetor v) {
         return new Vetor(this.x + v.x, this.y + v.y);
+    }
+
+    /**
+     * Multiplica esse vetor pelo escalar <b>c</b>
+     * 
+     * @param c
+     *            Constante a ser multiplicada
+     * @return Um novo vetor, com seus valores alterados.
+     */
+    public Vetor escalar(double c) {
+        return new Vetor(x * c, y * c);
     }
 
     @Override

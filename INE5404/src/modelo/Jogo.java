@@ -1,10 +1,8 @@
 package modelo;
 
-import br.ufsc.edugraf.telis.util.PosicaoEmTexto;
 import controle.*;
-import edugraf.jadix.Aplique;
-import edugraf.jadix.fachada.ComponenteDix;
-import edugraf.jadix.fachada.Pichador;
+import edugraf.jadix.*;
+import edugraf.jadix.fachada.*;
 import visao.*;
 import modelo.RoyerPhysics.*;
 import modelo.estruturasDeDados.*;
@@ -12,6 +10,7 @@ import modelo.fabricas.*;
 import modelo.jogo.RaqueteDoPong;
 import static modelo.RoyerPhysics.Coordenada.*;
 import static modelo.RoyerPhysics.Intersecao.*;
+import static modelo.RoyerPhysics.Vetor.*;
 import modelo.RoyerPhysics.corposRigidos.mascaras.*;
 import modelo.RoyerPhysics.corposRigidos.*;
 import modelo.RoyerPhysics.executivo.*;
@@ -20,16 +19,26 @@ import modelo.RoyerPhysics.*;
 
 @SuppressWarnings("unused")
 public class Jogo {
-
+    
+    public static void main(String[] args) {
+        ListaComEditor<Vetor> forcas = new ListaComEditor<Vetor>();
+        forcas.inserirPar("oo", vetorNulo);
+        forcas.inserirPar("ooo", vetorNulo);
+        forcas.inserirPar("oooo" ,vetorNulo);
+        
+        for(Vetor v: forcas)
+            System.out.println( v);
+    }
+    
     public static void Jogar(Aplique a) {
 
         GraficaDix grafica = new GraficaDix(a.obterPaginaDix());
         FabricaDeObjetos fabrica = new FabricaDeObjetos(grafica);
         FabricaDeJogadoresDix academia = new FabricaDeJogadoresDix(a.obterPaginaDix());
         
-        TipoAplicadorDeLeis controlador = fabrica.fabricarColisorEquipado();
+        TipoAplicadorDeLeis controlador = fabrica.fabricarColisorEquipado(0.05);
 
-        CorpoRigidoMovel bola = fabrica.fabricarBola(new Vetor(1, 1));
+        CorpoRigidoMovel bola = fabrica.fabricarBola(new Vetor(50, 50));
         controlador.adicionarCorpoRigido(bola);
 
         CorpoRigidoMovel rP1 = fabrica.fabricarRaqueteDireita();
@@ -45,10 +54,10 @@ public class Jogo {
 
         Pichador alce = new Pichador();
         while (!false) {
-            player1.atualizar();
-            player2.atualizar();
+            //player1.atualizar();
+            //player2.atualizar();
             controlador.aplicarLeis();
-            alce.descansar(0.02);
+            alce.descansar(0.05);
         }
     }
 }

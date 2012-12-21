@@ -63,28 +63,7 @@ public class Lista<Tipo> implements ListaLegivel<Tipo> {
         lista.remove(i);
     }
 
-    /**
-     * Retorna uma lista de tuplas, contendo todas as combinações de tamanho <b>t</b>
-     * dos objetos da lista.
-     * 
-     * Exemplo: se a lista contém os elementos A B C D E, obterTuplasUnicas(3)
-     * retornaria as tuplas:
-     * <ul>
-     * <li> (A, B, C) </li>
-     * <li> (A, B, D) </li>
-     * <li> (A, B, E) </li>
-     * <li> (A, C, D) </li>
-     * <li> (A, C, E) </li>
-     * <li> (A, D, E) </li>
-     * <li> (B, C, D) </li>
-     * <li> (B, C, E) </li>
-     * <li> (B, D, E) </li>
-     * <li> (C, D, E) </li>
-     * </ul>
-     * 
-     * @param t Tamanho das tuplas
-     * @return Uma lista de tuplas.
-     */
+    @Override
     public Lista<Tupla<Tipo>> obterTuplasUnicas (int t)
     {
         int n = this.obterTamanho();

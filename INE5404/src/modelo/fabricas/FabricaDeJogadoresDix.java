@@ -17,11 +17,9 @@ import edugraf.jadix.fachada.PaginaDix;
  */
 public class FabricaDeJogadoresDix {
 
-    private PaginaDix p;
     private ControladorTeclado input;
 
     public FabricaDeJogadoresDix(PaginaDix p) {
-        this.p = p;
         ComponenteDix teclado = p.criarProcuradorDeComponente("teclado");
         ControladorTeclado input = new ControladorTeclado();
         teclado.adicionarTratadorDeEventos(input);

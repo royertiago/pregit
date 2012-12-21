@@ -2,6 +2,7 @@ package modelo;
 
 import modelo.RoyerPhysics.CorpoRigidoMovel;
 import modelo.RoyerPhysics.Vetor;
+import modelo.estruturasDeDados.TipoEditor;
 
 public class Jogador implements Atualizavel {
 
@@ -35,15 +36,13 @@ public class Jogador implements Atualizavel {
     public void atualizar() {
 
         if (input.comandoSubir()) {
-            Vetor v = raquete.obterVetorMovimento();
-            v = v.somarCom(new Vetor(0, -forca));
-            raquete.fixarVetorMovimento(v);
+            TipoEditor<Vetor> e = raquete.obterForca("ForcaCima");
+            e.alterar(new Vetor(0, -forca));
         }
 
         if (input.comandoDescer()) {
-            Vetor v = raquete.obterVetorMovimento();
-            v = v.somarCom(new Vetor(0, +forca));
-            raquete.fixarVetorMovimento(v);
+            TipoEditor<Vetor> e = raquete.obterForca("ForcaCima");
+            e.alterar(new Vetor(0, forca));
         }
     }
 

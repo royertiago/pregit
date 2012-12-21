@@ -1,6 +1,7 @@
 package modelo.RoyerPhysics;
 
 import modelo.estruturasDeDados.ListaLegivel;
+import modelo.estruturasDeDados.TipoEditor;
 
 /**
  * Representa um corpo rígido que pode ser movido. Todo corpo rígido móvel tem:
@@ -8,6 +9,7 @@ import modelo.estruturasDeDados.ListaLegivel;
  * <li>Um vetor de movimento</li>
  * <li>Massa</li>
  * <li>Extremidades</li>
+ * <li>Forças que estão sendo aplicadas a ele</li>
  * </ul>
  * Essas grandezas podem ser usadas pelas implementações das leis da física para
  * haver uma física minimamente realista no jogo.
@@ -16,7 +18,7 @@ import modelo.estruturasDeDados.ListaLegivel;
  * 
  */
 public interface CorpoRigidoMovel extends TipoCorpoRigido {
-    
+
     /**
      * Obtêm uma lista de coordenadas, que representam as extremidades do
      * colidível.
@@ -27,13 +29,23 @@ public interface CorpoRigidoMovel extends TipoCorpoRigido {
     public abstract ListaLegivel<Coordenada> obterPontosExtremidades();
 
     /**
-     * Desloca o corpo rígido, de acordo com o vetor de movimento que ele
-     * possui.
+     * Desloca o corpo rígido, de acordo com o vetor de movimento que ele contém.
      * 
-     * Por exemplo, se o vetor contém (1, 1), o corpo deve ser deslocado uma
-     * unidade para a esquerda e uma abaixo.
+     * Por exemplo, se o vetor contém (1, 1), o corpo deve ser
+     * deslocado uma unidade para a esquerda e uma abaixo.
      */
     public abstract void mover();
+
+    /**
+     * Desloca o corpo rígido, de acordo com o vetor de movimento que ele contém,
+     * multiplicado por um escalar.
+     * 
+     * Por exemplo, se o vetor contém (2, 2) e o escalar for 0.5, o corpo deve ser
+     * deslocado uma unidade para a esquerda e uma abaixo.
+     * 
+     * @param c Escalar a ser multiplicada pelo vetor de movimento.
+     */
+    public abstract void mover(double c);
 
     /**
      * Obtém o vetor de movimento do corpo rígido..
@@ -65,4 +77,24 @@ public interface CorpoRigidoMovel extends TipoCorpoRigido {
      * @return A massa do objeto.
      */
     public abstract double obterMassa();
+
+    /**
+     * Obtém um editor para a força cujo nome está especificado.
+     * 
+     * Caso a força não exista ainda, ela será criada como vetorNulo e um editor
+     * para ela será retornado.
+     * 
+     * @param nome
+     *            Nome atribuído à força
+     * @return
+     */
+    public abstract TipoEditor<Vetor> obterForca(String nome);
+
+    /**
+     * Obtém um vetor de força que é o somatório de todas as forças aplicadas ao
+     * corpo.
+     * 
+     * @return um vetor que representa uma força.
+     */
+    public abstract Vetor obterSomatorioForcas();
 }

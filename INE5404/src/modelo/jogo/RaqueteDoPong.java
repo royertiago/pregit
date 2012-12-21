@@ -15,13 +15,13 @@ public class RaqueteDoPong extends CorpoRigidoPadrao {
     public void espelharVetorMovimento(double angulo)
     {
         // Vamos nos mover somente sobre a reta vertical sobre a qual iniciamos.
-        v = new Vetor(0, v.espelharSeSobre(angulo).y);
+        movimento = new Vetor(0, movimento.espelharSeSobre(angulo).y);
     }
     
     @Override
     public void fixarVetorMovimento( Vetor v )
     {
-        this.v = new Vetor(0, v.y);
+        this.movimento = new Vetor(0, v.y);
     }
     
     

@@ -10,6 +10,7 @@ import modelo.RoyerPhysics.corposRigidos.mascaras.Parede;
 import modelo.RoyerPhysics.executivo.AplicadorIneficiente;
 import modelo.RoyerPhysics.executivo.TipoAplicadorDeLeis;
 import modelo.RoyerPhysics.legislativo.ColisaoSemMomento;
+import modelo.RoyerPhysics.legislativo.LeiDeForcas;
 import modelo.RoyerPhysics.legislativo.Movimento;
 import modelo.jogo.RaqueteDoPong;
 
@@ -60,7 +61,7 @@ public class FabricaDeObjetos {
      * @return Uma raquete.
      */
     public CorpoRigidoMovel fabricarRaqueteDireita() {
-        RaqueteDoPong raquete = new RaqueteDoPong(Vetor.semMovimento, 1,
+        RaqueteDoPong raquete = new RaqueteDoPong(Vetor.vetorNulo, 1,
                 new Coordenada(60, 200), 100, 15);
         raquete.adicionarObservador(grafica.fabricarImagemJogadorDireita());
         return raquete;
@@ -72,7 +73,7 @@ public class FabricaDeObjetos {
      * @return Uma raquete.
      */
     public CorpoRigidoMovel fabricarRaqueteEsquerda() {
-        RaqueteDoPong raquete = new RaqueteDoPong(Vetor.semMovimento, 1,
+        RaqueteDoPong raquete = new RaqueteDoPong(Vetor.vetorNulo, 1,
                 new Coordenada(720, 200), 100, 15);
         raquete.adicionarObservador(grafica.fabricarImagemJogadorEsquerda());
         return raquete;
@@ -82,14 +83,16 @@ public class FabricaDeObjetos {
      * Cria um TipoAplicadorDeLeis, com as leis de movimento e colisão
      * devidamente adicionadas, e com as quatro paredes externas já criadas.
      * 
+     * @param tempo Tempo a ser passado ao aplicador.
+     * 
      * @return um TipoAplicadorDeLeis equipado com colisões e paredes.
      */
-    public TipoAplicadorDeLeis fabricarColisorEquipado() {
+    public TipoAplicadorDeLeis fabricarColisorEquipado(double tempo) {
       //TODO: prover uma fachada para o colisor e remover esse método daqui.
         Coordenada cA = new Coordenada(0, 0), cB = new Coordenada(700, 0), cC = new Coordenada(
                 700, 400), cD = new Coordenada(0, 400);
 
-        AplicadorIneficiente controlador = new AplicadorIneficiente();
+        AplicadorIneficiente controlador = new AplicadorIneficiente(tempo);
 
         Parede p1 = new Parede(cA, cB);
         Parede p2 = new Parede(cB, cC);
@@ -106,12 +109,13 @@ public class FabricaDeObjetos {
         controlador.adicionarCorpoRigido(pC);
         controlador.adicionarCorpoRigido(pD);
 
-        Movimento mov = new Movimento();
+        Movimento mov = new Movimento(tempo);
         ColisaoSemMomento c = new ColisaoSemMomento();
+        LeiDeForcas f = new LeiDeForcas(tempo);
         controlador.adicionarLei(c);
         controlador.adicionarLei(mov);
-
+        controlador.adicionarLei(f);
+        
         return controlador;
-    } 
-
+    }
 }

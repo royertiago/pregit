@@ -2,11 +2,10 @@ package modelo.RoyerPhysics.executivo;
 
 import modelo.RoyerPhysics.CorpoRigidoMovel;
 import modelo.RoyerPhysics.TipoCorpoRigido;
-import modelo.RoyerPhysics.legislativo.TipoLeiBinaria;
-import modelo.RoyerPhysics.legislativo.TipoLeiMoveisBinaria;
-import modelo.RoyerPhysics.legislativo.TipoLeiMoveisUnaria;
+import modelo.RoyerPhysics.legislativo.LeiSensivelAoTempo;
+import modelo.RoyerPhysics.legislativo.TipoLei;
+import modelo.RoyerPhysics.legislativo.TipoLeiEstruturas;
 import modelo.estruturasDeDados.Lista;
-import modelo.estruturasDeDados.Tupla;
 
 /**
  * Classe ineficiente que aplica leis de um ou dois parâmetros aos corpos
@@ -28,20 +27,30 @@ public class AplicadorIneficiente implements TipoAplicadorDeLeis {
     protected Lista<TipoCorpoRigido> paredes = new Lista<TipoCorpoRigido>();
 
     /**
-     * Legislação (lista de leis) das leis [U]nárias.
+     * Legislação (lista de leis).
      */
-    protected Lista<TipoLeiMoveisUnaria> legislacaoU = new Lista<TipoLeiMoveisUnaria>();
+    protected Lista<TipoLei> legislacao = new Lista<TipoLei>();
 
     /**
-     * Legislação (lista de leis) das leis [M]óveis binárias.
+     * Lista das leis que são afetadas pelo tempo.
      */
-    protected Lista<TipoLeiMoveisBinaria> legislacaoM = new Lista<TipoLeiMoveisBinaria>();
+    protected Lista<LeiSensivelAoTempo> cronos = new Lista<LeiSensivelAoTempo>();
 
     /**
-     * Legislação (lista de leis) das leis [B]inárias.
+     * Tempo a ser passado às leis sensíveis ao tempo.
      */
-    protected Lista<TipoLeiBinaria> legislacaoB = new Lista<TipoLeiBinaria>();
-
+    protected double tempo;
+    
+    /**
+     * Gera um aplicador de leis.
+     * 
+     * @param tempo Tempo a ser passado para as leis.
+     */
+    public AplicadorIneficiente( double tempo )
+    {
+        this.tempo = tempo;
+    }
+    
     @Override
     public void adicionarCorpoRigido(CorpoRigidoMovel c) {
         corposMoveis.adicionarItem(c);
@@ -63,76 +72,34 @@ public class AplicadorIneficiente implements TipoAplicadorDeLeis {
     }
 
     @Override
-    public void adicionarLei(TipoLeiMoveisUnaria l) {
-        legislacaoU.adicionarItem(l);
+    public void adicionarLei(TipoLei l) {
+        legislacao.adicionarItem(l);
+        if( l instanceof LeiSensivelAoTempo ) {
+            cronos.adicionarItem((LeiSensivelAoTempo) l);
+            ((LeiSensivelAoTempo) l).informarTempo(tempo);
+        }
     }
 
     @Override
-    public void adicionarLei(TipoLeiMoveisBinaria l) {
-        legislacaoM.adicionarItem(l);
-    }
-
-    @Override
-    public void adicionarLei(TipoLeiBinaria l) {
-        legislacaoB.adicionarItem(l);
-    }
-
-    @Override
-    public void removerLei(TipoLeiMoveisUnaria l) {
-        legislacaoU.removerItem(l);
-    }
-
-    @Override
-    public void removerLei(TipoLeiMoveisBinaria l) {
-        legislacaoM.removerItem(l);
-    }
-
-    @Override
-    public void removerLei(TipoLeiBinaria l) {
-        legislacaoB.removerItem(l);
+    public void removerLei(TipoLei l) {
+        legislacao.removerItem(l);
     }
 
     @Override
     public void aplicarLeis() {
-        aplicarLeisUnarias();
-        aplicarLeisBinarias();
-        aplicarLeisMoveis();
-    }
-
-    /**
-     * Metodo interne que aplica todas as leis unárias àos objetos.
-     */
-    protected void aplicarLeisUnarias() {
-        for (TipoLeiMoveisUnaria l : legislacaoU)
-            for (CorpoRigidoMovel c : corposMoveis)
-                l.aplicarLei(c);
-    }
-
-    /**
-     * Método interno que aplica as leis binárias de corpos móveis aos corpos
-     * rígidos.
-     */
-    protected void aplicarLeisMoveis() {
-        Lista<Tupla<CorpoRigidoMovel>> lista = corposMoveis
-                .obterTuplasUnicas(2);
-        for (TipoLeiMoveisBinaria l : legislacaoM)
-            for (Tupla<CorpoRigidoMovel> t : lista)
-                l.aplicarLei(t.obter(0), t.obter(1));
-    }
-
-    protected void aplicarLeisBinarias() {
-        Lista<Tupla<CorpoRigidoMovel>> lista = corposMoveis
-                .obterTuplasUnicas(2);
-        for (TipoLeiBinaria l : legislacaoB) {
-            // Primeiro, vamos aplicar a lei aos pares de corpos rígidos móveis:
-            for (Tupla<CorpoRigidoMovel> t : lista)
-                l.aplicarLei(t.obter(0), t.obter(1));
-
-            // Agora, entre um corpo móvel e um não móvel:
-            for (TipoCorpoRigido d : paredes)
-                for (CorpoRigidoMovel c : corposMoveis)
-                    l.aplicarLei(c, d);
+        for( TipoLei l: legislacao )
+        {
+            l.aplicarLei(corposMoveis);
+            
+            if( l instanceof TipoLeiEstruturas )
+                ((TipoLeiEstruturas)l).aplicarLei(corposMoveis, paredes);
         }
+    }
+
+    @Override
+    public void alterarTempo(double t) {
+        for( LeiSensivelAoTempo l: cronos)
+            l.informarTempo(t);
     }
 
 }

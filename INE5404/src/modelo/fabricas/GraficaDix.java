@@ -2,7 +2,6 @@ package modelo.fabricas;
 
 import static modelo.RoyerPhysics.Coordenada.origem;
 import visao.Imagem;
-import edugraf.jadix.Aplique;
 import edugraf.jadix.fachada.PaginaDix;
 import modelo.RoyerPhysics.ObservadorDeCorpos;
 
