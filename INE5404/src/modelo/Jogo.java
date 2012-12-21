@@ -34,8 +34,8 @@ public class Jogo {
         CorpoRigidoMovel rP1 = fabrica.fabricarRaqueteDireita();
         CorpoRigidoMovel rP2 = fabrica.fabricarRaqueteEsquerda();
 
-        Jogador player1 = academia.FabricarJogadorDireita(rP1, 20);
-        Jogador player2 = academia.FabricarJogadorDireita(rP2, 20);
+        Jogador player1 = academia.FabricarJogadorDireita(rP1, 100);
+        Jogador player2 = academia.FabricarJogadorEsquerda(rP2, 100);
         
         controlador.adicionarCorpoRigido(rP1);
         controlador.adicionarCorpoRigido(rP2);

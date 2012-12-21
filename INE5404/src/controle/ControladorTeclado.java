@@ -21,7 +21,6 @@ public class ControladorTeclado extends TratadorDixAbstrato {
      * Método que é chamado quando ocorre algum evento do teclado.
      */
     public void seDito(EventoDeTeclado evento) {
-
         if (evento.obterNomeDoEvento() == NomeDeEventosDeTeclado.TECLA_PRESSIONADA)
             teclas[evento.obterTecla()] = true;
         else if (evento.obterNomeDoEvento() == NomeDeEventosDeTeclado.TECLA_SOLTA)

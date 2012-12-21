@@ -2,8 +2,15 @@ package modelo;
 
 import modelo.RoyerPhysics.CorpoRigidoMovel;
 import modelo.RoyerPhysics.Vetor;
+import static modelo.RoyerPhysics.Vetor.vetorNulo;
 import modelo.estruturasDeDados.TipoEditor;
 
+/**
+ * Classe (gambiarrizada) que movimenta a barra do jogador.
+ * 
+ * @author Tiago Royer
+ *
+ */
 public class Jogador implements Atualizavel {
 
     private TipoEntradasJogador _input;
@@ -33,17 +40,24 @@ public class Jogador implements Atualizavel {
     }
 
     @Override
-    public void atualizar() {
+    public void atualizar() { //TODO: usar eventos
         
         if (_input.comandoSubir()) {
             TipoEditor<Vetor> e = _raquete.obterForca("ForcaCima");
             e.alterar(new Vetor(0, -_forca));
+        } else {
+            TipoEditor<Vetor> e = _raquete.obterForca("ForcaCima");
+            e.alterar(vetorNulo);
         }
 
         if (_input.comandoDescer()) {
-            TipoEditor<Vetor> e = _raquete.obterForca("ForcaCima");
+            TipoEditor<Vetor> e = _raquete.obterForca("ForcaBaixo");
             e.alterar(new Vetor(0, _forca));
+        } else {
+            TipoEditor<Vetor> e = _raquete.obterForca("ForcaBaixo");
+            e.alterar(vetorNulo);
         }
+        
     }
 
 }
