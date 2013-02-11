@@ -24,7 +24,7 @@ public class Jogo {
 
         GraficaDix grafica = new GraficaDix(a.obterPaginaDix());
         FabricaDeObjetos fabrica = new FabricaDeObjetos(grafica);
-        FabricaDeJogadoresDix academia = new FabricaDeJogadoresDix(a.obterPaginaDix());
+        FabricaDeJogadoresDix academia = new FabricaDeJogadoresDix();
         
         TipoAplicadorDeLeis controlador = fabrica.fabricarColisorEquipado(0.05);
 
@@ -34,8 +34,11 @@ public class Jogo {
         CorpoRigidoMovel rP1 = fabrica.fabricarRaqueteDireita();
         CorpoRigidoMovel rP2 = fabrica.fabricarRaqueteEsquerda();
 
+        ControladorTeclado keyboard = new ControladorTeclado(a.obterPaginaDix());
         Jogador player1 = academia.FabricarJogadorDireita(rP1, 100);
         Jogador player2 = academia.FabricarJogadorEsquerda(rP2, 100);
+        keyboard.registrarJogador(player1);
+        keyboard.registrarJogador(player2);
         
         controlador.adicionarCorpoRigido(rP1);
         controlador.adicionarCorpoRigido(rP2);
@@ -44,8 +47,6 @@ public class Jogo {
 
         Pichador alce = new Pichador();
         while (!false) {
-            player1.atualizar();
-            player2.atualizar();
             controlador.aplicarLeis();
             alce.descansar(0.05);
         }

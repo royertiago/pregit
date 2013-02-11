@@ -1,63 +1,71 @@
 package modelo;
 
+import controle.Tecla;
+import controle.TipoJogador;
 import modelo.RoyerPhysics.CorpoRigidoMovel;
 import modelo.RoyerPhysics.Vetor;
 import static modelo.RoyerPhysics.Vetor.vetorNulo;
 import modelo.estruturasDeDados.TipoEditor;
 
 /**
- * Classe (gambiarrizada) que movimenta a barra do jogador.
+ * Classe que movimenta a barra do jogador.
  * 
  * @author Tiago Royer
- *
+ * 
  */
-public class Jogador implements Atualizavel {
+public class Jogador implements TipoJogador {
 
-    private TipoEntradasJogador _input;
-    private CorpoRigidoMovel _raquete;
-    private double _forca;
+    private final CorpoRigidoMovel _raquete;
+    private final double _forca;
+    private final Tecla _teclaSubir, _teclaDescer;
 
     /**
      * Cria um jogador.
      * 
-     * Cada jogador tem uma entrada (um TipoEntradasJogador que vai lhe informar
-     * quais comandos estão sendo enviados), uma raquete (que ele moverá para
-     * cima e para baixo) e uma força (neste caso, a aceleração por
-     * atualização).
+     * Cada jogador tem uma raquete (que ele moverá para cima e para baixo) e
+     * uma força (neste caso, a aceleração por atualização).
      * 
-     * @param input
-     *            Entrada de dados.
      * @param raquete
      *            Barra do jogador.
      * @param forca
      *            Força imprimida por rodada.
+     * @param teclaSubir
+     *            Qual tecla fará a raquete do jogador deslocar-se para cima.
+     * @param teclaDescer
+     *            Qual tecla fará a raquete do jogador deslocar-se para baixo.
      */
-    public Jogador(TipoEntradasJogador input, CorpoRigidoMovel raquete,
-            double forca) {
-        _input = input;
+    public Jogador(CorpoRigidoMovel raquete, double forca, Tecla teclaSubir,
+            Tecla teclaDescer) {
         _raquete = raquete;
         _forca = forca;
+        _teclaSubir = teclaSubir;
+        _teclaDescer = teclaDescer;
     }
 
     @Override
-    public void atualizar() { //TODO: usar eventos
-        
-        if (_input.comandoSubir()) {
+    public void informarTeclaPressionada(Tecla t) {
+        if (t == _teclaSubir) {
             TipoEditor<Vetor> e = _raquete.obterForca("ForcaCima");
             e.alterar(new Vetor(0, -_forca));
-        } else {
-            TipoEditor<Vetor> e = _raquete.obterForca("ForcaCima");
-            e.alterar(vetorNulo);
-        }
-
-        if (_input.comandoDescer()) {
+            /*
+             * Nesse sistema de coordenadas, as coordenadas verticais estão
+             * invertidas em relação ao sistema cartesiano tradicional.
+             */
+        } else if (t == _teclaDescer) {
             TipoEditor<Vetor> e = _raquete.obterForca("ForcaBaixo");
             e.alterar(new Vetor(0, _forca));
-        } else {
+        }
+    }
+
+    @Override
+    public void informarTeclaSolta(Tecla t) {
+        if (t == _teclaSubir) {
+            TipoEditor<Vetor> e = _raquete.obterForca("ForcaCima");
+            e.alterar(vetorNulo);
+        } else if (t == _teclaDescer) {
             TipoEditor<Vetor> e = _raquete.obterForca("ForcaBaixo");
             e.alterar(vetorNulo);
         }
-        
     }
 
 }

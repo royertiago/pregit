@@ -2,28 +2,15 @@ package modelo.fabricas;
 
 import modelo.Jogador;
 import modelo.RoyerPhysics.CorpoRigidoMovel;
-import controle.ControladorTeclado;
-import controle.ControleJogador;
 import controle.Tecla;
-import edugraf.jadix.fachada.ComponenteDix;
-import edugraf.jadix.fachada.PaginaDix;
 
 /**
- * Fábrica que é responsável por criar os jogadores. Precisa de um aplique Dix
- * para funcionar.
+ * Fábrica que é responsável por criar os jogadores.
  * 
  * @author Tiago Royer
  * 
  */
 public class FabricaDeJogadoresDix {
-
-    private ControladorTeclado _input;
-
-    public FabricaDeJogadoresDix(PaginaDix p) {
-        ComponenteDix teclado = p.criarProcuradorDeComponente("teclado");
-        _input = new ControladorTeclado();
-        teclado.adicionarTratadorDeEventos(_input);
-    };
 
     /**
      * Cria o jogador da direita, e adiciona a ele o corpoMóvel correspondente.
@@ -36,9 +23,7 @@ public class FabricaDeJogadoresDix {
      * @return um jogador.
      */
     public Jogador FabricarJogadorDireita(CorpoRigidoMovel raquete, double forca) {
-        ControleJogador controle = new ControleJogador(_input, Tecla.SHIFT,
-                Tecla.CONTROL);
-        return new Jogador(controle, raquete, forca);
+        return new Jogador(raquete, forca, Tecla.SHIFT, Tecla.CONTROL);
     }
 
     /**
@@ -53,8 +38,6 @@ public class FabricaDeJogadoresDix {
      */
     public Jogador FabricarJogadorEsquerda(CorpoRigidoMovel raquete,
             double forca) {
-        ControleJogador controle = new ControleJogador(_input, Tecla.SETA_CIMA,
-                Tecla.SETA_BAIXO);
-        return new Jogador(controle, raquete, forca);
+        return new Jogador(raquete, forca, Tecla.SETA_CIMA, Tecla.SETA_BAIXO);
     }
 }

@@ -1,5 +1,6 @@
 /**
- * Contém os códigos ASCII das teclas; usado pelo ControladorTeclado. 
+ * Representa uma tecla.
+ *  
  * @author Tiago Royer
  */
 
@@ -22,7 +23,7 @@ public enum Tecla {
      * 
      * @return O código ASCII da tecla selecionada.
      */
-    public int obterCodigo() {
+    protected int obterCodigo() {
         return _codigo;
     }
 }
