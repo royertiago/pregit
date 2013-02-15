@@ -52,5 +52,11 @@ public class CorpoRigidoLinear extends CorpoRigidoAbstrato {
     public void fixarVetorMovimento(Vetor v) {
         _movimento = v;
     }
+    
+    @Override
+    public String toString() {
+        return "CorpoRigido - Poligono:\n" + poligono + "\nMovimento: "
+                + _movimento + " - Orientação: " + _angulo;
+    }
 
 }

@@ -15,7 +15,7 @@ public interface CorpoObservavel {
      * @param o
      *            Observador a ser adicionado.
      */
-    public void adicionarObservador(ObservadorDeCorpos o);
+    public abstract void adicionarObservador(ObservadorDeCorpos o);
 
     /**
      * Remove o observador da lista.
@@ -23,5 +23,5 @@ public interface CorpoObservavel {
      * @param o
      *            Observador a ser removido.
      */
-    public void removerObservador(ObservadorDeCorpos o);
+    public abstract void removerObservador(ObservadorDeCorpos o);
 }

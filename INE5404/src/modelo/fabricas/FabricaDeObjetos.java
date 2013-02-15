@@ -2,6 +2,7 @@ package modelo.fabricas;
 
 import modelo.RoyerPhysics.Coordenada;
 import modelo.RoyerPhysics.CorpoRigido;
+import modelo.RoyerPhysics.CorpoRigidoLinear;
 import modelo.RoyerPhysics.CorpoRigidoMovel;
 import modelo.RoyerPhysics.Vetor;
 import modelo.RoyerPhysics.leis.AplicadorDeLeis;
@@ -50,7 +51,7 @@ public class FabricaDeObjetos {
      * @return Uma bola.
      */
     public CorpoRigidoMovel fabricarBola(Vetor v) {
-        Circulo c = new Circulo(new Coordenada(350, 200), 13, 40);
+        Circulo c = new Circulo(new Coordenada(350, 200), 13);
         CorpoRigido cr = new CorpoRigido(c);
         cr.fixarVetorMovimento(v);
         CorpoObservado bola = new CorpoObservado(cr);
@@ -67,7 +68,8 @@ public class FabricaDeObjetos {
         PoligonoConvexo p = new PoligonoConvexo(new Coordenada(10, 150),
                 new Coordenada(25, 175), new Coordenada(25, 225),
                 new Coordenada(10, 250));
-        CorpoObservado raquete = new CorpoObservado(p);
+        CorpoRigidoLinear cr = new CorpoRigidoLinear(p, new Vetor(0, 1));
+        CorpoObservado raquete = new CorpoObservado(cr);
         raquete.adicionarObservador(_grafica.fabricarImagemJogadorEsquerda());
         return raquete;
     }
@@ -81,7 +83,8 @@ public class FabricaDeObjetos {
         PoligonoConvexo p = new PoligonoConvexo(new Coordenada(690, 150),
                 new Coordenada(690, 250), new Coordenada(675, 225),
                 new Coordenada(675, 175));
-        CorpoObservado raquete = new CorpoObservado(p);
+        CorpoRigidoLinear cr = new CorpoRigidoLinear(p, new Vetor(0, 1));
+        CorpoObservado raquete = new CorpoObservado(cr);
         raquete.adicionarObservador(_grafica.fabricarImagemJogadorDireita());
         return raquete;
     }

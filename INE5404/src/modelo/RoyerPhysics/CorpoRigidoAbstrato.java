@@ -94,5 +94,4 @@ public abstract class CorpoRigidoAbstrato implements CorpoRigidoMovel {
     public Coordenada obterCentro() {
         return poligono.obterCentro();
     }
-
 }

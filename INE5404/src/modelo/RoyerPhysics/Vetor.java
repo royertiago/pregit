@@ -99,7 +99,6 @@ public class Vetor {
      */
     public Vetor projetarSe (Vetor v)
     {
-        System.out.println(" Você ainda não implementou a projeção de vetores. ");
-        return null; //FIXME: Implementar.
+        return new Vetor((v.x*v.x*this.x + v.x*v.y*this.y)/(v.x*v.x + v.y*v.y),(v.x*v.y*this.x + v.y*v.y*this.y)/(v.x*v.x + v.y*v.y));
     }
 }

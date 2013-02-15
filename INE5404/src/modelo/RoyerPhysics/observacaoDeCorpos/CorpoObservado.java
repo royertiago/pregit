@@ -2,29 +2,27 @@ package modelo.RoyerPhysics.observacaoDeCorpos;
 
 import modelo.RoyerPhysics.AABB;
 import modelo.RoyerPhysics.Coordenada;
-import modelo.RoyerPhysics.CorpoRigido;
 import modelo.RoyerPhysics.CorpoRigidoMovel;
 import modelo.RoyerPhysics.TipoPoligonoConvexo;
 import modelo.RoyerPhysics.Vetor;
 import modelo.RoyerPhysics.estruturasDeDados.ListaLegivel;
 import modelo.RoyerPhysics.estruturasDeDados.TipoEditor;
-import modelo.RoyerPhysics.poligonos.PoligonoConvexo;
 
 /**
  * Corpo rígido que pode ser observado por ObservadorDeCorpos. Redireciona
- * chamadas para outro CorpoRigidoMovel e informa observadores em caso de movimento.
+ * chamadas para outro CorpoRigidoMovel (semelhante ao padrão decorador)
+ * e informa observadores em caso de movimento.
  *  
  * @author Tiago Royer
  *
  */
 public class CorpoObservado implements CorpoRigidoMovel, CorpoObservavel {
-
     private CorpoRigidoMovel _corpo;
     private Megafone _megafone;
     
     /**
      * Cria um CorpoObservado, que irá redirecionar chamadas para o CorpoRigidoMovel
-     * dado.
+     * dado (semelhante ao padrão decorador).
      * @param corpo Corpo Rígido que controlará as ações deste corpo.
      */
     public CorpoObservado( CorpoRigidoMovel corpo )
@@ -33,17 +31,6 @@ public class CorpoObservado implements CorpoRigidoMovel, CorpoObservavel {
         _megafone = new Megafone();
     }
     
-    /**
-     * Cria um corpo observado, usando um corpo rígido genérico.
-     * 
-     * @param p Polígono a ser usado pelo corpo rígido.
-     */
-    public CorpoObservado( PoligonoConvexo p )
-    {
-        _corpo = new CorpoRigido( p );
-        _megafone = new Megafone();
-    }
-        
     @Override
     public ListaLegivel<Coordenada> obterPontosExtremidades() {
         return _corpo.obterPontosExtremidades();
@@ -98,6 +85,7 @@ public class CorpoObservado implements CorpoRigidoMovel, CorpoObservavel {
     public void mover(double c) {
         _corpo.mover(c);
         _megafone.gritar(_corpo.obterCentro());
+        System.out.println("Avisando: " + _corpo); //TODO: remover
     }
 
     @Override
@@ -110,4 +98,9 @@ public class CorpoObservado implements CorpoRigidoMovel, CorpoObservavel {
         return _corpo.obterCentro();
     }
 
+    @Override
+    public String toString()
+    {
+        return "Observando: " + _corpo;
+    }
 }

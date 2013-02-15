@@ -5,7 +5,6 @@ import modelo.RoyerPhysics.Coordenada;
 import modelo.RoyerPhysics.CorpoRigidoMovel;
 import modelo.RoyerPhysics.Vetor;
 import modelo.RoyerPhysics.leis.TipoAplicador;
-import modelo.RoyerPhysics.observacaoDeCorpos.CorpoObservado;
 import modelo.RoyerPhysics.poligonos.PoligonoConvexo;
 import modelo.fabricas.AcademiaDix;
 import modelo.fabricas.FabricaDeObjetos;
@@ -47,12 +46,11 @@ public class Jogo {
             alce.descansar(0.05);
         }
     }
-    /*
+    
     static public void main( String[] args )
     {
-        PoligonoConvexo p = new PoligonoConvexo(
-                new Coordenada(0,0), new Coordenada(10, 0), new Coordenada(0, 10));
-        System.out.println(p.obterCentro());
-        System.out.println(p.contem(new Coordenada(4, 6.5)));
-    }*/
+        Vetor v = new Vetor(0, 1);
+        Vetor u = new Vetor(5*Math.PI, Math.PI);
+        System.out.println(u.projetarSe(v));
+    }//*/
 }

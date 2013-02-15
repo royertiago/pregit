@@ -11,7 +11,6 @@ import modelo.RoyerPhysics.observacaoDeCorpos.ObservadorDeCorpos;
 public class Imagem implements ObservadorDeCorpos {
 
     private TipoImagem img;
-    
     /**
      * Cria uma imagem, com um AdaptadorImagem como alvo de redirecionamento.
      * @param tela
@@ -43,6 +42,12 @@ public class Imagem implements ObservadorDeCorpos {
     @Override
     public void notificar(Coordenada centro) {
         img.centrarSeEm(centro);
+    }
+    
+    @Override
+    public String toString()
+    {
+        return "Imagem - " + img;
     }
 
 }

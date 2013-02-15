@@ -54,4 +54,10 @@ public class CorpoRigido extends CorpoRigidoAbstrato {
         _movimento = v;
     }
 
+    @Override
+    public String toString() {
+        return "CorpoRigido - Poligono:\n" + poligono + "\nMovimento: "
+                + _movimento;
+    }
+
 }
