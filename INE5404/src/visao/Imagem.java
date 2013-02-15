@@ -6,7 +6,7 @@ package visao;
 
 import edugraf.jadix.fachada.PaginaDix;
 import modelo.RoyerPhysics.Coordenada;
-import modelo.RoyerPhysics.ObservadorDeCorpos;
+import modelo.RoyerPhysics.observacaoDeCorpos.ObservadorDeCorpos;
 
 public class Imagem implements ObservadorDeCorpos {
 

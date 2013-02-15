@@ -5,7 +5,7 @@ import controle.TipoJogador;
 import modelo.RoyerPhysics.CorpoRigidoMovel;
 import modelo.RoyerPhysics.Vetor;
 import static modelo.RoyerPhysics.Vetor.vetorNulo;
-import modelo.estruturasDeDados.TipoEditor;
+import modelo.RoyerPhysics.estruturasDeDados.TipoEditor;
 
 /**
  * Classe que movimenta a barra do jogador.

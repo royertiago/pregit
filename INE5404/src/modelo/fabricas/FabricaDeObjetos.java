@@ -1,20 +1,18 @@
 package modelo.fabricas;
 
 import modelo.RoyerPhysics.Coordenada;
+import modelo.RoyerPhysics.CorpoRigido;
 import modelo.RoyerPhysics.CorpoRigidoMovel;
 import modelo.RoyerPhysics.Vetor;
-import modelo.RoyerPhysics.corposRigidos.CorpoRigidoImovel;
-import modelo.RoyerPhysics.corposRigidos.CorpoRigidoPadrao;
-import modelo.RoyerPhysics.corposRigidos.mascaras.Circular;
-import modelo.RoyerPhysics.corposRigidos.mascaras.Parede;
-import modelo.RoyerPhysics.executivo.AplicadorDeLeis;
-import modelo.RoyerPhysics.executivo.TipoAplicadorDeLeis;
-import modelo.RoyerPhysics.legislativo.ColisaoSemMomento;
-import modelo.RoyerPhysics.legislativo.LeiDeForcas;
-import modelo.RoyerPhysics.legislativo.LeiUnariaTemporal;
-import modelo.RoyerPhysics.legislativo.Movimento;
-import modelo.jogo.RaqueteDoPong;
-
+import modelo.RoyerPhysics.leis.AplicadorDeLeis;
+import modelo.RoyerPhysics.leis.ColisaoSemMomento;
+import modelo.RoyerPhysics.leis.LeiDeForcas;
+import modelo.RoyerPhysics.leis.Movimento;
+import modelo.RoyerPhysics.leis.TipoAplicador;
+import modelo.RoyerPhysics.observacaoDeCorpos.CorpoObservado;
+import modelo.RoyerPhysics.poligonos.Circulo;
+import modelo.RoyerPhysics.poligonos.PoligonoConvexo;
+import modelo.RoyerPhysics.poligonos.Parede;
 /**
  * Essa classe é de uma fábrica que é responsável por prover objetos ao jogo.
  * 
@@ -29,7 +27,7 @@ import modelo.jogo.RaqueteDoPong;
  */
 public class FabricaDeObjetos {
 
-    private TipoFabricaDeImagens grafica;
+    private TipoFabricaDeImagens _grafica;
 
     /**
      * Cria uma fábrica de objetos, que criará objetos usando a fábrica de
@@ -39,7 +37,7 @@ public class FabricaDeObjetos {
      *            fábrica de imagens a ser usada.
      */
     public FabricaDeObjetos(TipoFabricaDeImagens grafica) {
-        this.grafica = grafica;
+        this._grafica = grafica;
     }
 
     /**
@@ -50,22 +48,12 @@ public class FabricaDeObjetos {
      * @return Uma bola.
      */
     public CorpoRigidoMovel fabricarBola(Vetor v) {
-        Circular mBola = new Circular(new Coordenada(350, 200), 13, 40);
-        CorpoRigidoPadrao bola = new CorpoRigidoPadrao(mBola, v, 1);
-        bola.adicionarObservador(grafica.fabricarImagemBola());
+        Circulo c = new Circulo(new Coordenada(350,200), 13, 40);
+        CorpoRigido cr = new CorpoRigido(c);
+        cr.fixarVetorMovimento(v);
+        CorpoObservado bola = new CorpoObservado(cr);
+        bola.adicionarObservador(_grafica.fabricarImagemBola());
         return bola;
-    }
-
-    /**
-     * Cria uma raquete para o jogador da direita, com uma imagem apropriada.
-     * 
-     * @return Uma raquete.
-     */
-    public CorpoRigidoMovel fabricarRaqueteDireita() {
-        RaqueteDoPong raquete = new RaqueteDoPong(Vetor.vetorNulo, 1,
-                new Coordenada(60, 200), 100, 15);
-        raquete.adicionarObservador(grafica.fabricarImagemJogadorDireita());
-        return raquete;
     }
 
     /**
@@ -74,48 +62,56 @@ public class FabricaDeObjetos {
      * @return Uma raquete.
      */
     public CorpoRigidoMovel fabricarRaqueteEsquerda() {
-        RaqueteDoPong raquete = new RaqueteDoPong(Vetor.vetorNulo, 1,
-                new Coordenada(720, 200), 100, 15);
-        raquete.adicionarObservador(grafica.fabricarImagemJogadorEsquerda());
+        PoligonoConvexo p = new PoligonoConvexo(
+                                    new Coordenada(50,150), new Coordenada(65, 175),
+                                    new Coordenada(65,225), new Coordenada(50, 250));
+        CorpoObservado raquete = new CorpoObservado(p);
+        raquete.adicionarObservador(_grafica.fabricarImagemJogadorDireita());
         return raquete;
     }
 
     /**
-     * Cria um TipoAplicadorDeLeis, com as leis de movimento e colisão
-     * devidamente adicionadas, e com as quatro paredes externas já criadas.
+     * Cria uma raquete para o jogador da direita, com uma imagem apropriada.
      * 
-     * @param tempo Tempo a ser passado ao aplicador.
+     * @return Uma raquete.
+     */
+    public CorpoRigidoMovel fabricarRaqueteDireita() {
+        PoligonoConvexo p = new PoligonoConvexo(
+                new Coordenada(715,150), new Coordenada(730, 175),
+                new Coordenada(730,225), new Coordenada(715, 250));
+CorpoObservado raquete = new CorpoObservado(p);
+raquete.adicionarObservador(_grafica.fabricarImagemJogadorEsquerda());
+return raquete;
+    }
+
+    /**
+     * Cria um TipoAplicador, com as leis de movimento e colisão
+     * devidamente adicionadas, e com as quatro paredes externas já criadas.
      * 
      * @return um TipoAplicadorDeLeis equipado com colisões e paredes.
      */
-    public TipoAplicadorDeLeis fabricarColisorEquipado(double tempo) {
-      //TODO: prover uma fachada para o colisor e remover esse método daqui.
+    public TipoAplicador fabricarColisorEquipado() {
         Coordenada cA = new Coordenada(0, 0), cB = new Coordenada(700, 0), cC = new Coordenada(
                 700, 400), cD = new Coordenada(0, 400);
 
-        AplicadorDeLeis controlador = new AplicadorDeLeis(tempo);
+        AplicadorDeLeis controlador = new AplicadorDeLeis();
 
         Parede p1 = new Parede(cA, cB);
         Parede p2 = new Parede(cB, cC);
         Parede p3 = new Parede(cC, cD);
         Parede p4 = new Parede(cD, cA);
 
-        CorpoRigidoImovel pA = new CorpoRigidoImovel(p1);
-        CorpoRigidoImovel pC = new CorpoRigidoImovel(p3);
-        CorpoRigidoImovel pD = new CorpoRigidoImovel(p4);
-        CorpoRigidoImovel pB = new CorpoRigidoImovel(p2);
+        controlador.registrarEstrutura(p1);
+        controlador.registrarEstrutura(p2);
+        controlador.registrarEstrutura(p3);
+        controlador.registrarEstrutura(p4);
 
-        controlador.adicionarCorpoRigido(pA);
-        controlador.adicionarCorpoRigido(pB);
-        controlador.adicionarCorpoRigido(pC);
-        controlador.adicionarCorpoRigido(pD);
-
-        LeiUnariaTemporal mov = new Movimento(tempo);
+        Movimento mov = new Movimento();
         ColisaoSemMomento c = new ColisaoSemMomento();
-        LeiDeForcas f = new LeiDeForcas(tempo);
-        controlador.adicionarLei(c);
-        controlador.adicionarLei(mov);
-        controlador.adicionarLei(f);
+        LeiDeForcas f = new LeiDeForcas();
+        controlador.registrarLei(c);
+        controlador.registrarLei(mov);
+        controlador.registrarLei(f);
         
         return controlador;
     }

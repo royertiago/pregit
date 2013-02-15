@@ -3,7 +3,7 @@ package modelo.fabricas;
 import static modelo.RoyerPhysics.Coordenada.origem;
 import visao.Imagem;
 import edugraf.jadix.fachada.PaginaDix;
-import modelo.RoyerPhysics.ObservadorDeCorpos;
+import modelo.RoyerPhysics.observacaoDeCorpos.ObservadorDeCorpos;
 
 /**
  * Fábrica de imagens que é capaz de operar com o Jadix.
@@ -29,12 +29,12 @@ public class GraficaDix implements TipoFabricaDeImagens {
     }
 
     @Override
-    public ObservadorDeCorpos fabricarImagemJogadorDireita() {
+    public ObservadorDeCorpos fabricarImagemJogadorEsquerda() {
         return new Imagem(a, origem, "recursos/Barra1.png", 15, 100);
     }
 
     @Override
-    public ObservadorDeCorpos fabricarImagemJogadorEsquerda() {
+    public ObservadorDeCorpos fabricarImagemJogadorDireita() {
         return new Imagem(a, origem, "recursos/Barra2.png", 15, 100);
     }
 

@@ -1,6 +1,6 @@
 package modelo.fabricas;
 
-import modelo.RoyerPhysics.ObservadorDeCorpos;
+import modelo.RoyerPhysics.observacaoDeCorpos.ObservadorDeCorpos;
 
 /**
  * Representa uma interface com a visão; as classes que implementam essa

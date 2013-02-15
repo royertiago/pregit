@@ -11,7 +11,7 @@ import edugraf.jadix.eventos.EventoDeTeclado;
 import edugraf.jadix.eventos.nomes.NomeDeEventosDeTeclado;
 import edugraf.jadix.fachada.PaginaDix;
 import edugraf.jadix.fachada.TratadorDixAbstrato;
-import modelo.estruturasDeDados.Lista;
+import modelo.RoyerPhysics.estruturasDeDados.Lista;
 
 /**
  * Classe responsável por redirecionar eventos de teclado para dentro do jogo.
@@ -43,9 +43,7 @@ public class ControladorTeclado extends TratadorDixAbstrato {
         p.criarProcuradorDeComponente("teclado").adicionarTratadorDeEventos(this);
     }
     
-    /**
-     * Método que é chamado quando ocorre algum evento do teclado.
-     */
+    @Override
     public void seDito(EventoDeTeclado evento) {
         Tecla t = obterTecla(evento.obterTecla());
         if (t== null) return;

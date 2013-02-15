@@ -1,35 +1,27 @@
 package modelo;
 
-import controle.*;
-import edugraf.jadix.*;
-import edugraf.jadix.fachada.*;
-import visao.*;
-import modelo.RoyerPhysics.*;
-import modelo.estruturasDeDados.*;
-import modelo.fabricas.*;
-import modelo.jogo.RaqueteDoPong;
-import static modelo.RoyerPhysics.Coordenada.*;
-import static modelo.RoyerPhysics.Intersecao.*;
-import static modelo.RoyerPhysics.Vetor.*;
-import modelo.RoyerPhysics.corposRigidos.mascaras.*;
-import modelo.RoyerPhysics.corposRigidos.*;
-import modelo.RoyerPhysics.executivo.*;
-import modelo.RoyerPhysics.legislativo.*;
-import modelo.RoyerPhysics.*;
+import controle.ControladorTeclado;
+import modelo.RoyerPhysics.CorpoRigidoMovel;
+import modelo.RoyerPhysics.Vetor;
+import modelo.RoyerPhysics.leis.TipoAplicador;
+import modelo.fabricas.AcademiaDix;
+import modelo.fabricas.FabricaDeObjetos;
+import modelo.fabricas.GraficaDix;
+import edugraf.jadix.Aplique;
+import edugraf.jadix.fachada.Pichador;
 
-@SuppressWarnings("unused")
 public class Jogo {
 
-    public static void Jogar(Aplique a) {
+    public static void jogar(Aplique a) {
 
         GraficaDix grafica = new GraficaDix(a.obterPaginaDix());
         FabricaDeObjetos fabrica = new FabricaDeObjetos(grafica);
-        FabricaDeJogadoresDix academia = new FabricaDeJogadoresDix();
+        AcademiaDix academia = new AcademiaDix();
         
-        TipoAplicadorDeLeis controlador = fabrica.fabricarColisorEquipado(0.05);
+        TipoAplicador controlador = fabrica.fabricarColisorEquipado();
 
         CorpoRigidoMovel bola = fabrica.fabricarBola(new Vetor(50, 50));
-        controlador.adicionarCorpoRigido(bola);
+        controlador.registrarCorpo(bola);
 
         CorpoRigidoMovel rP1 = fabrica.fabricarRaqueteDireita();
         CorpoRigidoMovel rP2 = fabrica.fabricarRaqueteEsquerda();
@@ -40,14 +32,14 @@ public class Jogo {
         keyboard.registrarJogador(player1);
         keyboard.registrarJogador(player2);
         
-        controlador.adicionarCorpoRigido(rP1);
-        controlador.adicionarCorpoRigido(rP2);
+        controlador.registrarCorpo(rP1);
+        controlador.registrarCorpo(rP2);
 
         System.out.println("Jogo criado. Este jogo usa RoyerPhysics - A Leading Computational Engine");
 
         Pichador alce = new Pichador();
         while (!false) {
-            controlador.aplicarLeis();
+            controlador.avancar(0.05);
             alce.descansar(0.05);
         }
     }
