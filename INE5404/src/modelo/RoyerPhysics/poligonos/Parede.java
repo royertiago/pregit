@@ -82,5 +82,4 @@ public class Parede implements PoligonoEstrutural {
         
         return false;
     }
-
 }

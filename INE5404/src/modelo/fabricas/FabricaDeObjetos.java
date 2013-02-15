@@ -13,15 +13,17 @@ import modelo.RoyerPhysics.observacaoDeCorpos.CorpoObservado;
 import modelo.RoyerPhysics.poligonos.Circulo;
 import modelo.RoyerPhysics.poligonos.PoligonoConvexo;
 import modelo.RoyerPhysics.poligonos.Parede;
+
 /**
  * Essa classe é de uma fábrica que é responsável por prover objetos ao jogo.
  * 
- * A fábrica é ser capaz de criar a bola, as raquetes, e um colisor
- * "equipado" com as quatro paredes e um controle de colisões.
+ * A fábrica é ser capaz de criar a bola, as raquetes, e um colisor "equipado"
+ * com as quatro paredes e um controle de colisões.
  * 
- * Para a raquete e a bola, esses objetos já terão registrado as imagens
- * como observadores, por isso que a fábrica precisa de uma fábrica de imagens acoplada.
- *  
+ * Para a raquete e a bola, esses objetos já terão registrado as imagens como
+ * observadores, por isso que a fábrica precisa de uma fábrica de imagens
+ * acoplada.
+ * 
  * @author Tiago Royer
  * 
  */
@@ -48,7 +50,7 @@ public class FabricaDeObjetos {
      * @return Uma bola.
      */
     public CorpoRigidoMovel fabricarBola(Vetor v) {
-        Circulo c = new Circulo(new Coordenada(350,200), 13, 40);
+        Circulo c = new Circulo(new Coordenada(350, 200), 13, 40);
         CorpoRigido cr = new CorpoRigido(c);
         cr.fixarVetorMovimento(v);
         CorpoObservado bola = new CorpoObservado(cr);
@@ -62,11 +64,11 @@ public class FabricaDeObjetos {
      * @return Uma raquete.
      */
     public CorpoRigidoMovel fabricarRaqueteEsquerda() {
-        PoligonoConvexo p = new PoligonoConvexo(
-                                    new Coordenada(50,150), new Coordenada(65, 175),
-                                    new Coordenada(65,225), new Coordenada(50, 250));
+        PoligonoConvexo p = new PoligonoConvexo(new Coordenada(10, 150),
+                new Coordenada(25, 175), new Coordenada(25, 225),
+                new Coordenada(10, 250));
         CorpoObservado raquete = new CorpoObservado(p);
-        raquete.adicionarObservador(_grafica.fabricarImagemJogadorDireita());
+        raquete.adicionarObservador(_grafica.fabricarImagemJogadorEsquerda());
         return raquete;
     }
 
@@ -76,17 +78,17 @@ public class FabricaDeObjetos {
      * @return Uma raquete.
      */
     public CorpoRigidoMovel fabricarRaqueteDireita() {
-        PoligonoConvexo p = new PoligonoConvexo(
-                new Coordenada(715,150), new Coordenada(730, 175),
-                new Coordenada(730,225), new Coordenada(715, 250));
-CorpoObservado raquete = new CorpoObservado(p);
-raquete.adicionarObservador(_grafica.fabricarImagemJogadorEsquerda());
-return raquete;
+        PoligonoConvexo p = new PoligonoConvexo(new Coordenada(690, 150),
+                new Coordenada(690, 250), new Coordenada(675, 225),
+                new Coordenada(675, 175));
+        CorpoObservado raquete = new CorpoObservado(p);
+        raquete.adicionarObservador(_grafica.fabricarImagemJogadorDireita());
+        return raquete;
     }
 
     /**
-     * Cria um TipoAplicador, com as leis de movimento e colisão
-     * devidamente adicionadas, e com as quatro paredes externas já criadas.
+     * Cria um TipoAplicador, com as leis de movimento e colisão devidamente
+     * adicionadas, e com as quatro paredes externas já criadas.
      * 
      * @return um TipoAplicadorDeLeis equipado com colisões e paredes.
      */
@@ -112,7 +114,7 @@ return raquete;
         controlador.registrarLei(c);
         controlador.registrarLei(mov);
         controlador.registrarLei(f);
-        
+
         return controlador;
     }
 }

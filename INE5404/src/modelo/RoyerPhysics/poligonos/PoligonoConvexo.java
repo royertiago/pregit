@@ -60,7 +60,7 @@ public class PoligonoConvexo extends PoligonoMovelAbstrato {
         int n = _pontos.obterTamanho();
         for( int i = 0; i < n; i++)
         {
-            Parede p = new Parede(_pontos.obter(i), _pontos.obter((i+1)%n));
+            Parede p = new Parede(_pontos.obter((i+1)%n), _pontos.obter(i));
             //Esta é uma das arestas do polígono.
             if (!p.contem(c))
                 return false; //Se o ponto em questão está fora da parede, ele também está fora
@@ -76,10 +76,11 @@ public class PoligonoConvexo extends PoligonoMovelAbstrato {
         {
             PoligonoConvexo p = new PoligonoConvexo(_pontos.obter(i), _pontos.obter((i+1)%n), this._centro);
             //Testo todos os triângulos internos do polígono.
-            if (!p.contem(c))
+            if (p.contem(c))
                 return new Parede(_pontos.obter(i), _pontos.obter((i+1)%n)).anguloColisao(c); 
         }
-        return 0;
+        
+        return _centro.obterAnguloCom(c); //O ponto está fora do polígono.
     }
 
     @Override

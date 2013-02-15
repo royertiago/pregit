@@ -25,6 +25,8 @@ public class ColisaoSemMomento extends LeiBinaria {
         Vetor m = cr.obterVetorMovimento();
         m = m.espelharSeSobre(cr.anguloColisao(c));
         cr.fixarVetorMovimento(m);
+        
+        System.out.println( "Colisão contra a parede: " + cr + " - ângulo: " + p.anguloColisao(c) ); //TODO: remover
     }
 
     @Override

@@ -1,15 +1,19 @@
 package modelo;
 
 import controle.ControladorTeclado;
+import modelo.RoyerPhysics.Coordenada;
 import modelo.RoyerPhysics.CorpoRigidoMovel;
 import modelo.RoyerPhysics.Vetor;
 import modelo.RoyerPhysics.leis.TipoAplicador;
+import modelo.RoyerPhysics.observacaoDeCorpos.CorpoObservado;
+import modelo.RoyerPhysics.poligonos.PoligonoConvexo;
 import modelo.fabricas.AcademiaDix;
 import modelo.fabricas.FabricaDeObjetos;
 import modelo.fabricas.GraficaDix;
 import edugraf.jadix.Aplique;
 import edugraf.jadix.fachada.Pichador;
 
+@SuppressWarnings("unused")
 public class Jogo {
 
     public static void jogar(Aplique a) {
@@ -43,4 +47,12 @@ public class Jogo {
             alce.descansar(0.05);
         }
     }
+    /*
+    static public void main( String[] args )
+    {
+        PoligonoConvexo p = new PoligonoConvexo(
+                new Coordenada(0,0), new Coordenada(10, 0), new Coordenada(0, 10));
+        System.out.println(p.obterCentro());
+        System.out.println(p.contem(new Coordenada(4, 6.5)));
+    }*/
 }

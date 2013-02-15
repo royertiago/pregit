@@ -91,4 +91,15 @@ public class Vetor {
     public String toString() {
         return String.format("[%.3f;%.3f]", x, y);
     }
+    
+    /**
+     * Projeta este vetor perpendicularmente sobre <b>v</b>.
+     * @param v Vetor sobre o qual este será projetato.
+     * @return A projeção deste vetor.
+     */
+    public Vetor projetarSe (Vetor v)
+    {
+        System.out.println(" Você ainda não implementou a projeção de vetores. ");
+        return null; //FIXME: Implementar.
+    }
 }
