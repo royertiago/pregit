@@ -51,7 +51,7 @@ public class FabricaDeObjetos {
      * @return Uma bola.
      */
     public CorpoRigidoMovel fabricarBola(Vetor v) {
-        Circulo c = new Circulo(new Coordenada(350, 200), 13);
+        Circulo c = new Circulo(new Coordenada(350, 200), 13, 40);
         CorpoRigido cr = new CorpoRigido(c);
         cr.fixarVetorMovimento(v);
         CorpoObservado bola = new CorpoObservado(cr);

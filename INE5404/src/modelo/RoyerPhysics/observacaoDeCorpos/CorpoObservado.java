@@ -85,7 +85,6 @@ public class CorpoObservado implements CorpoRigidoMovel, CorpoObservavel {
     public void mover(double c) {
         _corpo.mover(c);
         _megafone.gritar(_corpo.obterCentro());
-        System.out.println("Avisando: " + _corpo); //TODO: remover
     }
 
     @Override

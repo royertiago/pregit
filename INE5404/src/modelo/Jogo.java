@@ -12,6 +12,7 @@ import modelo.fabricas.GraficaDix;
 import edugraf.jadix.Aplique;
 import edugraf.jadix.fachada.Pichador;
 
+import edugraf.jadix.ajudantes.DecoradorDeComponenteDixAbstrato;
 @SuppressWarnings("unused")
 public class Jogo {
 
@@ -25,7 +26,7 @@ public class Jogo {
 
         CorpoRigidoMovel bola = fabrica.fabricarBola(new Vetor(50, 50));
         controlador.registrarCorpo(bola);
-
+        
         CorpoRigidoMovel rP1 = fabrica.fabricarRaqueteDireita();
         CorpoRigidoMovel rP2 = fabrica.fabricarRaqueteEsquerda();
 
@@ -37,7 +38,7 @@ public class Jogo {
         
         controlador.registrarCorpo(rP1);
         controlador.registrarCorpo(rP2);
-
+        
         System.out.println("Jogo criado. Este jogo usa RoyerPhysics - A Leading Computational Engine");
 
         Pichador alce = new Pichador();
@@ -49,8 +50,13 @@ public class Jogo {
     
     static public void main( String[] args )
     {
-        Vetor v = new Vetor(0, 1);
-        Vetor u = new Vetor(5*Math.PI, Math.PI);
-        System.out.println(u.projetarSe(v));
+        PoligonoConvexo p = new PoligonoConvexo(new Coordenada(690, 150),
+                new Coordenada(690, 250), new Coordenada(675, 225),
+                new Coordenada(675, 175));
+        System.out.println(p);
+        p.mover(new Vetor(Math.PI, Math.E));
+        System.out.println(p);
+        p.mover(new Vetor(Math.PI, Math.E));
+        System.out.println(p);
     }//*/
 }

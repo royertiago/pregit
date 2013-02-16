@@ -105,4 +105,13 @@ public class PoligonoConvexo extends PoligonoMovelAbstrato {
     public Coordenada obterCentro() {
         return _centro;
     }
+    
+    @Override
+    public String toString() {
+        String out = "PoligonoConvexo - Centro: " + _centro + " - " + _aabb;
+        for( Coordenada c: _pontos )
+            out = out + "\n" + c;
+        
+        return out;
+    }
 }

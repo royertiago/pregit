@@ -105,7 +105,7 @@ public class AABB {
      * @return Este objeto.
      */
     public AABB mover(Vetor v) {
-        return new AABB(x + v.x, y + v.x, altura, largura);
+        return new AABB(x + v.x, y + v.x, largura, altura);
     }
 
     /**
@@ -134,5 +134,11 @@ public class AABB {
         // Canto inferior esquerdo
         
         return l;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return String.format("(%.3f;%.3f) + %.3f - %.3f", x, y, largura, altura);
     }
 }

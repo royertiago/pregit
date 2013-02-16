@@ -14,25 +14,23 @@ public class ColisaoSemMomento extends LeiBinaria {
 
     @Override
     public void aplicar(PoligonoEstrutural p, CorpoRigidoMovel cr, double tempo) {
-        if (!p.contem(cr.obterAABB())) // Se o teste preliminar deu negativo,
+        /*if (!p.contem(cr.obterAABB())) // Se o teste preliminar deu negativo,
                                        // sair.
-            return;
+            return;*///TODO: arrumar AABB.
 
         Coordenada c = p.obterIntersecao(cr);
         if (c == null) // Se não há interseção
             return;
 
         Vetor m = cr.obterVetorMovimento();
-        m = m.espelharSeSobre(cr.anguloColisao(c));
+        m = m.espelharSeSobre(p.anguloColisao(c));
         cr.fixarVetorMovimento(m);
-        
-        System.out.println( "Colisão contra a parede: " + cr + " - ângulo: " + p.anguloColisao(c) ); //TODO: remover
     }
 
     @Override
     public void aplicar(CorpoRigidoMovel cr1, CorpoRigidoMovel cr2, double tempo) {
-        if (!cr1.obterAABB().estaSobreposto(cr2.obterAABB()))
-            return;
+        /*if (!cr1.obterAABB().estaSobreposto(cr2.obterAABB()))
+            return;*/
 
         Coordenada c = cr1.obterIntersecao(cr2);
         if (c == null)
