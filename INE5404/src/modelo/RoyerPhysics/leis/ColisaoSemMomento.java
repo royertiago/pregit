@@ -7,16 +7,17 @@ import modelo.RoyerPhysics.Vetor;
 
 /**
  * Testa colisão entre dois objetos; desconsidera momento linear.
+ * 
  * @author Tiago Royer
- *
+ * 
  */
 public class ColisaoSemMomento extends LeiBinaria {
 
     @Override
     public void aplicar(PoligonoEstrutural p, CorpoRigidoMovel cr, double tempo) {
-        /*if (!p.contem(cr.obterAABB())) // Se o teste preliminar deu negativo,
-                                       // sair.
-            return;*///TODO: arrumar AABB.
+        if (!p.contem(cr.obterAABB()))
+            // sair.
+            return;// Se o teste preliminar deu negativo,sair
 
         Coordenada c = p.obterIntersecao(cr);
         if (c == null) // Se não há interseção
@@ -29,8 +30,8 @@ public class ColisaoSemMomento extends LeiBinaria {
 
     @Override
     public void aplicar(CorpoRigidoMovel cr1, CorpoRigidoMovel cr2, double tempo) {
-        /*if (!cr1.obterAABB().estaSobreposto(cr2.obterAABB()))
-            return;*/
+        if (!cr1.obterAABB().estaSobreposto(cr2.obterAABB()))
+            return;//*///TODO: arrumar AABB
 
         Coordenada c = cr1.obterIntersecao(cr2);
         if (c == null)

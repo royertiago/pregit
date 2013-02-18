@@ -91,10 +91,10 @@ public class AABB {
      *         <b>false</b> caso contrário.
      */
     public boolean estaSobreposto(AABB alvo) {
-        return ((x <= alvo.x && x + largura >= alvo.x) || (alvo.x <= x && alvo.x
-                + alvo.largura <= x))
-                && ((y <= alvo.y && y + altura >= alvo.y) || (alvo.y <= y && alvo.y
-                        + alvo.altura <= y));
+        return ((alvo.x < x && x < alvo.x + alvo.largura) ||
+                 (x < alvo.x && alvo.x < x + largura))
+                && ((alvo.y < y && y < alvo.y + alvo.altura) ||
+                    (y < alvo.y && alvo.y < y + altura));
     }
 
     /**
@@ -105,7 +105,7 @@ public class AABB {
      * @return Este objeto.
      */
     public AABB mover(Vetor v) {
-        return new AABB(x + v.x, y + v.x, largura, altura);
+        return new AABB(x + v.x, y + v.y, largura, altura);
     }
 
     /**
@@ -120,25 +120,26 @@ public class AABB {
 
     public ListaLegivel<Coordenada> obterExtremidades() {
         Lista<Coordenada> l = new Lista<Coordenada>();
-        
+
         l.adicionarItem(new Coordenada(x, y));
         // Canto superior esquerdo
-        
+
         l.adicionarItem(new Coordenada(x + largura, y));
         // Canto superior direito
-        
+
         l.adicionarItem(new Coordenada(x + largura, y + altura));
         // Canto inferior direito
-        
+
         l.adicionarItem(new Coordenada(x, y + altura));
         // Canto inferior esquerdo
-        
+
         return l;
     }
-    
+
     @Override
-    public String toString()
-    {
-        return String.format("(%.3f;%.3f) + %.3f - %.3f", x, y, largura, altura);
+    public String toString() {
+        return String.format(
+                "AABB - Canto: (%.3f;%.3f) + largura %.3f + altura %.3f", x, y,
+                largura, altura);
     }
 }

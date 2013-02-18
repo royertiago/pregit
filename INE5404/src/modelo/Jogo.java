@@ -1,19 +1,13 @@
 package modelo;
 
-import controle.ControladorTeclado;
-import modelo.RoyerPhysics.Coordenada;
-import modelo.RoyerPhysics.CorpoRigidoMovel;
-import modelo.RoyerPhysics.Vetor;
-import modelo.RoyerPhysics.leis.TipoAplicador;
-import modelo.RoyerPhysics.poligonos.PoligonoConvexo;
-import modelo.fabricas.AcademiaDix;
-import modelo.fabricas.FabricaDeObjetos;
-import modelo.fabricas.GraficaDix;
+import controle.*;
+import modelo.RoyerPhysics.*;
+import modelo.RoyerPhysics.leis.*;
+import modelo.RoyerPhysics.poligonos.*;
+import modelo.fabricas.*;
 import edugraf.jadix.Aplique;
 import edugraf.jadix.fachada.Pichador;
 
-import edugraf.jadix.ajudantes.DecoradorDeComponenteDixAbstrato;
-@SuppressWarnings("unused")
 public class Jogo {
 
     public static void jogar(Aplique a) {
@@ -24,15 +18,15 @@ public class Jogo {
         
         TipoAplicador controlador = fabrica.fabricarColisorEquipado();
 
-        CorpoRigidoMovel bola = fabrica.fabricarBola(new Vetor(50, 50));
+        CorpoRigidoMovel bola = fabrica.fabricarBola(new Vetor(100, 100));
         controlador.registrarCorpo(bola);
         
         CorpoRigidoMovel rP1 = fabrica.fabricarRaqueteDireita();
         CorpoRigidoMovel rP2 = fabrica.fabricarRaqueteEsquerda();
 
         ControladorTeclado keyboard = new ControladorTeclado(a.obterPaginaDix());
-        Jogador player1 = academia.FabricarJogadorDireita(rP1, 100);
-        Jogador player2 = academia.FabricarJogadorEsquerda(rP2, 100);
+        Jogador player1 = academia.FabricarJogadorDireita(rP1, 50);
+        Jogador player2 = academia.FabricarJogadorEsquerda(rP2, 50);
         keyboard.registrarJogador(player1);
         keyboard.registrarJogador(player2);
         
@@ -43,8 +37,8 @@ public class Jogo {
 
         Pichador alce = new Pichador();
         while (!false) {
-            controlador.avancar(0.05);
-            alce.descansar(0.05);
+            controlador.avancar(0.02);
+            alce.descansar(0.02);
         }
     }
     
@@ -53,10 +47,18 @@ public class Jogo {
         PoligonoConvexo p = new PoligonoConvexo(new Coordenada(690, 150),
                 new Coordenada(690, 250), new Coordenada(675, 225),
                 new Coordenada(675, 175));
-        System.out.println(p);
-        p.mover(new Vetor(Math.PI, Math.E));
-        System.out.println(p);
-        p.mover(new Vetor(Math.PI, Math.E));
-        System.out.println(p);
+        PoligonoConvexo p1 = new PoligonoConvexo(new Coordenada(690, 150),
+                new Coordenada(690, 250), new Coordenada(675, 225),
+                new Coordenada(675, 175));
+        
+        p.mover(new Vetor(10, 10));
+        
+        System.out.println();
+        System.out.println(p.obterAABB());
+        System.out.println();
+        System.out.println(p1.obterAABB());
+        System.out.println();
+        System.out.println(p.obterAABB().estaSobreposto(p1.obterAABB()));
+        
     }//*/
 }
