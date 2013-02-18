@@ -48,11 +48,12 @@ public class FabricaDeObjetos {
      * 
      * @param v
      *            Vetor de movimento da bola.
+     *            @param c Centro da bola.
      * @return Uma bola.
      */
-    public CorpoRigidoMovel fabricarBola(Vetor v) {
-        Circulo c = new Circulo(new Coordenada(350, 200), 13, 40);
-        CorpoRigido cr = new CorpoRigido(c);
+    public CorpoRigidoMovel fabricarBola(Coordenada c, Vetor v) {
+        Circulo circ = new Circulo(c, 13, 40);
+        CorpoRigido cr = new CorpoRigido(circ);
         cr.fixarVetorMovimento(v);
         CorpoObservado bola = new CorpoObservado(cr);
         bola.adicionarObservador(_grafica.fabricarImagemBola());

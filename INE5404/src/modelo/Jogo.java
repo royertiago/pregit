@@ -1,10 +1,13 @@
 package modelo;
 
-import controle.*;
-import modelo.RoyerPhysics.*;
-import modelo.RoyerPhysics.leis.*;
-import modelo.RoyerPhysics.poligonos.*;
-import modelo.fabricas.*;
+import controle.ControladorTeclado;
+import modelo.RoyerPhysics.Coordenada;
+import modelo.RoyerPhysics.CorpoRigidoMovel;
+import modelo.RoyerPhysics.Vetor;
+import modelo.RoyerPhysics.leis.TipoAplicador;
+import modelo.fabricas.AcademiaDix;
+import modelo.fabricas.FabricaDeObjetos;
+import modelo.fabricas.GraficaDix;
 import edugraf.jadix.Aplique;
 import edugraf.jadix.fachada.Pichador;
 
@@ -18,7 +21,7 @@ public class Jogo {
         
         TipoAplicador controlador = fabrica.fabricarColisorEquipado();
 
-        CorpoRigidoMovel bola = fabrica.fabricarBola(new Vetor(100, 100));
+        CorpoRigidoMovel bola = fabrica.fabricarBola(new Coordenada(350, 200), new Vetor(100, 100));
         controlador.registrarCorpo(bola);
         
         CorpoRigidoMovel rP1 = fabrica.fabricarRaqueteDireita();
@@ -41,24 +44,4 @@ public class Jogo {
             alce.descansar(0.02);
         }
     }
-    
-    static public void main( String[] args )
-    {
-        PoligonoConvexo p = new PoligonoConvexo(new Coordenada(690, 150),
-                new Coordenada(690, 250), new Coordenada(675, 225),
-                new Coordenada(675, 175));
-        PoligonoConvexo p1 = new PoligonoConvexo(new Coordenada(690, 150),
-                new Coordenada(690, 250), new Coordenada(675, 225),
-                new Coordenada(675, 175));
-        
-        p.mover(new Vetor(10, 10));
-        
-        System.out.println();
-        System.out.println(p.obterAABB());
-        System.out.println();
-        System.out.println(p1.obterAABB());
-        System.out.println();
-        System.out.println(p.obterAABB().estaSobreposto(p1.obterAABB()));
-        
-    }//*/
 }

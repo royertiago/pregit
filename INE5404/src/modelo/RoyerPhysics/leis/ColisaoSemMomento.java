@@ -31,7 +31,7 @@ public class ColisaoSemMomento extends LeiBinaria {
     @Override
     public void aplicar(CorpoRigidoMovel cr1, CorpoRigidoMovel cr2, double tempo) {
         if (!cr1.obterAABB().estaSobreposto(cr2.obterAABB()))
-            return;//*///TODO: arrumar AABB
+            return;
 
         Coordenada c = cr1.obterIntersecao(cr2);
         if (c == null)
