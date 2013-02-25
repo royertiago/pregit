@@ -12,8 +12,8 @@ import modelo.RoyerPhysics.CorpoRigidoMovel;
 public class Movimento extends LeiUnaria {
 
     @Override
-    public void aplicar(CorpoRigidoMovel cr, double tempo) {
-        cr.mover(tempo);
+    public void aplicarA(CorpoRigidoMovel cr) {
+        cr.mover(super.obterClockDoCampo().obterTempo());
     }
 
 }

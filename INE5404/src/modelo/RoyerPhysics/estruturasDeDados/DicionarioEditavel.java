@@ -2,22 +2,30 @@ package modelo.RoyerPhysics.estruturasDeDados;
 
 import java.util.Iterator;
 
-public class ListaComEditor<Valor> implements ListaLegivel<Valor> {
+/**
+ * Dicionário de dados, que faz uma associação entre uma string e o tipo
+ * de dado selecionado.
+ * 
+ * @author Tiago Royer
+ *
+ * @param <Valor> Tipo de dado a ser associado com a string.
+ */
+public class DicionarioEditavel<Valor> implements ListaLegivel<Valor> {
 
     private Lista<Par<String, Valor>> _mapa;
 
     /**
-     * Enjambração para que essa lista possa ser lida com um foreach.
+     * Enjambração para que esse dicionário possa ser lida com um foreach.
      */
     private Iterator<Par<String, Valor>> _leitorInterno;
 
-    public ListaComEditor() {
+    public DicionarioEditavel() {
         _mapa = new Lista<Par<String, Valor>>();
         reiniciarLeitura();
     }
 
     /**
-     * Método interno, que procura a chave especificada na lista e retorna o par
+     * Método interno, que procura a chave especificada no dicionário e retorna o par
      * ordenado correspondente. Caso nada seja encontrado, o valor <b>null</b> é
      * retornado.
      * 
@@ -35,7 +43,8 @@ public class ListaComEditor<Valor> implements ListaLegivel<Valor> {
     }
 
     /**
-     * Insere um novo par Chave-Valor na lista.
+     * Insere um novo par Chave-Valor no dicionário. Caso a chave já exista,
+     * o valor será modificado.
      * 
      * @param chave
      *            Chave do par a ser adicionado.
@@ -51,17 +60,7 @@ public class ListaComEditor<Valor> implements ListaLegivel<Valor> {
     }
 
     /**
-     * Insere diretamente um novo par na lista.
-     * 
-     * @param par
-     *            Par a ser adicionado.
-     */
-    public void inserirPar(Par<String, Valor> par) {
-        _mapa.adicionarItem(par);
-    }
-
-    /**
-     * Descobre se um par com a chave <b>chave</b> existe na lista.
+     * Descobre se um par com a chave <b>chave</b> existe no dicionário.
      * 
      * @param chave
      *            Chave a ser testada.
@@ -82,7 +81,7 @@ public class ListaComEditor<Valor> implements ListaLegivel<Valor> {
      *            Chave a ser buscada.
      * @return Um Editor apontando para o par desejado.
      */
-    public Editor<Valor> obterEditor(String chave) {
+    public TipoEditor<Valor> obterEditor(String chave) {
         Par<String, Valor> p = obterChave(chave);
         if (p == null)
             return null;
@@ -91,7 +90,7 @@ public class ListaComEditor<Valor> implements ListaLegivel<Valor> {
     }
     
     /**
-     * Converte a lista atual para uma Lista, descartando as chaves.
+     * Converte o dicionário atual para uma Lista, descartando as chaves.
      * @return Lista<Valor> com apenas os valores dessa lista.
      */
     public Lista<Valor> paraLista()
@@ -124,12 +123,12 @@ public class ListaComEditor<Valor> implements ListaLegivel<Valor> {
         return alce.t2;
     }
 
-    //@Override
+    @Override
     public int obterTamanho() {
         return _mapa.obterTamanho();
     }
 
-    //@Override
+    @Override
     public Valor obter(int indice) {
         return _mapa.obter(indice).t2;
     }

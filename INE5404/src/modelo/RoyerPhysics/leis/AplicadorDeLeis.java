@@ -54,9 +54,9 @@ public class AplicadorDeLeis implements TipoAplicador {
 
     @Override
     public void avancar(double tempo) {
-        Campo c = new Campo(this._corpos, this._paredes);
+        ClockDoCampo c = new ClockDoCampo(this._corpos, this._paredes, tempo);
         for (TipoLei l : _legislacao)
-            l.aplicar(c, tempo);
+            l.aplicar(c);
     }
 
 }

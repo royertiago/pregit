@@ -1,7 +1,7 @@
 package modelo.RoyerPhysics;
 
 import modelo.RoyerPhysics.estruturasDeDados.Editor;
-import modelo.RoyerPhysics.estruturasDeDados.ListaComEditor;
+import modelo.RoyerPhysics.estruturasDeDados.DicionarioEditavel;
 import modelo.RoyerPhysics.estruturasDeDados.Par;
 import modelo.RoyerPhysics.estruturasDeDados.TipoEditor;
 import static modelo.RoyerPhysics.Vetor.vetorNulo;
@@ -15,33 +15,26 @@ import static modelo.RoyerPhysics.Vetor.vetorNulo;
  */
 public class ConjuntoDeForcas implements TipoConjuntoDeForcas {
 
-    private ListaComEditor<Vetor> _forcas;
+    private DicionarioEditavel<Vetor> _forcas;
     
     /**
      * Cria um conjunto de forças vazio.
      */
     public ConjuntoDeForcas () {
-        _forcas = new ListaComEditor<Vetor>();
+        _forcas = new DicionarioEditavel<Vetor>();
     }
     
-    /* (non-Javadoc)
-     * @see modelo.RoyerPhysics.TipoConjuntoForcas#obterForca(java.lang.String)
-     */
     @Override
     public TipoEditor<Vetor> obterForca(String nome)
     {
-        Editor<Vetor> e = _forcas.obterEditor(nome);
-        if (e != null)
-            return e;
+        if( _forcas.existeChave(nome))
+            return _forcas.obterEditor(nome);
         
         Par<String, Vetor> par = new Par<String, Vetor>(nome, vetorNulo);
-        _forcas.inserirPar(par);
+        _forcas.inserirPar(nome, vetorNulo);
         return new Editor<Vetor>(par);
     }
     
-    /* (non-Javadoc)
-     * @see modelo.RoyerPhysics.TipoConjuntoForcas#obterSomatorioForcas()
-     */
     @Override
     public Vetor obterSomatorioForcas()
     {

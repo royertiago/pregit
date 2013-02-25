@@ -6,6 +6,8 @@ import modelo.RoyerPhysics.estruturasDeDados.TipoEditor;
  * Representa um conjunto de forças atuando sobre um objeto. As forças são
  * manipuladas separadamente.
  * 
+ * A manipulação das forças se dá de forma semelhante a um dicionario.
+ * 
  * @author Tiago Royer
  */
 public interface TipoConjuntoDeForcas {

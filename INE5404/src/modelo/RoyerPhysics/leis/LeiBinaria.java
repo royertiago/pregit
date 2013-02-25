@@ -17,20 +17,52 @@ import modelo.RoyerPhysics.PoligonoEstrutural;
  */
 public abstract class LeiBinaria implements TipoLei  {
 
+    private TipoClockDoCampo _clock;
+    
     @Override
-    public void aplicar(Campo c, double tempo) {
+    public void aplicar(TipoClockDoCampo c) {
+        _clock = c;
         
-        for( PoligonoEstrutural p: c.estruturas )
-            for( CorpoRigidoMovel cr: c.corposRigidos )
-                this.aplicar(p, cr, tempo);
+        for( PoligonoEstrutural p: c.obterEstruturas() )
+            for( CorpoRigidoMovel cr: c.obterCorpos() )
+                this.aplicarA(p, cr);
         
-        for( int i = 0; i < c.corposRigidos.obterTamanho(); i++)
-            for( int j = i + 1; j < c.corposRigidos.obterTamanho(); j++)
-                this.aplicar(c.corposRigidos.obter(i),c.corposRigidos.obter(j), tempo);
+        for( int i = 0; i < c.obterCorpos().obterTamanho(); i++)
+            for( int j = i + 1; j < c.obterCorpos().obterTamanho(); j++)
+                this.aplicarA(c.obterCorpos().obter(i),c.obterCorpos().obter(j));
+    }
+
+    /**
+     * Obtém o clock atual do campo.
+     * @return O clock do campo.
+     */
+    protected final TipoClockDoCampo obterClockDoCampo()
+    {
+        return _clock;
     }
     
-    public abstract void aplicar(PoligonoEstrutural p, CorpoRigidoMovel cr, double tempo);
+    /**
+     * Método interno que será chamado pela superclasse, uma vez para cada
+     * par [PolígonoEstrutural - CorpoRigidoMovel]. Deve ser implementado na subclasse.
+     * 
+     * Caso algum dado adicional seja necessário, <code>obtecClockDoCampo()</code>
+     * pode ser chamado para obter as informações faltantes.
+     * 
+     * @param p Polígono estrutural ao qual a lei será aplicada.
+     * @param cr Corpo Rígido ao qual a lei será aplicada.
+     */
+    public abstract void aplicarA(PoligonoEstrutural p, CorpoRigidoMovel cr);
     
-    public abstract void aplicar(CorpoRigidoMovel cr1, CorpoRigidoMovel cr2, double tempo);
+    /**
+     * Método interno que será chamado pela superclasse, uma vez para cada
+     * par de corpos rígidos distintos. Deve ser implementado na subclasse.
+     * 
+     * Caso algum dado adicional seja necessário, <code>obtecClockDoCampo()</code>
+     * pode ser chamado para obter as informações faltantes.
+     * 
+     * @param cr1 Primeiro corpo rígido ao qual a lei será aplicada.
+     * @param cr2 Segundo corpo rígido ao qual a lei será aplicada.
+     */
+    public abstract void aplicarA(CorpoRigidoMovel cr1, CorpoRigidoMovel cr2);
 
 }

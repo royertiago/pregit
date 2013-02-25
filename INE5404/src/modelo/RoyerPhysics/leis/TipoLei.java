@@ -9,16 +9,10 @@ package modelo.RoyerPhysics.leis;
 public interface TipoLei {
 
     /**
-     * Aplicar a lei àos corpos do campo <b>c</b>. <b>tempo</b> é o tempo, em
-     * segundos, que o sistema deve ser avançado.
-     * 
-     * Por exemplo, se um objeto está se movendo a 10m/s, avançar o sistema em
-     * 1.5 segundo deslocaria este objeto 15m.
+     * Aplicar a lei àos corpos do campo <b>c</b>.
      * 
      * @param c
-     *            Campo em que será aplicada a lei
-     * @param tempo
-     *            Tempo, em segundos, que o sistema deve ser avançado.
+     *            ClockDoCampo que deve ser considerado para a aplicação da lei.
      */
-    public void aplicar(Campo c, double tempo);
+    public void aplicar(TipoClockDoCampo c);
 }

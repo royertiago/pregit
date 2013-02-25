@@ -13,7 +13,8 @@ import modelo.RoyerPhysics.Vetor;
 public class LeiDeForcas extends LeiUnaria {
 
     @Override
-    public void aplicar(CorpoRigidoMovel cr, double tempo) {
+    public void aplicarA(CorpoRigidoMovel cr) {
+        double tempo = super.obterClockDoCampo().obterTempo();
         Vetor forca = cr.obterSomatorioForcas();
         Vetor movimento = cr.obterVetorMovimento().somarCom(forca.escalar(tempo));
         cr.fixarVetorMovimento(movimento);

@@ -1,15 +1,13 @@
 package modelo.RoyerPhysics.estruturasDeDados;
 
 /**
- * Representa um Editor. Editor é um objeto que é ligado diretamente à uma lista, mas que
- * só pode alterar um item em específico dela.
- * 
- * O Editor provê acesso total ao item da lista; mas, como é somente um objeto que o editor
- * é capaz de manipular, o restante da lista não pode ser tocado pelo "dono" do editor.
+ * Representa um Editor. Editor é um objeto que é ligado diretamente a um item
+ * de um dicionário, podendo alterar somente aquele item.
  * 
  * @author Tiago Royer
- *
- * @param <Tipo> Tipo do objeto que pode ser editado.
+ * 
+ * @param <Tipo>
+ *            Tipo do objeto que pode ser editado.
  */
 public interface TipoEditor<Tipo> {
 
@@ -24,8 +22,8 @@ public interface TipoEditor<Tipo> {
     /**
      * Extrai (obtém) o valor armazenado.
      * 
-     * @return
+     * @return O valor armazenado.
      */
-    public abstract Tipo extrair();
+    public abstract Tipo obter();
 
 }

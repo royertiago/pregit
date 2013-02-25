@@ -3,8 +3,7 @@ package modelo.RoyerPhysics.estruturasDeDados;
 /**
  * Representa um editor.
  * 
- * Um editor é um objeto que tem acesso direto a um par de uma
- * lista com editor. 
+ * Um editor é um objeto que tem acesso direto a um par de um dicionário.
  * 
  * @author Tiago Royer
  * 
@@ -21,6 +20,7 @@ public class Editor<Tipo> implements TipoEditor<Tipo> {
 
     /**
      * Cria um editor com o par escolhido.
+     * 
      * @param valor
      */
     public Editor(Par<?, Tipo> valor) {
@@ -33,13 +33,12 @@ public class Editor<Tipo> implements TipoEditor<Tipo> {
     }
 
     @Override
-    public Tipo extrair() {
+    public Tipo obter() {
         return _par.t2;
     }
-    
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "[Editor] " + _par.t2.toString();
     }
 }
