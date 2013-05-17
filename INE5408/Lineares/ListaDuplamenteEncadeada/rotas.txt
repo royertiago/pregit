@@ -1,0 +1,125 @@
+10
+
+92.50
+Remoídas
+5
+Florianópolis
+08:30
+Capital de Santa Catarina.
+Blumenau
+21:00
+Oktoberfest.
+Joaçaba
+02:00
+Aqui deveria haver uma descrição criativa da cidade em questão.
+Chapecó
+05:30
+Cidade do criador deste software.
+Mondaí
+06:45
+Última parada.
+
+108.75
+Dólar Viagens Diretas
+2
+Florianópolis
+20:30
+Saída.
+Chapecó
+05:45
+Chegada.
+
+278.00
+Wangenheim Transportes
+3
+Florianópolis
+07:00
+Cidade de partida.
+Porto Alegre
+19:00
+Capital do Rio Grande do Sul
+Curitiba
+13:00
+Última parada.
+
+108.75
+Dólar Viagens Diretas
+2
+Florianópolis
+22:30
+Saída.
+São Paulo
+12:00
+Chegada.
+
+157.79
+Remoídas
+4
+Florianópolis
+06:00
+Capital da Santa e Bela Catarina
+Blumenau
+12:00
+Oktoberfest
+Itajaí
+13:30
+Ali do lado
+São José
+19:00
+Última parada.
+
+108.75
+Dólar Viagens Diretas
+2
+Florianópolis
+12:30
+Saída.
+Rio de Janeiro
+02:00
+Chegada.
+
+108.75
+Dólar Viagens Diretas
+2
+Florianópolis
+06:30
+Saída.
+Buenos Aires
+22:00
+Chegada.
+
+108.75
+Dólar Viagens Diretas
+2
+Florianópolis
+12:30
+Saída.
+Rio de Janeiro
+02:00
+Chegada.
+
+78.79
+Remoídas
+3
+Florianópolis
+07:15
+Capital de Santa Catarina
+Brusque
+08:25
+Segunda cidade visitada. Desculpe-me professor, minha criatividade não está ajudando.
+Tijucas
+10:00
+Chegada.
+
+320.00
+Wangenheim Transportes
+3
+Florianópolis
+13:30
+Capital de Santa Catarina.
+Curitiba
+22:00
+Visitar a UFPR
+Porto Alegre
+08:00
+Visitar a UFRGS

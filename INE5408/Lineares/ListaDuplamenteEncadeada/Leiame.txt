@@ -1,0 +1,16 @@
+O arquivo Rotas.txt contém as rotas que serão utilizadas
+durante a execução do programa. Seu formato é o seguinte:
+
+Na primeira linha, há um inteiro correspondendo a quantidade
+de rotas a serem lidas.
+
+A cada rota, há um inteiro correspondendo à quantidade
+de cidades, um valor decimal correspondendo ao valor da
+passagem, a empresa, e as cidades.
+
+Cada cidade possui, em sequência, o nome da cidade, o horário
+previsto de chegada do ônibus, e uma descrição da cidade,
+em cada linha.
+
+Não deve haver linhas em branco entre as cidades, mas pode
+haver entre as rotas.
