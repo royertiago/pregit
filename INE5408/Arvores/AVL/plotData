@@ -1,0 +1,2 @@
+plot "data.txt" w l
+pause -1
