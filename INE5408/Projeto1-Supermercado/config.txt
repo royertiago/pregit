@@ -1,0 +1,20 @@
+#Isto é um comentário.
+#Comentários devem ter no primeiro caracter da linha uma cerquilha.
+#Nome do supermercado:
+Wangenheim Alimentos
+#Tempo de simulação (horas):
+24
+#Tempo médio de chegada de clientes, em segundos:
+60
+#Tamanho das filas. Se o tamanho de todas as filas superar este valor,
+#o supermercado contratará mais um caixa:
+5
+#Número de caixas:
+5
+#Salário dos caixas, taxa de eficiência, Nome completo:
+678 4.0 João De Mora
+679 4.0 Zeca Mole
+1189 1.1 Juliana Digito
+958 2.0 Zózimo de Oliveira
+886 2.5 Zulmira de Oliveira
+#Fim do arquivo de configuração.
