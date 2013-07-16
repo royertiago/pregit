@@ -1,0 +1,54 @@
+        Arquivos .dat:
+
+manpages.dat - Todas as páginas de manual do trabalho
+primary.dat - Árvore de chaves primárias
+secondary.dat - Árvore de chaves secundárias
+forbidden.dat - Palavras proibidas
+As árvores tem sua estrutura descrita em MemoryTrie.cpp::serializar.
+
+
+        Forbidden.dat
+
+Conterá as palavras que devem ser ignoradas na indexação, como letras
+separadas, artigos, conectivos...
+É um MemoryTrie<bool> serializado (o bool é um placeholder).
+
+        Estrutura de manpages.dat:
+
+O arquivo é, primariamente, de texto; cada man page gravada em dois
+campos: o primeiro é o arquivo que gerou esta man page, sem a extensão
+.txt, e o segundo é o texto da man page. Após cada campo, existe um
+caractere nulo; as man pages são armazenadas sequencialmente.
+
+Algo como:
+
+Nome 1'\0'Texto ManPage 1'\0'Nome 2'\0'Texto ManPage 2'\0'Nome 3 ...
+
+Os nomes das manpages conterão os caminhos inteiros; entretanto, apenas
+o nome do arquivo (sem o .txt) será usado para indexação.
+
+
+        Opções em linha de comando
+
+    -i files
+        Cria/sobrescreve os arquivos manpages.dat, primary.dat e
+        secondary.dat de acordo com as especificações, usando os
+        arquivos especificados. Supor-se-á que todos os arquivos
+        passados por parâmetro terminam em .txt, e que não existem
+        dois arquivos com nomes idênticos.
+
+    -m manpage
+        Busca e exibe a manpage especificada. Caso não exista, uma
+        mensagem de erro será emitida.
+
+    -k keyword
+        Lista os nomes de todas as manpages que contém a palavra-
+        -chave especificada.
+
+    -k keyword1 keyword2
+        Lista os nomes de todas as manpages que contém ambas as
+        palavras-chave especificadas.
+
+    -f forbidden
+        Constrói o arquivo forbidden.dat baseado no arquivo
+        especificado.
