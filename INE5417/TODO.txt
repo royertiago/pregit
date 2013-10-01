@@ -1,0 +1,27 @@
+Classes (supostamente) completas:
+OrdemDeEnvio.h
+MovimentacaoDeTropas.h
+Exercito.h
+Tecnologia.h
+
+Header completos:
+Time.h
+Ator.h
+
+Headers incompletos:
+Cidade.h
+Jogador.h
+Estrada.h
+LocalDeBatalha.h
+(Em todos estes, faltam os atributos corretos.)
+
+Problemas na hierarquia: LocalDeBatalha -> CampoAberto e Cidade.
+A batalha na cidade pode ter efeitos colaterais (conquista da cidade)
+que não ocorrem no campo aberto.
+Solução possível: colocar um RegistradorDeBatalha em cada
+LocalDeBatalha e verificar na cidade, na etapa de geração de soldados,
+se a cidade troca de dono ou não.
+
+Possível alteração: deslocar gerarOrdemDeEnvio() e
+alterarBalanceamento() do Jogador para o Ator?
+
