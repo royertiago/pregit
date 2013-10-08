@@ -7,12 +7,32 @@
 #define TIME_H
 
 #include <list>
+using std::list;
+
+#include "Jogador.h"
+
+class Time;
 
 class Time {
+    list< Jogador > time;
 public:
-    Time( const list< Jogadores > time );
 
-    const list< Jogadores > time;
+    /* Cria um time vazio, sem jogadores. */
+    Time();
+
+    // Simplesmente retorna os iteradores da lista de times.
+    list<Jogador>::iterator begin();
+    list<Jogador>::const_iterator begin() const;
+    list<Jogador>::iterator end();
+    list<Jogador>::const_iterator end() const;
+    
+
+
+    /* Cria um time com a quantidade especificada de jogadores. */
+    static Time fabricarTime( int jogadores );
+
+    friend struct std::hash< Time >;
+    friend struct std::hash< Time* >;
 };
 
 namespace std {
@@ -28,3 +48,5 @@ namespace std {
         }
     };
 }
+
+#endif

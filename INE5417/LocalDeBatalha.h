@@ -5,17 +5,23 @@
  *
  */
 
-class Time;
+#ifndef LOCAL_DE_BATALHA_H
+#define LOCAL_DE_BATALHA_H
+
+#include "Historiador.h"
+
 
 class LocalDeBatalha {
 protected:
-    // Função que deve ser implementada pelas classes que estendidas.
-    virtual unordered_map< Time*, double > obterForcas() = 0;
+    Historiador h;
+    std::list< Exercito* > exercitos;
 public:
     LocalDeBatalha();
 
-    // Efetua a batalha de acordo com o método obterForcas.
+    // Efetua a batalha. 
     void batalhar();
 
     virtual ~LocalDeBatalha();
 };
+
+#endif

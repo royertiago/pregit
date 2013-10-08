@@ -1,8 +1,9 @@
 /* Jogador é uma fachada para acesso ao sistema, que é usado
  * pelos atores para jogar o jogo.
+ *
  * O Jogador não é um "jogador" no sentido usual, não é ele
  * quem ganha ou perde as partidas. Ele serve apenas para diferenciar
- * os exércitos de cada jogadores
+ * os exércitos de cada jogador.
  *
  * Cada jogador possui um ID único e constante por toda a duração
  * da execução do programa.
@@ -15,12 +16,19 @@
 #define JOGADOR_H
 
 #include <functional> //std::hash
+#include <string>
+using std::string;
 
 #include "Tecnologia.h"
 
 class Time;
-class Cidade;
 
+/*namespace std {
+    template <> struct hash< Jogador* > {
+        size_t operator()( Jogador* j ) const;
+    };
+}*/
+ 
 class Jogador {
 private:
     Tecnologia t;
@@ -29,22 +37,24 @@ private:
     static int idcount;
 public:
 
-    // Cria um jogador padrão com tecnologia 1.0.
-    Jogador();
+    /* Cria um jogador com tecnologia 1.0, associado ao time
+     * passado. */
+    Jogador( Time* );
 
     const int id;
-    const Time* time;
+    Time* const time;
 
     // Retorna a tecnologia do jogador.
-    const Tecnologia tecnologia() const;
+    Tecnologia& tecnologia();
 
     // Gera uma ordem de envio.
-    void gerarOrdemDeEnvio( Cidade* origem, Cidade* destino,
+    void gerarOrdemDeEnvio( string cidadeOrigem, string cidadeDestino,
                             int quantidade ) const;
 
     /* Altera o balanceamento da cidade alvo. A cidade alvo
      * será instruída a gerar a quantidade passada de soldados. */
-    void alterarBalanceamento( Cidade* alvo, int balanceamento ) const;
+    void alterarBalanceamento( string cidadeAlvo,
+           int balanceamento ) const;
 
 };
 
@@ -56,10 +66,9 @@ namespace std {
         }
     };
 
-    template <> struct hash< Jogador* > {
-        size_t operator()( const Jogador* & j ) const {
+/*    template <> size_t hash< Jogador* >
+        ::operator() ( Jogador* j ) const {
             return j->id;
-        }
-    };
+        }*/
 }
 #endif // Jogador.h

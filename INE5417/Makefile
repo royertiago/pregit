@@ -1,29 +1,55 @@
-CC = g++ -std=c++0x
+#Configurações do compilador
+COMPILER = g++
+FLAGS = -std=c++0x
+CC = $(COMPILER) $(FLAGS)
 
-obj = MovimentacaoDeTropas.o Tecnologia.o Jogador.o OrdemDeEnvio.o \
-	  Exercito.o
+#Lista de object files e dependências
+SOURCES = $(wildcard *.cpp) #Expandir o *.cpp
+OBJ = $(SOURCES:.cpp=.o) #Substitui .cpp para .o no fim das palavras
+OBJDEPS = $(SOURCES:.cpp=.d)
 
-all: a.out
 
-Tecnologia.o: Tecnologia.h Tecnologia.cpp
-	$(CC) -c Tecnologia.cpp
+#Agora, temos: \
+	SOURCES contém a lista de todos os .cpp do diretório. \
+	OBJ contém a mesma lista, mas com .o no final. \
+	OBJDEPS contém a mesma lista, mas com .d no final. \
+\
+A ideia é usar os .d como alvos do g++ -MM, que dá a lista de \
+dependências do .cpp em questão. Então incluímos todos os .d \
+no final.
 
-Jogador.o: Jogador.h Jogador.cpp Tecnologia.h
-	$(CC) -c Jogador.cpp
+a.out: $(OBJ) 
+	$(CC) $^
+# $^ retorna todas as dependências, sem repetição.
 
-MovimentacaoDeTropas.o: MovimentacaoDeTropas.h MovimentacaoDeTropas.cpp
-	$(CC) -c MovimentacaoDeTropas.cpp
+#"Metarregra": para cada palavra em OBJDEPS que case com %.o, defina \
+	a regra %.d : %.cpp \
+			g++ -MM -MF $@ $<
 
-OrdemDeEnvio.o: OrdemDeEnvio.h OrdemDeEnvio.cpp
-	$(CC) -c OrdemDeEnvio.cpp
+$(OBJDEPS): %.d : %.cpp
+	g++ -std=c++0x -MM $< -MF $@ -MT "$*.o $*.d"
+#Explicação: \
+$@ retorna o target \
+$< retorna a primeira dependência \
+$* retorna o que quer que tenha casado com o % \
+Digamos que o arquivo alce.d esteja em OBJDEPS. alce.d casará com \
+%.d, ficando % == alce. A regra criada é: \
+	alce.d : alce.cpp \
+Cado tenha ocorrido alguma modificação em alce.cpp, reconstruímos \
+alce.d. A linha executada pega todas as dependências de alce.cpp \
+(-MM $<) e salva-as no arquivo alce.d (-MF $@). Entretanto, usaremos \
+um target diferente: queremos que o alvo seja "alce.d alce.cpp", \
+para que, ao incluírmos alce.d, todas as dependências de alce.cpp \
+também provoquem a recriação de alce.d. \
+No final, as regras assumem esta forma: \
+alce.d alce.cpp : dependencias
 
-Exercito.o: Exercito.h Exercito.cpp
-	$(CC) -c Exercito.cpp
+$(OBJ): %.o : %.cpp
+	$(CC) -c $<
+
+include $(OBJDEPS)
 
 .PHONY: clean
 
 clean:
-	-rm $(obj)
-
-a.out: $(obj)
-	$(CC) $(obj) Main.cpp
+	-rm $(OBJ)$(OBJDEPS)

@@ -1,0 +1,42 @@
+                ____________
+                | Exército |
+                |__________|
+    _________________________________________
+    |   ______________   ______________     |
+    |   | __________ |   | __________ |  D  |
+    |   | |Batalhão| |   | |Batalhão| |  I  |
+    |   | |________| |   | |________| |  V  |
+    |   |  Brigada   |   |  Brigada   |  I  |
+    |   | __________ |   | __________ |  S  |
+    |   | |Batalhão| |   | |Batalhão| |  Ã  |
+    |   | |________| |   | |________| |  O  |
+    |   |____________|   |____________|     |
+    |_______________________________________|
+                ____________
+                | Exército |
+                |__________|
+
+Esta é a configuração para unir dois jogadores em torno de um time.
+A divisão irá conter todos os exércitos dos jogadores de um mesmo
+time. Ela une os exércitos de um mesmo time.
+
+A regra para batalhas com mais de dois jogadores separa as forças
+de cada time em brigadas, proporcionalmente aos times inimigos.
+A batalha é feita entre as brigadas considerando que apenas aquelas
+brigadas estão guerreando. A separação dos exércitos em brigadas é
+tarefa da Divisão.
+
+Por exemplo, se há quatro times batalhando num local de batalha,
+a divisão se dividirá em três brigadas, uma para batalhar com cada
+divisão inimiga. (De fato, as divisões inimigas também se dividirão
+em brigadas; as batalhas ocorrem entre brigadas, e as perdas são
+somadas no final.)
+
+Cada brigada conterá partes de exércitos. A separação de exércitos
+em partes é responsabilidade da divisão, e é nomeado Batalhão.
+Cada batalhão conterá a informação de que exército pertence.
+
+As batalhas ocorrem entre os batalhões. Eles procedem de acordo com
+a seção "Batalhas", entre dois times, do documento de regras.
+As perdas correspondentes a cada brigada são propagadas para os
+batalhões, que as propagam para os exércitos correspondentes.

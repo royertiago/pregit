@@ -1,15 +1,14 @@
-#include <functional>
-
 #include "Jogador.h"
 #include "Tecnologia.h"
 
 int Jogador::idcount = 0;
 
-Jogador::Jogador() :
+Jogador::Jogador( Time* t ) :
     id( ++idcount ),
-    t()
+    t(),
+    time( t )
 {}
 
-const Tecnologia Jogador::tecnologia() const {
+Tecnologia& Jogador::tecnologia() {
     return t;
 }
