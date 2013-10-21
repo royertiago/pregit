@@ -7,6 +7,7 @@ using std::list;
 using std::hash;
 using std::cout;
 using std::endl;
+using std::cin;
 
 #include "Batalhao.h"
 #include "Brigada.h"
@@ -19,7 +20,59 @@ using std::endl;
 #include "Tecnologia.h"
 #include "Time.h"
 
+// Testar coisas.
+void teste();
+void simulacaoDix();
+
 int main() {
+    simulacaoDix();
+    //teste();
+    return 0;
+}
+
+void simulacaoDix() {
+    int qtimes;
+    cout << "Digite a quantidade de times: ";
+    cin >> qtimes;
+    list< Time* > times;
+    int i = 0;
+    for( ; i < qtimes; i++  ) {
+        cout << "Digite a quantidade de jogadores para o time " << 1+i
+            << " :";
+        int q;
+        cin >> q;
+        times.push_back(new Time( Time::fabricarTime( q ) ));
+    }
+    i = 1;
+    int j = 1;
+    list< Divisao* > divisoes;
+    auto div = divisoes.begin();
+    for( Time* t : times ) {
+        list< Exercito* > exerc;
+        cout << "Time " << i++ << " - soldados:\n";
+        for( auto iter = t->begin(); iter != t->end(); ++iter ) {
+            cout << "Jogador " << j << " - Digite a quantidade de "
+                "soldados: ";
+            int qsold;
+            cin >> qsold;
+            exerc.push_back( new Exercito( qsold, &(*(iter)) ) );
+        }
+        divisoes.push_back( new Divisao( exerc ) );
+    }
+
+    cout << endl << "Iniciando a batalha:" << endl << endl;
+    Historiador h;
+    Divisao::guerrear( divisoes, h );
+
+    Caneta::escreverRegistroHistorico( h );
+    for( Divisao* d : divisoes )
+        for( Exercito* ex : d->exercitos ) 
+            cout << "Jogador: " << ex->dono->id <<
+                " - tropas restantes: " <<  int(*ex) << endl;
+
+}
+
+void teste() {
     hash< Time > THash;
     hash< Jogador > JHash;
 
@@ -40,7 +93,7 @@ int main() {
     Jogador* j4 = &(*t3.begin());
 
     Historiador h;
-    h.registrarMortes( 6, j1 );
+/*    h.registrarMortes( 6, j1 );
     h.registrarMortes( 10, j2 );
     cout << "Primeiro vencedor: " << h.obterVencedor()->id << endl;
     h.registrarMortes( 10, j3 );
@@ -90,15 +143,16 @@ int main() {
     Brigada::brigar( br1, br2, h );
     Caneta::escreverRegistroHistorico( h );
     cout << e1 << '\t' << e2 << '\t' << e3 << endl << endl;
-
+*/
     // Divisoes
+    j3->tecnologia().registrarContador( 50 );
+    j3->tecnologia().aumentarTecnologia();
+
+    for( int i = 0; i < 1; i++ ) {
     h.queimaDeArquivo( j1 );
     h.queimaDeArquivo( j2 );
     h.queimaDeArquivo( j3 );
     h.queimaDeArquivo( j4 );
-
-    j3->tecnologia().registrarContador( 50 );
-    j3->tecnologia().aumentarTecnologia();
 
     Exercito ex1( 20, j1 );
     Exercito ex2( 10, j2 );
@@ -111,8 +165,7 @@ int main() {
     Caneta::escreverRegistroHistorico( h );
     cout << ex1 << '\t' << ex2 << '\t' << ex3 << '\t' << ex4 << endl;
     cout << h.obterVencedor()->id << endl;
-
+    }
     Caneta umaCaneta;
-    //umaCaneta.explodir();
-    return 0;
+    umaCaneta.explodir();
 }

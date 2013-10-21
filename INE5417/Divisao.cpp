@@ -8,6 +8,8 @@
 
 #include <list>
 #include <unordered_map>
+#include <cmath>
+using std::round;
 using std::list;
 using std::unordered_map;
 
@@ -55,8 +57,8 @@ std::unordered_map< Divisao*, Brigada* >
             << d->forca << " de forca.\n";
         list< Batalhao* > batalhoes;
         for( Exercito* e : exercitos )
-            batalhoes.push_front( 
-                    new Batalhao( e, percentual * e->operator int() )
+            batalhoes.push_front( new Batalhao( e, 
+                        round( percentual * e->operator int() ) )
                     );
 
         inimigos[ d ] = new Brigada( batalhoes, 

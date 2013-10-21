@@ -16,7 +16,7 @@ class Exercito;
 class Historiador;
 
 class Divisao {
-protected:
+public:
     std::list<Exercito*> exercitos;
 
     double forca;
