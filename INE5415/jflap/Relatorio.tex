@@ -1,0 +1,381 @@
+\documentclass[12pt]{article}
+
+\usepackage[brazil]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc} %Não sei exatamente o que isso faz.
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{textcomp} %Companion fonts
+\usepackage{amsfonts}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows, automata}
+\usetikzlibrary{decorations.pathmorphing} %snake
+\usetikzlibrary{decorations}
+\tikzset{>=stealth, shorten >= 0.2ex, node distance = 10em, auto, initial text = {}}
+
+\renewcommand{\L}{\mathcal{L}}
+\newcommand{\goes}{\rightarrow}
+\renewcommand{\r}{\rightarrow}
+\renewcommand{\l}{\leftarrow}
+\newcommand{\dispstack}[2]{\genfrac{}{}{0pt}{0}{#1}{#2}}
+\newtheorem{theorem}{Teorema}
+
+\begin{document}
+
+\title{INE5415 --- Teoria da Computação --- Trabalho 1: Máquinas}
+\author{Tiago Royer}
+\maketitle
+
+\section{Primeira máquina}
+
+        \begin{equation*}
+            \L(M)= \left\{ \dispstack{w |}{} \parbox{20em}{
+                            $w \in \{a, b, c\}^*$ e $w$ possui número par de
+                            $b$'s e o número de $a$'s $+$ o número de $c$'s é ímpar
+                    } \right\}
+        \end{equation*}
+
+    Temos duas propriedades que precisam ser controladas: a paridade da quantidade de $b$'s e a paridade da quantidade de $a$'s e $c$'s.
+
+    Como são apenas duas características que precisamos controlar, a máquina escolhida é autômato finito determinístico.
+    Iremos associar cada estado correspondentemente (tabela \ref{EX1}).
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{c | r | l }
+                  & Quantidade de $b$'s & Quantidade de $a$'s + $c$'s \\
+            \hline
+            $q_0$ & Par                 & Par \\
+            $q_1$ & Par                 & Ímpar \\
+            $q_2$ & Ímpar               & Par \\
+            $q_3$ & Ímpar               & Ímpar \\
+        \end{tabular}
+        \caption{Relação entre os estados e as variáveis analisadas.}
+        \label{EX1}
+    \end{table}
+
+    De acordo com a definição da linguagem, o estado inicial tem de ser $q_0$, e o estado final, $q_1$.
+    A máquina de estados pode ser vista na figura \ref{EX1fig}.
+
+    \begin{figure}[h]
+        \center
+        \begin{tikzpicture}
+            \node[state, initial]   (q0)                 {$q_0$};
+            \node[state, accepting] (q1) [right of = q0] {$q_1$};
+            \node[state]            (q2) [below of = q0] {$q_2$};
+            \node[state]            (q3) [right of = q2] {$q_3$};
+
+            \path[->] (q0) edge [bend left] node {$a, c$} (q1);
+            \path[->] (q1) edge [bend left] node {$a, c$} (q0);
+            \path[->] (q2) edge [bend left] node {$a, c$} (q3);
+            \path[->] (q3) edge [bend left] node {$a, c$} (q2);
+
+            \path[->] (q0) edge [bend left] node {$b$} (q2);
+            \path[->] (q2) edge [bend left] node {$b$} (q0);
+            \path[->] (q1) edge [bend left] node {$b$} (q3);
+            \path[->] (q3) edge [bend left] node {$b$} (q1);
+        \end{tikzpicture}
+        \label{EX1fig}
+        \caption{Máquina de estados para o exercício 1.}
+    \end{figure}
+
+    As cadeias $a$ e $abcba$ ambas são aceitas pelo autômato, a primeira indo direto ao estado de aceitação e a última
+    passando por todos os estados antes. Já as cadeias $babaca$, $acaba$ e $ab$ terminam a computação, respectivamente, nos estados
+    $q_0$, $q_2$ e $q_3$, sendo rejeitadas pelo autômato.
+    
+\section{Segunda máquina}
+
+    \begin{equation*}
+        \L(M) = \{a^m b^n c^k | m,n,k \in \mathbb{N}, \; m \leq n \leq 2m \; \text{ e } \; k \geq 0\}
+    \end{equation*}
+    
+    Para ver que esta linguagem não é regular, iremos utilizar o lema do bombardeamento.
+
+    \subsection{Lema do Bombardeamento}
+
+    \begin{theorem}[Lema do Bombardeamento]
+        Tome uma linguagem regular $L$. Existe um número $l$ tal que, se uma palavra $w \in L$ tem comprimento maior que $2l + 1$,
+        podemos escolher (marcar) alguma posição desta palavra e escrevê-la como
+        \begin{equation*}
+            w = v_1 x_1 v_2 x_2 \cdots v_k x_k v_{k+1}
+        \end{equation*}
+        satisfazendo
+        \begin{itemize}
+            \item Podemos remover arbitrariamente quantos $x_i$ quisermos --- ``bombardeá-los'' --- que ainda produzimos
+                uma palavra dentro da linguagem
+            \item A posição marcada está dentro de algum $v_j$ --- isto é, a posição marcada está ``protegida'' do bombardeamento
+            \item $|v_1 v_2 \cdots v_{k+1}| \leq 2l+1$ --- dá para bombardear $w$ até ficar menor que $2l+1$
+            \item $|x_i| \geq 1 \; \forall i$, e
+            \item Ao bombardear todos os $x_i$ de $w$, na palavra resultante, sobrarão no máximo $l$ símbolos à esquerda
+                da posição marcada, e no máximo $l$ símbolos à direita.
+        \end{itemize}
+    \end{theorem}
+    \begin{proof}
+        Faremos uma demonstração baseada na do lema do bombeamento.
+
+        Como a linguagem é regular, existe um autômato $M$ tal que $\L(M) = L$. Este autômato possui uma quantidade
+        finita de estados. Escolheremos $l$ como sendo esta quantidade.
+       
+        Tome uma palavra $w$ com comprimento maior que $2l+1$. Uma marcação de uma posição nesta palavra é uma separação
+        \begin{equation*}
+            w = ubz
+        \end{equation*}
+        em que $b$ é um símbolo do alfabeto.
+
+        Agora, iremos particionar o prefixo $u$ em $v_1 x_1 \cdots v_r x_r v_{r+1}$ satisfazendo às exigências do teorema. Faremos em etapas.
+
+        \textbf{Etapa 1}
+    
+        Se $|u| \leq l$, nosso trabalho está concluído. 
+        
+        Senão, defina $p_i$ como sendo o estado alcançado ao processar os $i$ primeiros caracteres de $u$ \footnote{
+            Na notação do livro de Hopcroft e Ullman \cite{Hopcroft}, se $u = a_1 a_2 \cdots a_{|u|}$,
+            $p_i = \delta( q_0, a_1 \cdots a_i )$
+        }.
+        Como os $p_i$ são mais numerosos do que a quantidade de estados da máquina, podemos concluir que existem estados repetidos;
+        isto é, $p_i = p_j$ para algum $i \neq j$ (figura \ref{Etapa1Lema}).
+
+        \begin{figure}[h]
+            \centering
+            \begin{tikzpicture}[decoration = {snake, amplitude = 1 ex, segment length = 3 ex, post length = 0.25 ex} ]
+                \node[state] (p0) {$q_0$};
+                \node[state, right of = p0] (pi) {$p_i = p_j$};
+                \node[state, right of = pi] (pu) { $p_{|u|}$ };
+                \coordinate[above of = pi, node distance = 3 em] (gambiarra);
+                \node[state, above left of = gambiarra, node distance = 5 em] (px) { $p_\xi$ };
+                \node[state, above right of = gambiarra, node distance = 5 em] (pz) { $p_\zeta$ };
+
+                \draw[->, densely dashed, decorate] (p0) to (pi);
+                \draw[->, densely dashed, decorate] (pi) to (px);
+                \draw[->, densely dashed, decorate] (px) to (pz);
+                \draw[->, densely dashed, decorate] (pz) to (pi);
+                \draw[->, densely dashed, decorate] (pi) to (pu);
+            \end{tikzpicture}
+            \label{Etapa1Lema}
+            \caption{Primeira etapa do particionamento da subcadeia $u$.}
+        \end{figure}
+
+        Como estes estados se repetem, podemos ``ignorá-los'' e ir direto ao estado $p_{|u|}$. Ou seja, separamos
+        \begin{equation*}
+            u = \rho \sigma \tau
+        \end{equation*}
+        em que $|\rho| = i$ (atingimos o estado $p_i$ lendo este prefixo) e $|\rho \sigma| = j$ (voltamos para $p_j = p_i$ após ler
+        a subcadeia $\sigma$).
+
+        Agora, escolhemos $v_1 = \rho$, $x_1 = \sigma$, $v_2 = \tau$.
+        Como podemos substituir $u$ por $v_1 v_2$, encontramos uma parte da cadeia que é removível, mas ainda mantendo a palavra
+        na linguagem. Assim, encerramos o primeiro passo.
+
+        \textbf{Etapa $n$}
+
+        Já temos $u = v_1 x_1 \cdots v_t x_t v_{t+1}$, de forma que os $x_i$ podem ser removidos arbitrariamente sem comprometer
+        a pertinência da palavra à linguagem. Caso $|v_1 v_2 \cdots v_{t+1}| \leq l$, encerramos o particionamento: já atingimos
+        o objetivo.
+
+        Caso contrário, podemos aplicar o mesmo raciocínio da etapa 1 à cadeia $v_1 \cdots v_{t+1}$ para encontrar ``partes desnecessárias''.
+        Pode ser que o $\sigma$ do passo anterior englobe vários $v_j$. Não tem problema: basta englobar todos os $x_i$ entre
+        eles num único $x_i'$ e prosseguir.
+
+        Como em todas as etapas do particionamento, o tamanho de $v_1 v_2 \cdots v_{r+1}$ é reduzido em, no mínimo, um símbolo,
+        eventualmente $v_1 v_2 \cdots v_{r+1}$ ficará menor (ou igual) a $l$ símbolos e nosso objetivo foi atingido --- de um lado.
+
+        Podemos aplicar o mesmo raciocínio para quebrar o lado $z$ como
+        \begin{equation*}
+            z = v_{r+2} x_{r+1} \cdots v_{k+1} x_k v_{k+2}
+        \end{equation*}
+        Finalmente, para obter as subcadeias desejadas, junte $v_{r+1} b v_{r+2}$ numa única cadeia. O lema segue.
+    \end{proof}
+
+    \subsection{Usando o lema do bombardeamento}
+
+    Para mostrar que a linguagem $L = \L(M)$ considerada não é regular, aplicaremos o lema do bombardeamento.
+
+    Suponha que $L$ seja regular. Pelo lema do bombardeamento, existe um $l$ em que \emph{todas} as cadeias em $L$ com comprimento
+    maior que $2l+1$ possuem propriedades interessantes. Em particular, para $w = a^{l+1} b^{2l+2} \in L$, o lema funciona.
+    Iremos proteger (marcar) o primeiro $b$ e usar o lema.
+
+    De acordo com o lema, existem cadeias $x_i$ de $w$ que podem ser bombardeadas. Como a posição marcada é o primeiro $b$,
+    podemos ter certeza de que nenhum $x_i$ contém $a$'s e $b$'s ao mesmo tempo. De fato, como podemos bombardear o lado 
+    esquerdo até sobrar, no máximo, $l$ símbolos, temos certeza de que o $x_1$ é composto inteiramente de $a$'s. Vamos bombardeá-lo;
+    desta forma, construímos uma cadeia $a^m b^n \in L$, $n = 2l + 2$, $m = l + 1 - |x_1| \leq l$. Portanto, $n > 2m$, contradição.
+
+    Portanto, $L$ não é regular.
+
+    \subsection{Construíndo um autômato de pilha}
+
+    A maior dificuldade desta linguagem é a parte $a^m b^n$, mas, uma vez que este trecho pode ser descrito pela gramática
+    \begin{equation*}
+        S \to aSb \,|\, aSbb \,|\, \varepsilon
+    \end{equation*}
+    o tipo de máquina escolhido é autômato de pilha.
+
+    Pela descrição da gramática, para cada $a$ lido no começo, haverá um ou dois $b$'s correspondentes na segunda parte.
+    Então, iremos criar um autômato de pilha não determinístico que, a cada $a$ lido, empilha um ou dois $b$'s para lê-los depois.
+    Também temos de ter o cuidado de ler zero ou mais $c$'s. (Figura \ref{EX2fig}.)
+
+    \begin{figure}[h]
+        \center
+        \begin{tikzpicture}
+            \node[state, initial]   (q0)                 {$q_0$};
+            \node[state]            (q1) [right of = q0] {$q_1$};
+            \coordinate[right of = q1, node distance = 5em] (gambiarra);
+            \node[state]            (q2) [right of = gambiarra, node distance = 5em] {$q_2$};
+            \node[state, accepting] (q3) [below of = gambiarra, node distance = 8em] {$q_3$};
+            \node[state]            (q4) [below of = q0, node distance = 8em] {$q_4$};
+
+            \path[->] (q0) edge [bend left] node {$a, \varepsilon \goes b$} (q4);
+            \path[->] (q4) edge [bend left] node {$\varepsilon, \varepsilon \goes b$} (q0);
+            \path[->] (q0) edge [loop above] node {$a, \varepsilon \goes b$} (q4);
+
+            \path[->] (q0) edge node {$b, b \goes \varepsilon$} (q1);
+            \path[->] (q1) edge [loop above] node {$b, b \goes \varepsilon$} ();
+            \path[->] (q1) edge node {$c, \varepsilon \goes \varepsilon$} (q2);
+            \path[->] (q2) edge [loop above] node {$c, \varepsilon \goes \varepsilon$} ();
+
+            \path[->] (q1) edge node [left] {$\varepsilon, Z \goes \varepsilon$} (q3);
+            \path[->] (q2) edge node [right] {$\varepsilon, Z \goes \varepsilon$} (q3);
+        \end{tikzpicture}
+        \label{EX2fig}
+        \caption{Autômato de pilha para o exercício 2.}
+    \end{figure}
+
+    $Z$ é o símbolo de início de fita.
+
+    Por exemplo, o autômato rejeita as palavras $aab$ e $aabbbbb$, a primeira por sobrar $b$'s na pilha, e a segunda por faltar.
+    Uma palavra como $aabbb$ é aceita pelo autômato, assim como $aabbbccccccccccccccccccccccccccccccccccccccccccc$.
+
+\section{Terceira máquina}
+
+    \begin{equation*}
+        \L(M) = \{w\#w \, |\, w \in \{0, 1\}^*\}
+    \end{equation*}
+
+    Claramente, $L = \L(M)$ não é regular. Intuitivamente, ela também não pode ser livre de contexto, pois um autômato de pilha
+    não pode examinar o fundo da pilha, apenas o topo. Usaremos o lema do bombeamento para linguagens regulares para mostrar
+    que $L$ não é regular.
+
+    Suponha que seja, e tome $l$ como sendo a consante provida pelo lema do bombeamento. Escolha $z = 0^l 1^l \# 0^l 1^l$.
+    Podemos separar $z$ em $uvwxy$, satisfazendo $|vwx| \leq l$ e $|vx| \geq 1$ ($v$ e $x$ são as cadeias que serão bombeadas).
+
+    Nem $v$ nem $x$ podem conter a tralha. Como as subcadeias dos dois lados da tralha são iguais, elas tem comprimento igual.
+    Para que isso não seja quebrado pelo bombeamento, $v$ tem que ficar de um lado, $x$ do outro, e $|v| = |x| = t$.
+    Mas, como $|vwx| \leq l$, $v$ não pode conter zeros, e $x$ não pode conter uns.
+
+    Aplicando o lema do bombeamento para deletar $v$ e $x$ de $z$, obtemos a palavra $0^l 1^{l-t} \# 0^{l-t} 1^l$. Claramente
+    as duas cadeias de cada lado da tralha são diferentes, portanto, esta palavra não poderia estar em $L$ --- contradição.
+
+    Prosseguiremos construindo uma máquina de Turing para resolver o problema. A ideia é efetuar a seguinte substituição:
+    \begin{align*}
+        0010\#0010 &\goes \#010\#\#010 \\
+                  &\goes \#\#10\#\#\#10 \\
+                  &\goes \#\#\#0\#\#\#\#0 \\
+                  &\goes \#\#\#\#\#\#\#\#\#,
+    \end{align*}
+    isto é, substituiremos o começo das cadeias de cada lado da tralha por tralhas até preenchermos toda a palavra original com tralhas.
+
+    \begin{figure}[h]
+        \center
+        \begin{tikzpicture}[node distance = 7 em, every node/.style={font = \footnotesize}]
+            \node[state, initial]   (q0)                 {$q_0$};
+            \node[state]            (q1) [above of = q0, right of = q0] {$q_1$};
+            \node[state]            (q2) [below of = q0, right of = q0] {$q_2$};
+            \node[state]            (q3) [right of = q1] {$q_3$};
+            \node[state]            (q4) [right of = q2] {$q_4$};
+            \node[state]            (q6) [right of = q0, node distance = 10.5em] {$q_6$};
+            \node[state]            (q5) [right of = q6, node distance = 10.5em] {$q_5$};
+            \node[state]            (q7) [right of = q5] {$q_7$};
+            \node[state, accepting] (qa) [below of = q7] {$q_a$};
+
+            \path[->] (q0) edge [left] node {$0| \#, \r$} (q1);
+            \path[->] (q1) edge [loop above] node {$\dispstack{0| 0, \r}{1| 1, \r}$} ();
+            \path[->] (q1) edge node {$\#| \#, \r$} (q3);
+            \path[->] (q3) edge [loop above] node {$\#| \#, \r$} ();
+            \path[->] (q3) edge [above] node {$0| \#, \l$} (q5);
+
+            \path[->] (q0) edge [right] node {$1| \#, \r$} (q2);
+            \path[->] (q2) edge [loop below] node {$\dispstack{0| 0, \r}{1| 1, \r}$} ();
+            \path[->] (q2) edge node {$\#| \#, \r$} (q4);
+            \path[->] (q4) edge [loop below] node {$\#| \#, \r$} ();
+            \path[->] (q4) edge [right] node {$1| \#, \l$} (q5);
+
+            \path[->] (q5) edge [loop above] node {$\# | \#, \l$} ();
+            \path[->] (q5) edge node {$\dispstack{0| 0, \r}{1| 1, \r}$} (q6);
+            \path[->] (q6) edge [loop above] node {$\dispstack{0| 0, \r}{1| 1, \r}$} ();
+            \path[->] (q6) edge node {$\# | \#, \r$} (q0);
+            
+            \path[->] (q5) edge node {$\sqcup | \sqcup, \r$} (q7);
+            \path[->] (q7) edge [loop above] node {$\#| \#, \r$} ();
+            \path[->] (q7) edge node {$\sqcup | \sqcup, \l$} (qa);
+            \path[->] (q0) edge [out = -90, in = -135, looseness = 1.5] node {$\#| \#, \r$} (qa);
+        \end{tikzpicture}
+        \label{EX3fig}
+        \caption{Máquina de Turing para o exercício 3. A barra vertical separa entrada e saída.}
+    \end{figure}
+
+    A máquina está descrita na figura \ref{EX3fig}. Os estados $q_1$ e $q_3$ lêem e ``excluem'' da palavra um zero de cada lado da tralha.
+    Eles terminam antes de retornar para o começo da fita. Este retorno é feito pelos nodos $q_5$ e $q_6$. Já os nodos $q_2$ e $q_3$ lêem
+    um $1$ de cada lado da tralha, e reusam os estados $q_5$ e $q_6$ para voltar para o início da fita.
+
+    Caso não hajam mais números à esquerda da tralha, o nodo $q_7$ procura verificar se não há mais números à direita. Caso não hajam,
+    a máquina pode aceitar a entrada.
+
+    Além do exemplo dado anteriormente, a palavra consistindo apenas no símbolo $\#$ aceita a linguagem.
+    Palavras que não contenham a tralha são rejeitadas ($000$, por exemplo). E palavras em que ``sobrem'' símbolos também são rejeitadas,
+    como $00\#000$, por exemplo.
+
+\section{Quarta máquina}
+
+    \begin{equation*}
+        \L(M) = \{ww \, |\, w \in \{0, 1\}^*\}
+    \end{equation*}
+
+    Esta linguagem é parecida com a anterior, então também escolheremos a máquina de Turing para resolvê-la.
+
+    Para mostrar que um autômato de pilha não pode computar esta linguagem, podemos notar que, se existisse algum desses,
+    uma modificação simples (ignorar a tralha) iria fazer com que ele passasse a aceitar a linguagem do exercício anterior,
+    contradizendo o fato de que aquela linguagem não é livre de contexto.
+
+    Para o quarto problema, uma máquina de Turing multifitas não determinística bastante enxuta foi criada \footnote{
+    Até onde eu pude averiguar, este tipo de autômato não funciona no JFLAP. Isto é, eu não consegui fazê-lo transitar não-deterministicamente.}.
+    Ela constitui de três partes. A primeira copia a entrada, na primeira fita, para a segunda.
+    Em um dado momento, a máquina chuta que ela chegou ao meio da fita, e a segunda parte volta a cabeça da segunda fita para o início.
+    Então, o controle passa para a terceira parte, que simplesmente compara as duas fitas. Assim que ler dois brancos consecutivos,
+    a máquina aceita a entrada.
+    
+    A implementação pode ser encontrada na figura \ref{EX4fig}. As três partes descritas são implementadas pelos estados $q_0, q_1 e q_2$,
+    respectivamente. Denotaremos por $\circ$ quando quisermos que o cabeçote da máquina não se movimente pela fita.
+    A máquina assume que toda a segunda fita está preenchida de brancos.
+
+    \begin{figure}[h]
+        \center
+        \begin{tikzpicture}[every node/.style={font = \footnotesize}]
+            \node[state, initial]   (q0)                 {$q_0$};
+            \node[state]            (q1) [right of = q0] {$q_1$};
+            \node[state]            (q2) [right of = q1] {$q_2$};
+            \node[state, accepting] (qa) [right of = q2] {$q_3$};
+
+            \path[->] (q0) edge [loop above] node {$\dispstack{0,0,\r | \sqcup, 0, \r}{1,1,\r | \sqcup, 1, \r}$} (q0);
+            \path[->] (q0) edge node {$\dispstack{0,0,\r | \sqcup, \sqcup, \l}{1,1,\r | \sqcup, \sqcup, \l}$} (q1);
+
+            \path[->] (q1) edge [loop above] node {$\dispstack{0,0,\circ | 0, 0, \l}{0,0,\circ | 1, 1, \l}$} (q1);
+            \path[->] (q1) edge [loop below] node {$\dispstack{1,1,\circ | 0, 0, \l}{1,1,\circ | 1, 1, \l}$} (q1);
+
+            \path[->] (q1) edge node {$\dispstack{1,1,\circ | \sqcup, \sqcup, \r}{0,0,\circ | \sqcup, \sqcup, \r}$} (q2);
+
+            \path[->] (q2) edge [loop above] node {$\dispstack{0,0,\r | 0, 0, \r}{1,1,\r | 1, 1, \r}$} (q2);
+            \path[->] (q2) edge node {$\sqcup,\sqcup,\l | \sqcup, \sqcup, \l$} (qa);
+
+            \path[->] (q0) edge [bend right, out = -45, in = -135, below] node {$\sqcup,\sqcup,\l | \sqcup, \sqcup, \l$} (qa);
+        \end{tikzpicture}
+        \label{EX4fig}
+        \caption{Máquina de Turing não-determinística multifitas para o exercício 4. A barra vertical separa as ações em cada fita.}
+    \end{figure}
+
+    Por exemplo, as palavras $0000$ e $10101010$ são aceitas pela máquina, no ramo de computação em que ela chuta corretamente
+    o comprimento da palavra. Já para palavras como $000$ não existe ``meio'', então a máquina sempre chutará errado e rejeitará
+    a palavra. E palavras como $010101$, por mais que a máquina chute corretamente o meio, os primeiros caracteres de cada metade
+    são diferentes, portanto, a máquina não consegue fazer a transição de $q_2$ para $q_a$.
+
+\bibliographystyle{plain}
+\bibliography{bib.bib}
+\end{document}
