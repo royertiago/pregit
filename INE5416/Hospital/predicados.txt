@@ -1,0 +1,20 @@
+/*
+ * Lista de predicados da clínica:
+ *
+ * ID é um número, Nome é um átomo.
+ * Data é um número. Por exemplo, 20/12/1995 -> 1995/12/20 -> 19951220.
+ * Hora é um número. Por exemplo, 10h00 -> 1000.
+ * Resultado/Tipo são listas de caracteres.
+ * Status é 'alta' ou 'baixa'.
+ *
+ * paciente( ID, Nome )
+ * medico( ID, Nome )
+ * exame( ID, IDMedico, IDPaciente, Data, Hora )
+ * diagnostico( ID, IDExame, Resultado )
+ * cirurgia( ID, IDMedico, IDPaciente, Data, Hora, Tipo )
+ * status( IDPaciente, IDDiagnostico, Data, Hora, Status )
+ *
+ * pacienteID, medicoID, exameID, diagnosticoID e statusID
+ * são contadores para registrar o próximo ID a ser usado.
+ * Veja counter.pl para mais detalhes.
+ */
