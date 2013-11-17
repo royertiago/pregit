@@ -11,8 +11,6 @@ using std::list;
 
 #include "Jogador.h"
 
-class Time;
-
 class Time {
     list< Jogador > time;
 public:
@@ -25,8 +23,6 @@ public:
     list<Jogador>::const_iterator begin() const;
     list<Jogador>::iterator end();
     list<Jogador>::const_iterator end() const;
-    
-
 
     /* Cria um time com a quantidade especificada de jogadores. */
     static Time fabricarTime( int jogadores );
@@ -47,6 +43,6 @@ namespace std {
             return t->time.front().id;
         }
     };
-}
+} // TODO: Talvez não precise destas especializações.
 
 #endif

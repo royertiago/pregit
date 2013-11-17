@@ -16,12 +16,13 @@ class Exercito;
 class Historiador;
 
 class Divisao {
-public:
+private:
     std::list<Exercito*> exercitos;
 
     double forca;
 
 public:
+    // A própria divisão é capaz de computar sua força.
     Divisao( std::list<Exercito*> );
 
     /* O sistema de batalhas irá passar uma lista de divisões e espera
@@ -32,11 +33,12 @@ public:
      *
      * A rotina chamadora deve cuidar do trabalho de deletar as
      * brigadas quando elas não forem mais necessárias. */
-    virtual std::unordered_map< Divisao*, Brigada* > obterBrigadas(
-        std::list< Divisao* >);
+    virtual std::unordered_map< Divisao*, Brigada* > 
+        obterBrigadas( std::list< Divisao* >);
 
-    /* Efetua a guerra entre todas as divisões passadas. */
-    static void guerrear( std::list< Divisao* >, Historiador& h );
-};    
+    /* Efetua a guerra entre todas as divisões passadas.
+     * O método não exclui ponteiros. */
+    static void guerrear( std::list< Divisao* >&, Historiador& h );
+};
 
 #endif // Divisao.h

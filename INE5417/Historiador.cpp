@@ -12,7 +12,6 @@ using std::round;
 #include <random>
 #include <chrono>
 
-
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -51,6 +50,8 @@ Jogador* Historiador::obterVencedor() const {
         else if( p.second == max )
             vencedores.insert( p.first );
     }
+
+    // Inicío bruxaria para números aleatórios
     static unsigned int seed = std::chrono::system_clock::now().
         time_since_epoch().count();
     static std::default_random_engine generator (seed);
@@ -58,8 +59,9 @@ Jogador* Historiador::obterVencedor() const {
     std::uniform_int_distribution<int> distribution(1,
             vencedores.size());
 
-    int n = distribution(generator);
-    /* n é um número aleatório entre zero e a quantidade de jogadores
+    int n = distribution(generator); // fim bruxaria aleatória
+
+    /* n é um número aleatório entre 1 e a quantidade de jogadores
      * que foram selecionados no conjunto. */
     for( Jogador* j : vencedores ) {
         if( n == 1 )
@@ -69,7 +71,6 @@ Jogador* Historiador::obterVencedor() const {
     return 0;
 }
 
-const unordered_map< Jogador*, int >& Historiador::obterRegistro()
-    const {
+const unordered_map<Jogador*, int>& Historiador::obterRegistro() const{
     return registro;
 }

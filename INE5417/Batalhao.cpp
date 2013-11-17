@@ -7,9 +7,7 @@ using std::round;
 using std::ceil;
 using std::floor;
 
-#include <iostream>
-using std::cout;
-using std::endl;
+#include "Depurador.h"
 
 Batalhao::Batalhao( Exercito* exercito, int limite ) :
     exercito( exercito ),
@@ -20,9 +18,9 @@ int Batalhao::danificar( double proporcao ) {
     int quantidadeDeMortos = round( proporcao * limite );
     if( quantidadeDeMortos > limite )
         quantidadeDeMortos = limite;
-    cout << "Proporcao: " << proporcao;
-    cout << " - Quantidade de mortos: " << quantidadeDeMortos;
-    cout << " - Jogador: " << exercito->dono->id << endl;
+
+    debug( "Proporcao: %i - Quantidade de mortos: %i - Jogador: %i\n",
+            proporcao, quantidadeDeMortos, exercito->dono->id );
 
     return exercito -> subtrair( quantidadeDeMortos );
 }

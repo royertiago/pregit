@@ -1,0 +1,137 @@
+
+_________ ______________ ______________ ______________ _________
+|     =>| |<-        ->| |<-        ->| |<-        ->| |<=     |
+|Cidade1| |CampoAberto1| |CampoAberto2| |CampoAberto3| |Cidade2|
+|_______| |____________| |____________| |____________| |_______|
+
+Cada campo aberto possui uma lista de tropas que estão se deslocando
+para a "direita" e outra lista para as que estão se deslocando para a
+esquerda. Cada campo aberto sabe qual cidade termina cada um de seus
+lados, então, ao ver um ExercitoMovendo, ele sabe em qual lista pôr.
+
+A movimentação ocorre em três etapas: movimentação terminal,
+movimentação interna à esquerda e movimentação interna à direita.
+
+Na primeira fase, todos os campos abertos que estão conectados 
+"diretamente" a uma cidade (os ponteiros para os campos abertos
+à esquerda ou à direita (ou ambos) são nulos) deslocam os exércitos
+que estão a um passo de concluir sua jornada para seus respectivos
+destinos.
+No exemplo, CampoAberto1 desloca exércitos para Cidade1 e CampoAberto3
+desloca para Cidade2.
+
+Após isso, as batalhas nas cidades ocorrem.
+
+Então, ocorre a movimentação interna. Como queremos programar isto
+usando apenas um laço for, não dá para simplesmente começar no
+CampoAberto1 e deslocar todas as tropas para o próximo campo aberto
+até chegar no CampoAberto3: um exéricito recém saído da Cidade1 seria
+transportado imediatamente para CampoAberto3, e não queremos isto.
+
+Três soluções possíveis vieram à mente do autor deste texto.
+
+A primeira seria adicionar um atributo "campos andados" ao exército.
+Esta solução possui a vantagem de ser extensível: se criarmos algum
+tipo de exército que caminha mais rápido, seria fácil de implementar.
+Entretanto, a quantidade de if-else adicionada ao programa faz
+com que o programador considere outra opção.
+
+Outra ideia seria fazer uma separação cuidadosa entre as tropas que já
+andaram e as que ainda têm de andar. Entretanto, precisaríamos fazer
+várias passagens pelos campos para mover e consolidar movimenetos.
+
+A terceira opção - que é a implementada - é separar esta última etapa
+em duas: movimentação para a esquerda e movimentação para a direita.
+Esta ideia é inspirada no algoritmo de deslocamento de vetor.
+Digamos que temos o vetor
+____________
+1|1|2|3|5|8|
+
+e queremos adicionar mais um '0' ao começo dele. Para deslocarmos todos
+os elementos para a direita, começamos de trás para frente:
+______________
+1|1|2|3|5|8|8| (copia o 8 para a próxima posição)
+______________
+1|1|2|3|5|5|8| (copia o 5 para a posição do 8)
+______________
+1|1|2|3|3|8|8| (copia o 3 para a posição do 5)
+______________
+1|1|2|2|5|8|8| (copia o 2 para a posição do 3)
+______________
+1|1|1|3|5|8|8| (copia o segundo 1 para a posição do 2)
+______________
+1|1|1|3|5|8|8| (copia o primeiro 1 para a posição do segundo 1)
+______________
+0|1|1|3|5|8|8| (insere o 0 na a posição do primeiro 1)
+
+A ideia é similar. Quebremos o deslocamento interno em duas etapas:
+deslocamento à esquerda e deslocamento à direita. Começando desde
+o CampoAberto1, desloque todas as tropas que tem como destino Cidade1
+para a esquerda (não haverão nenhuma pois todas já foram deslocadas
+na etapa de deslocamento terminal). Depois, desloque as tropas 
+correspondentes do CampoAberto2 para a esquerda, e, por fim, todas
+as tropas do CampoAberto3 para a esquerda. Então, repita o mesmo
+procedimento com as tropas que terminam na Cidade2, mas, desta vez,
+começando do CampoAberto3 e terminando no CampoAberto1.
+
+Legenda: n> -- o exéricito n vai para a direita.
+         <n -- o exéricito n vai para a esquerda.
+
+Digamos que seja esta a configuração apos a movimentação terminal:
+    _______ __________ __________ _______
+        1>| |      2>| |      3>| |    
+          | |<4      | |<5      | |<6  
+    ______| |________| |________| |______
+
+Começamos a movimentar as tropas para a esquerda:
+    <4    | |        | |<5      | |<6  
+    ______| |________| |________| |______
+
+    <4    | |<5      | |        | |<6  
+    ______| |________| |________| |______
+
+    <4    | |<5      | |<6      | |    
+    ______| |________| |________| |______
+
+Agora, movimentar para a direita:
+    _______ __________ __________ _______
+        1>| |      2>| |        | |    3>
+          | |        | |        | |
+    _______ __________ __________ _______
+        1>| |        | |      2>| |    3>
+          | |        | |        | |
+    _______ __________ __________ _______
+          | |      1>| |      2>| |    3>
+          | |        | |        | |
+
+Terminamos assim:
+    _______ __________ __________ _______
+          | |      1>| |      2>| |    3>
+    <4    | |<5      | |<6      | |    
+    ______| |________| |________| |______
+
+Caso seja necessário deslocar tropas mais de uma vez, podemos repetir
+estes dois passos.
+
+Até agora, a discussão supôs que todos os exércitos são aliados. 
+A colisão de exéricitos ocorre em duas situações: na primeira, um dos
+campos abertos está em batalha. Neste caso, os exércitos deste campo
+não se movem - pois estão batalhando - e não há conflito.
+
+O problema é quando dos campos abertos adjacentes possuem exéricitos
+inimigos de frente um para o outro. Para resolver este tipo de
+problema, cada campo aberto deve procurar, no campo aberto seguinte,
+se existem inimigos do exército a ser deslocado lá. Caso existam,
+efetuar o deslocamento apenas se o time do exéricito a ser deslocado
+tiver mais soldados do que o outro lado.
+
+Entretanto, chegamos a um impasse quando há exatamente o mesmo número
+de soldados em cada lado. Neste caso, fica determinado que será
+decidido na sorte. Para fazer esta decisão, como o deslocamento de
+cada exército ocorre em situações distintas da etapa de deslocamento,
+foi criada uma prioridade para cada cidade. A cidade que tem mais
+prioridade desloca exércitos.
+
+Para definir aleatoriamente a prioridade, basta gerar um valor 
+aleatório único para cada cidade a cada rodada. Isto é tarefa do
+contador de Geiger.

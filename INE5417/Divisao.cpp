@@ -13,9 +13,7 @@ using std::round;
 using std::list;
 using std::unordered_map;
 
-#include <iostream>
-using std::cout;
-using std::endl;
+#include "Depurador.h"
 
 Divisao::Divisao( list< Exercito* > exercitos ) :
     exercitos( exercitos )
@@ -46,15 +44,17 @@ std::unordered_map< Divisao*, Brigada* >
     for( Divisao* d : divisoes )
         somaForcas += d->forca;
 
-    cout << "Forca interna: " << forcaInterna << "\t Somatorio forcas:"
-        << somaForcas << endl;
+    debug( "Força interna: %lf\t Somatorio forças: %lf\n",
+            forcaInterna, somaForcas );
 
     unordered_map< Divisao*, Brigada* > inimigos;
 
     for( Divisao* d : divisoes ) {
         double percentual = d->forca / somaForcas;
-        cout << "Reservo " << percentual << " para este, que tem "
-            << d->forca << " de forca.\n";
+        
+        debug( "Reservo %f para este, que tem %f de força.\n",
+                percentual, d->forca );
+
         list< Batalhao* > batalhoes;
         for( Exercito* e : exercitos )
             batalhoes.push_front( new Batalhao( e, 
@@ -68,9 +68,9 @@ std::unordered_map< Divisao*, Brigada* >
     return inimigos;
 }
 
-void Divisao::guerrear( list<Divisao*> divisoes, Historiador& h ) {
+void Divisao::guerrear( list<Divisao*>& divisoes, Historiador& h ) {
     unordered_map< Divisao*, unordered_map< Divisao*, Brigada* > > war;
-    /* Mapeamento triplo entre duas divisões D1 e D2 e a brigada
+    /* Mapeamento  entre duas divisões D1 e D2 e a brigada
      * que a divisão D1 escolheu para enfrentar a brigada da D2. */
 
     for( Divisao* d : divisoes ) {
@@ -82,15 +82,6 @@ void Divisao::guerrear( list<Divisao*> divisoes, Historiador& h ) {
     for( auto it = divisoes.begin(); it != divisoes.end(); ++it ) {
         auto jt = it;
         for( ++jt; jt != divisoes.end(); ++jt ) {
-/*
-                    Divisao* d = *it;
-                    cout << "Enfrentamento ";
-                    Exercito* e = (*d->exercitos.begin());
-                    cout << e->dono->id << 'x';
-                    d = *jt;
-                    e = (*d->exercitos.begin());
-                    cout << e->dono->id << endl;
-*/
             Brigada* b1 = war[*it][*jt];
             Brigada* b2 = war[*jt][*it];
             Brigada::brigar( *b1, *b2, h );

@@ -1,9 +1,24 @@
-Próximas tarefas: 
-Implementar Cidade e Campo Aberto
-Atualmente, as divisões são capazes de, dada uma lista de divisões e
-um historiador, executar todo o resto sozinhas. Mas ainda precisamos
-dos locais de batalha para criar estas divisões.
+A classe CampoAberto possui dois estados que definem comportamentos
+distintos. Talvez seria útil separar estes comportamentos classes.
 
+A classe CampoAberto possui comportamentos diferentes também relativos
+à nulidade ou não dos atributos campoEsquerda de campoDireita.
+Eis uma oportunidade de usar herança múltipla.
 
-(possíveis) Bugs conhecidos:
-Divisao::obterBrigadas() ignora erros de arredondamento.
+Alternativamente, estes dois problemas poderiam ser resolvidos 
+lindamente usando ponteiro para função-membro.
+
+Os campos abertos não iteram sobre seus elementos para trás; eles
+o fazem para frente apenas. Podemos substituir std::list por
+std::forward_list por questões de eficiência.
+
+Classes restantes:
+    ContadorDeGeiger.cpp
+    Mapa.cpp
+    Terminar Cidade.cpp
+    Estrada.cpp - adicionar batalhar();
+    CampoAberto.cpp renomear batalhar();
+
+Mudança de estilo: em praticamente todos os cabeçalhos, a interface
+pública da classe está no fim do arquivo, após os detalhes de
+implementação.

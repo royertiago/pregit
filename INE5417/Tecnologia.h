@@ -8,6 +8,13 @@
  * cidades é somado (através do método registrarContador()), e o valor
  * da soma é incrementado, em percentagem, na tecnologia (método
  * aumentarTecnologia()).
+ *
+ * Por exemplo, se um jogador possui 3 cidades, uma delas em cerco, 
+ * e escolheu ganhar 3 soldados de cada uma, cada uma das duas cidades
+ * que não estão em cerco irá chamar registrarContador( 7 )
+ * (totalizando 14 no contador). Quando o método aumentarTecnologia()
+ * é chamado, a tecnologia do jogador é multiplicada por 1.14 
+ * (é aumentada em 14%) e o contador é zerado.
  */
 
 #ifndef TECNOLOGIA_H

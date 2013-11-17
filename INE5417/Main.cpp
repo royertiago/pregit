@@ -1,3 +1,4 @@
+#define DEPURAR
 #include <iostream>
 #include <functional>
 #include <unordered_map>
@@ -8,7 +9,6 @@ using std::hash;
 using std::cout;
 using std::endl;
 using std::cin;
-
 #include "Batalhao.h"
 #include "Brigada.h"
 #include "Caneta.h"
@@ -66,7 +66,7 @@ void simulacaoDix() {
 
     Caneta::escreverRegistroHistorico( h );
     for( Divisao* d : divisoes )
-        for( Exercito* ex : d->exercitos ) 
+        for( Exercito* ex : d->exercitos )
             cout << "Jogador: " << ex->dono->id <<
                 " - tropas restantes: " <<  int(*ex) << endl;
 
@@ -104,7 +104,7 @@ void teste() {
     h.queimaDeArquivo( &t2 );
     cout << "Terceiro vencedor: " << h.obterVencedor()->id << endl;
     h.queimaDeArquivo( j4 );
-    cout << "Quarto vencedor: " << h.obterVencedor()->id << endl << 
+    cout << "Quarto vencedor: " << h.obterVencedor()->id << endl <<
         endl;
 
     // Multiplos registros no historiador
@@ -132,13 +132,13 @@ void teste() {
     Batalhao* b3 = new Batalhao( &e3, 4 );
 
     Brigada br1( list<Batalhao*>{b1}, 30.0, {{j1, 1.0}} );
-    Brigada br2( list<Batalhao*>{b2, b3}, 40.0, 
+    Brigada br2( list<Batalhao*>{b2, b3}, 40.0,
             { {j2, 0.75}, {j3, 0.25} } );
     h.queimaDeArquivo( j1 );
     h.queimaDeArquivo( j2 );
     h.queimaDeArquivo( j3 );
     h.queimaDeArquivo( j4 );
-    
+
     Caneta::escreverRegistroHistorico( h );
     Brigada::brigar( br1, br2, h );
     Caneta::escreverRegistroHistorico( h );

@@ -1,1 +1,0 @@
-Arquivos .d são arquivos auxiliares criados pelo Makefile.

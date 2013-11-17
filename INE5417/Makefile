@@ -1,5 +1,5 @@
 #Configurações do compilador
-COMPILER = g++
+COMPILER = gcc
 FLAGS = -std=c++0x
 CC = $(COMPILER) $(FLAGS)
 

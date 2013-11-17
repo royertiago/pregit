@@ -33,8 +33,13 @@ int Brigada::propagarDanos( double percentagem ) {
     return total;
 }
 
+// Número de ouro
 static const double Phi = (1 + sqrt(5))/2;
-// Função de cerco
+
+/* Função de cerco          ___________
+ *                /        /   x * y     \
+ * c( x, y ) = max| 1, \  /  _________   |
+ *                \     \/   10(x + y)  */
 static double cerco( double x, double y ) {
     return max( 1.0, sqrt( x*y/(10*(x + y)) ) );
 }

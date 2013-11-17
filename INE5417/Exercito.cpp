@@ -8,12 +8,8 @@ Exercito::Exercito( int quantidade, Jogador* dono ) :
 {}
 
 Exercito Exercito::unir( const Exercito& alvo ) const {
-    return Exercito( quantidade + alvo.quantidade, dono );
+    quantidade += alvo.quantidade;
 }
-
-/*Exercito Exercito::separar( int quantidade ) {
-    return Exercito( subtrair( quantidade ), dono );
-}*/
 
 int Exercito::subtrair( int n ){
     if( quantidade < n ) {
