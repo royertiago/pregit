@@ -1,41 +1,73 @@
+
 #include "Cidade.h"
-#include "OrdemDeEnvio.h"
-#include "Estrada.h"
-#include "Jogador.h"
-#include "Time.h"
-#include "Exercito.h"
-#include "ExercitoParado.h"
+#define add push_back
 
-#include <list>
-#include <unordered_map>
-using std::list;
-using std::unordered_map;
 
-Cidade::Cidade( string nome ) : nome( nome ) {}
-
-Cidade::adicionarDestino( Estrada* e ) {
-    if( e.esquerda == this )
-        destinos[e.direita] = e;
-    if( e.direita == this )
-        destinos[e.esquerda] = e;
-}
-
-Cidade::criarOrdemDeEnvio( Jogador* j, Cidade* d, int tropas ) {
-    ordens.emplace_back( j, d, tropas );
-}
-
-Cidade::adicionarExercito( Exercito* exercito ) {
-    for( ExercitoParado* e : exercitos )
-        if( e->dono == exercito->dono ) {
-            e->unir( *exercito );
-            delete exercito;
-            return;
+Cidade::Cidade(list<Cidade*> vizinhos, list<Estrada*> estrada,string nome){
+    this->vizinhos=vizinhos;
+    this->estradas=estrada;
+    this->nome=nome;
+    for(Estrada *e: estrada){//supondo que toda estrada esta conectada a esta cidade
+        if(e->inicio == this){
+           hashDestino[e->fim]=e;
+        }else{
+            hashDestino[e->inicio]=e;
         }
-    lista.push_back( exercito );
+    }
 
-    //TODO: adicionar um atualizarEstado()?
+}
+string Cidade::getNome(){
+return nome;
 }
 
-Cidade::alterarBalanceamento( int soldados ) {
-    producaoSoldados = soldados;
+void Cidade::addExercito(Exercito *e){
+    this->garrison.add(e);
+}
+void Cidade::modificarBalanceamento(int t){
+    producaoSoldado=10-t;
+    producaoTecnologia=t;
+}
+void Cidade::criarOrdemdeEnvio(Jogador *jogador, Cidade *destino, int quantidade){
+    Exercito *exercito;
+    for(Exercito* j: garrison){
+        Jogador *dono=j->dono;
+        if(dono==jogador){
+            exercito=j;
+            break;
+        }
+    }
+    if(exercito==0){
+        return;
+    }
+    Cidade *cidade;
+    for(Cidade* c: vizinhos){
+        if(c==destino){
+            cidade=c;
+        }
+    }
+    if(cidade==0)return;
+    /* DESCOMENTAR QUANDO exercitoMovendo extender exercito
+    exercito=exercito->dividirExercito(quantidade);
+    exercito.destino=cidade;
+    exercitosMovendo.add(exercito);
+    //*/
+
+}
+double Cidade::getSoldadosProduzido(){
+    return producaoSoldado/10 * CONSTANTE_SOLDADO;
+}
+double Cidade::getTecnologiaProduzida(){
+    return producaoTecnologia/10 * CONSTANTE_TECNOLOGIA;
+}
+void Cidade::passagemDeTurno(){
+    for(ExercitoMovendo *e:exercitosMovendo){
+        MovimentacaoDeTropas novoMovimento= MovimentacaoDeTropas(e,e->destino);
+        Estrada *estrada=hashDestino[novoMovimento.destino];
+
+        estrada->adicionarMovimentacaoDeTropas(novoMovimento);
+    }
+    exercitosMovendo.clear();
+
+
+
 }

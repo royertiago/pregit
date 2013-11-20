@@ -2,6 +2,10 @@
 #include "ExercitoMovendo.h"
 #include "ExercitoParado.h"
 
-ExercitoMovendo* deslocarTropas( int tropas, const Cidade* destino ) {
-    return new ExercitoMovendo( subtrair(tropas), dono, destino );
+ExercitoParado::ExercitoParado( int quantidade, Jogador* dono ) :
+    Exercito( quantidade, dono )
+{}
+
+ExercitoMovendo deslocarTropas( int tropas, const Cidade* destino ) {
+    return ExercitoMovendo( subtrair(tropas), dono, destino );
 }

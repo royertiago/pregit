@@ -33,5 +33,5 @@ void Jogador::alterarBalanceamento( string cidade, int soldados ) {
     }
     
     Cidade* alvo = mapa->obterCidade( cidade );
-    alvo->alterarBalanceamento( soldados );
+    alvo->modificarBalanceamento( soldados );
 }

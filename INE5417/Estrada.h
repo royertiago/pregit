@@ -14,33 +14,22 @@
 #define ESTRADA_H
 
 class Cidade;
-class ExercitoMovendo;
 #include "CampoAberto.h"
 
+#include <list>
+#include <utility>
+using std::list;
 class Estrada {
 private:
-    CampoAberto* const campos;
-
+    list< CampoAberto > campos;
 public:
-    Estrada() = default;
-    ~Estrada(); // desalocar listaDeCampos
-
+    Estrada();
     Cidade * const esquerda = 0;
     Cidade * const direita = 0;
-    const int comprimento; // Quantos campos abertos existem
-
-    Estrada( Cidade* esquerda, Cidade* direita, int comprimento );
 
     /* Insere o exéricitoMovendo no campo aberto correspondente
      * (de acordo com seu destino). */
-    void adicionarExercito( ExercitoMovendo* );
-
-    /* Desloca todos os exércitos que estão em campos finais da estrada
-     * para a cidade de destino correspondente.
-     *
-     * Nas regras, esta etapa corresponde à etapa "Agrupamento de
-     * exércitos". */
-    void movimentacaoTerminal();
+    void adicionarExercitoMovendo( ExercitoMovendo* );
 
     /* Desloca todas as tropas que não estavam em batalha para
      * as cidades seguintes. 
@@ -49,8 +38,12 @@ public:
      * de Tropas".*/
     void movimentacaoInterna();
 
-    /* Propaga a chamada aos campos abertos internos. */
-    void batalhar();
+    /* Desloca todos os exércitos que estão em campos finais da estrada
+     * para a cidade de destino correspondente.
+     *
+     * Nas regras, esta etapa corresponde à etapa "Agrupamento de
+     * exércitos". */
+    void movimentacaoTerminal();
 };
 
 

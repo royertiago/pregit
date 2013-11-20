@@ -8,15 +8,17 @@
 #include "Exercito.h"
 class ExercitoMovendo;
 
-class ExercitoParado : public Exercito {
+class ExercitoParado : public ExercitoMovendo {
 public:
-    using Exercito::Exercito;
+    ExercitoParado() = default;
+    ExercitoParado( const ExercitoParado& ) = default;
+    ~ExercitoParado() = default;
+
+    ExercitoParado( int quantidade, Jogador* dono );
 
     /* Gera um ExercitoMovendo com o referido destino,
      * com a quantidade de tropas passadas.
-     * Este total é deduzido da quantidade de tropas deste exército.
-     * A responsabilidade de deletar o ponteiro é da função chamadora. 
-     */
-    ExercitoMovendo* moverTropas( int tropas, const Cidade* destino );
+     * Este total é deduzido da quantidade de tropas deste exército. */
+    ExercitoMovendo moverTropas( int tropas, const Cidade* destino );
 };
 #endif // ExercitoMovendo.h

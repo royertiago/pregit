@@ -5,20 +5,11 @@ A classe CampoAberto possui comportamentos diferentes também relativos
 à nulidade ou não dos atributos campoEsquerda de campoDireita.
 Eis uma oportunidade de usar herança múltipla.
 
-Alternativamente, estes dois problemas poderiam ser resolvidos 
-lindamente usando ponteiro para função-membro.
+Métodos para NÃO remover ao consertar a cidade:
+    adicionarExercito( Exercito* ) - faz as conversões necessárias
+    criarOrdemDeEnvio( Jogador*, Cidade*, int )
+    modificarBalanceamento( int )
 
 Os campos abertos não iteram sobre seus elementos para trás; eles
 o fazem para frente apenas. Podemos substituir std::list por
 std::forward_list por questões de eficiência.
-
-Classes restantes:
-    ContadorDeGeiger.cpp
-    Mapa.cpp
-    Terminar Cidade.cpp
-    Estrada.cpp - adicionar batalhar();
-    CampoAberto.cpp renomear batalhar();
-
-Mudança de estilo: em praticamente todos os cabeçalhos, a interface
-pública da classe está no fim do arquivo, após os detalhes de
-implementação.

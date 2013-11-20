@@ -77,58 +77,8 @@ void CampoAberto::movimentacaoTerminal() {
                     exercitosDireita.pop_back() );
 }
 
-void CampoAberto::mover( list< ExercitoMovendo* >& exercitos,
-        CampoAberto* campo )
-{
-    int totalSoldados = 0; // Total de soldados a ser deslocado
-    for( ExercitoMovendo* e : exercitos )
-        totalSoldados += *e;
-
-    if( totalSoldados == 0 ) return;
-
-    // t é o time que possui exércitos na lista.
-    Time* t = exercitos.begin()->dono->time; //Piuí...
-
-    // Simular o lançamento da moeda.
-    int quantidadeInimigos = campo->enumerarInimigos( t );
-    if( quantidadeInimigos > totalSoldados )
-        return;
-
-    if( quantidadeInimigos == totalSoldados && 
-        campo->prioridade <= this->prioridade )
-        return;
-
-    for( ExercitoMovendo* e : exercitos )
-        campo->adicionarExercito( e );
-}
-
 void CampoAberto::movimentacaoEsquerda() {
-    if( estado == EmBatalha || campoEsquerda == 0 )
-        return;
 
-    mover( exercitosEsquerda, campoEsquerda );
-}
-
-void CampoAberto::movimentacaoDireita() {
-    if( estado == EmBatalha || campoDireita == 0 )
-        return;
-
-    mover( exercitosDireita, campoDireita );
-}
-
-int CampoAberto::enumerarInimigos( Time* t ) {
-    int total = 0;
-    for( list< ExercitoMovendo* >* lista : 
-            {&exercitosEsquerda, &ExercitosDireita} )
-    /* Estou iterando sobre a lista que contém, como elementos, apenas
-     * as listas de exercitos Esquerda e direita, para evitar
-     * duplicação de código. */
-    for( ExercitoMovendo* e : *lista )
-        if( e->dono->time != t )
-            total += *e;
-
-    return total;
-}
 
 void CampoAberto::atualizarEstado() {
     /* Limparemos os times e exércitos que não possuem mais
@@ -138,6 +88,9 @@ void CampoAberto::atualizarEstado() {
 
     for( list< ExercitoMovendo* >* lista : 
             {&exercitosEsquerda, &ExercitosDireita} )
+    /* Estou iterando sobre a lista que contém, como elementos, apenas
+     * as listas de exercitos Esquerda e direita, para evitar
+     * duplicação de código. */
     for( auto i = lista->begin(); i != lista->end(); ) {
         if( *i == 0 ) //quantidade nula de exércitos
             i = lista->erase( i );
