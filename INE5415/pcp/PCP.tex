@@ -1,0 +1,258 @@
+\documentclass[12pt]{article}
+
+\usepackage[brazil]{babel}
+\usepackage[latin1]{inputenc} %Codificação de entrada
+\usepackage[T1]{fontenc} %Codificação do PDF gerado
+\usepackage{amsmath, amsfonts, amsthm}
+\usepackage{textcomp} %Companion fonts
+
+%\usepackage{tikz}
+%\usetikzlibrary{arrows, automata}
+%\usetikzlibrary{decorations.pathmorphing} %snake
+%\usetikzlibrary{decorations}
+%\tikzset{>=stealth, shorten >= 0.2ex, node distance = 10em, auto, initial text = {}}
+
+\newcommand{\domino}[2]{\genfrac{[}{]}{1pt}{}{#1}{#2}}
+\newcommand{\displaytower}[2]{\genfrac{}{}{0pt}{}{#1}{#2}}
+
+\renewcommand{\l}{\leftarrow}
+\renewcommand{\r}{\rightarrow}
+
+\newtheorem*{theorem}{Teorema}
+\newtheorem*{lemma}{Lema}
+\newtheorem*{corollary}{Corolário}
+
+\begin{document}
+
+\title{INE5415 --- Teoria da Computação --- Trabalho 2: Problema da Correspondência de Post}
+\author{Tiago Royer \and Wagner Gascho}
+\maketitle
+
+\begin{abstract}
+    Apresentaremos uma demonstração da indecidibilidade do Problema da Correspondência de Post.
+    A demonstração é ``inspirada'' no texto de Hopcroft e Ullman \cite{Hopcroft}
+\end{abstract}
+
+\section{Definição do problema}
+
+    \subsection{Como um problema de pareamento}
+    Considere o seguinte conjunto de ``dominós'':
+    \begin{equation*}
+        \left\{ \quad \domino{a}{aa}, \domino{ab}{ba}, \domino{aca}{b}\quad \right\}
+    \end{equation*}
+    Nosso objetivo é alinhar estas pecinhas de forma que a cadeia de caracteres de cima seja igual à cadeia de baixo.
+    Não há restrições quanto à repetição de peças; apenas não podemos girar os dominós.
+
+    Para este conjunto, uma solução possível é
+    \begin{equation*}
+        \domino{a}{aa} \domino{aca}{c} \domino{a}{aa} \to \displaytower{a|aca|a}{aa|c|aa}
+    \end{equation*}
+    Esta solução não é única; também podemos alinhar assim:
+    \begin{equation*}
+        \domino{a}{aa} \domino{ab}{ba} \domino{aca}{c} \domino{a}{aa}
+    \end{equation*}
+    Na verdade, existem infinitas soluções: basta repetir
+    o dominó $\domino{ab}{ba}$ quantas vezes quisermos:
+    \begin{align*}
+        \domino{a}{aa} \domino{ab}{ba} \domino{aca}{c} \domino{a}{aa} \\
+        \domino{a}{aa} \domino{ab}{ba} \domino{ab}{ba} \domino{aca}{c} \domino{a}{aa} \\
+        \domino{a}{aa} \domino{ab}{ba} \domino{ab}{ba} \domino{ab}{ba} \domino{aca}{c} \domino{a}{aa} \\
+        ...
+    \end{align*}
+    O importante aqui não são os dominós, mas sim o pareamento (correspondência) entre as cadeias de caracteres da parte
+    de cima e da parte de baixo. Este é o Problema da Correspondência de Post (PCP).
+
+    Podemos formalizar da seguinte maneira: dados dois conjuntos $w_1, w_2, \ldots, w_k$ (as partes de cima dos dominós) e $v_1, v_2, \ldots, v_k$
+    (as partes de baixo), queremos encontrar uma sequência de índices $i_1, i_2, \ldots, i_t$ tais que
+    $w_{i_1} w_{i_2} \ldots w_{i_t} = v_{i_1} v_{i_2} \ldots v_{i_t}$. (Estes índices correspondem a quais dominós escolhemos para
+    enfileirar; no exemplo, a primeira solução possui $i_1 = 1$, $i_2 = 2$ e $i_1 = 1$, de forma que $w_1 w_2 w_1 = aacaa = v_1 v_2 v_1$.)
+
+    \subsection{Formalização como um problema de linguagem}
+    Dado um alfabeto $\sigma$ sobre o qual são escolhidos os símbolos para as cadeias (as partes de cima e de baixo dos dominós), podemos
+    construir um alfabeto $\Sigma = \sigma \cup \{\#\}$ (em que $\#$ não está em $\Sigma$), sobre o qual construiremos uma linguagem:
+    o conjunto das cadeias de caracteres da forma
+    \begin{equation*}
+        w_1 \# w_2 \# \cdots \# w_n \#\# v_1 \# v_2 \# \cdots \# v_n
+    \end{equation*}
+    em que $w_i, v_i \in \sigma^*$ podem ser alinhados no sentido discutido acima. Chamemos esta linguagem de $L_P$ (``linguagem (do problema)
+    de Post''); o que pretendemos demonstrar é que esta linguagem é indecidível.
+
+\section{Problema da Correspondência de Post modificado}
+
+    Para mostrarmos a indecidibilidade de $L_P$, antes iremos adicionar uma restrição: escolheremos um dos dominós do conjunto
+    e exigiremos que a solução comece com aquele par. Por exemplo, se escolhermos o dominó $\domino{a}{aa}$ no exemplo acima, ainda satisfaremos
+    ao problema modificado. Entretanto, não existe emparelhamento que comece com o dominó $\domino{ab}{ba}$.
+
+    Se possuíssemos um algoritmo \footnote{Consideremos, para efeito deste trabalho, que ``algoritmo'' é o mesmo que ``máquina de Turing
+    que sempre para''.} para resolver esta versão do problema, seria simples resolver o problema irrestrito: basta executar o algoritmo
+    exigindo que cada um dos pares seja o par inicial; caso alguma solução seja encontrada, ela também é solução para o problema original,
+    e, se nenhum dos dominós como inicial seja solução, o problema original também não tem.
+
+    Isto garante que, se mostrarmos que PCP é indecidível, automaticamente garantimos a indecidibilidade da versão modificada (pois um algoritmo
+    para a versão modificada é facilmente adaptado para resolver o problema original). Entretanto, não é isto que queremos fazer;
+    queremos mostrar que a versão modificada é indecidível e, com isso, garantir que PCP também o é. Portanto, devemos seguir o caminho
+    contrário. Iremos adaptar um ``algoritmo'' para o problema original para resolver o problema modificado --- então a ausência de um algoritmo
+    para o segundo implica na ausência do algoritmo para o primeiro.
+
+    \begin{lemma}
+        Se o problema da correspondência de Post é decidível, então a versão modificada também é.
+    \end{lemma}
+    \begin{proof}
+        Iremos modificar as palavras $w_i$ e $v_i$ de forma que, se rodarmos o algoritmo original nas palavras adaptadas, ele
+        as aceitará se, e somente se, as palavras originais satisfazem ao problema modificado.
+
+        Tome dois símbolos $\_$ e $\$$ não presentes no alfabeto original. Iremos intercalar as letras das palavras originais de um jeito
+        esperto: nas palavras $w_i$, colocaremos o $\_$ na frente de cada letra, e nos $v_i$, colocaremos atrás. No exemplo, a primeira ``solução''
+        ficaria assim:
+        \begin{equation*}
+            \displaytower{\_a|\_a\_c\_a|\_a}{\quad\;\; a\_a\_|c\_|a\_a\_}
+        \end{equation*}
+
+        Observe que sobrou um $\_$ no começo e um no final. Iremos adicionar um dominó à lista para encaixar no final:
+        \begin{equation*}
+            \domino{\_\$}{\$}
+        \end{equation*}
+        Como ele contém o caracter $\$$, ele apenas poderá ser encaixado no final para completar a sentença. Para terminar, adicionemos
+        mais um dominó para ser o início. Se $\domino{w}{v}$ for o dominó que foi escolhido para estar no começo da solução
+        e $\domino{w'}{v'}$ for sua versão modificada como acima, adicionemos o dominó
+        \begin{equation*}
+            \domino{\$w'}{\$\_v'}
+        \end{equation*}
+        à lista.
+
+        Com estas modificações, a solução do exemplo é totalmente traduzida como
+        \begin{equation*}
+            \displaytower{\$\_a|\_a\_c\_a|\_a|\_\$}{\$\_a\_a\_|c\_|a\_a\_|\$}
+        \end{equation*}
+
+        Então, entregamos esta nova lista de dominós ao decisor do PCP.
+
+        Observe que, se existir alguma solução para o problema original com a nova lista de dominós, ela tem que começar com o dominó
+        $\domino{\$w'}{\$\_v'}$, pois é o único cuja letra inicial é a mesma para ambas as palavras.
+
+        O contrário também é verdade: se existir uma solução para o problema modificado com a lista original, podemos adaptá-la,
+        usando a tradução descrita acima e adicionando o dominó $\domino{\_\$}{\$}$ ao fim, para tornar-se uma solução para
+        o problema original com a lista modificada.
+
+        Ou seja: existe solução para o problema original com a lista modificada se, e somente se, existir solução para o problema
+        modificado com a lista original. Portanto, um algoritmo para PCP pode ser convertido num algoritmo para o problema modificado.
+    \end{proof}
+
+\section{Indecidibilidade do problema modificado}
+
+    \begin{theorem}
+        O problema da correspondência modificado é indecidível.
+    \end{theorem}
+    \begin{proof}
+        Iremos usar um algoritmo imaginário para o problema modificado para resolver o problema da parada.
+
+        A ideia é codificar os estados da computação da máquina usando cadeias de caracteres. Se, num determinado
+        estado de computação, a máquina está no estado $q_j$, com as cadeias $\alpha$ à esquerda,
+        $\beta$ à direita e $c$ sob o cabeçote de leitura, codificaremos isto como
+        \begin{equation*}
+            \alpha q_j c \beta
+        \end{equation*}
+        adicionando símbolos $q_i$ ao alfabeto se necessário.
+        (Note que estamos assumindo implicitamente que a máquina não ``cai para fora'' à esquerda da entrada.)
+
+        Queremos que a solução seja uma sequência de computação da máquina. Se a máquina parar, então a sequência de dominós existirá.
+        E vice versa: se a máquina nunca para, não existirá sequência de dominós que soluciona o problema.
+
+        Para uma entrada $\langle M, w \rangle$, o primeiro dominó deve ser este:
+        \begin{equation*}
+            \domino{\#q_0 w\#}{\#}
+        \end{equation*}
+        Aqui, codificaremos o estado atual da máquina na parte de baixo dos dominós, e o próximo estado no topo.
+        
+        Numa transição de estado, os únicos elementos da fita importantes são aqueles que estão mais próximos do cabeçote: o imediatamente
+        abaixo (pois é o analisado pela máquina) e os dois do lado (pois o cabeçote pode se mover entre eles). 
+        O resto da fita deve ser copiada. Para cada símbolo $s$ do alfabeto de fita, adicionemos os dominós
+        \begin{equation*}
+            \domino{s}{s}
+        \end{equation*}
+        Exemplo:
+        \begin{equation*}
+             \displaytower{\cdots\#00q11\#}{\cdots\#\qquad\quad\;} \to 
+             \displaytower{\cdots\#00q11\#0}{\cdots\#0\qquad\quad\;} \to 
+             \displaytower{\cdots\#00q11\#00}{\cdots\#00\qquad\quad\;}
+         \end{equation*}
+         Também precisamos copiar o divisor de estados --- adicionaremos $\domino{\#}{\#}$.
+
+         Agora, para a transição de estados, olhemos para a descrição do estado de computação adotado. Como observamos antes, basta apenas
+         os três caracteres mais próximos do cabeçote. Temos quatro casos:
+         \footnote{
+             Observe que esta etapa da construção lida de forma muito elegante com o não-determinismo: um ramo de computação que ``não tem futuro''
+             será descartado pelo fato de não produzir um pareamento de dominós útil, e um ramo que leva a uma aceitação codificará um alinhamento
+             válido dos dominós.
+         }
+         
+
+         \begin{enumerate}
+             \item Movimentação para a direita no meio da fita. A função de transição $\delta$ contém a instrução $\delta(q, C) = (p, D, \r)$,
+                 em que $q$ e $p$ são estados e $C$ e $D$ são símbolos de fita, não necessariamente distintos. Incluímos o seguinte dominó:
+                 \begin{equation*}
+                     \domino{qC}{Dp}
+                 \end{equation*}
+                 Note que este caso também dá conta da movimentação no início da fita, pois estamos assumindo que a máquina nunca cai para
+                 fora no começo da fita.
+             \item Movimentação para a esquerda no meio da fita. Temos agora $\delta(q, C) = (p, D, \l)$. Como o símbolo logo abaixo do cabeçote
+                 é representado à direita da fita, temos de incluir, para todos os símbolos de fita $X$, o dominó
+                 \begin{equation*}
+                     \domino{XqC}{pXD}
+                 \end{equation*}
+                 para cobrirmos todos os casos de símbolos à esquerda do cabeçote.
+             \item Movimentação para a direita no fim da fita. $\delta(q, \sqcup) = (p, D, \r)$. Para identificar que estamos no fim da fita,
+                 o símbolo à direita de $q$ na cadeia de cima do dominó é o de divisão de estado de computação ($\#$). Incluímos o dominó
+                 \begin{equation*}
+                     \domino{q\#}{Dp\#}
+                 \end{equation*}
+             \item Movimentação para a esquerda no fim da fita. $\delta(q, \sqcup) = (p, D, \l)$. Pelo raciocínio combinado dos dois casos
+                 anteriores, para cada símbolo de fita $X$, incluímos o dominó
+                 \begin{equation*}
+                     \domino{Xq\#}{qXD\#}
+                 \end{equation*}
+         \end{enumerate}
+
+        No exemplo de antes, digamos que $\delta(q, 1) = (p, 0, \r)$; temos o dominó $\domino{q0}{1p}$ e
+        \begin{equation*}
+            \displaytower{\cdots\#00q11\#00}{\cdots\#00\qquad\quad\;} \to
+            \displaytower{\cdots\#00q11\#000p}{\cdots\#00q1\qquad\quad\;}
+        \end{equation*}
+        Agora, usando as regras da cópia de fita, iremos copiar os valores até que a parte de baixo dos dominós cheque no $p$
+        e seja necessário alinhar mais uma mudança de estado.
+
+        Agora, falta a terminação. Ao chegar num estado de parada, a máquina não executará mais transições. Podemos modificar
+        a máquina antes de fazer esta conversão de forma que, antes de entrar num estado de parada, ela se desloque até o fim
+        da fita. Então, basta adicionar mais um dominó para cada estado $p$ de parada:
+        \begin{equation*}
+            \domino{\#}{p\#\#}
+        \end{equation*}
+        Algo assim:
+        \begin{equation*}
+            \displaytower{\cdots\#0p\#}{\cdots\#0\quad\;} \to
+            \displaytower{\cdots\#0p\#\#}{\cdots\#0p\#\#}
+        \end{equation*}
+
+        Por construção, sempre que houver uma sequência de computação que pare, haverá uma correspondência para o conjunto
+        de dominós passado.
+
+        Por outro lado, também por construção, sempre que haver algum emparelhamento de dominós que comece com aquele dominó
+        que escolhemos lá no começo da demonstração, este emparelhamento obrigatoriamente irá codificar uma sequência computação
+        na qual a máquina $M$ para ao computar $w$.
+
+        Como todas estas adaptações são passíveis de serem feitas por máquinas de Turing, um algoritmo para a versão modificada
+        do problema da correspondência de Post pode ser adaptado para decidir o problema da parada.
+
+        O resultado segue pela contrapositiva.
+    \end{proof}
+
+    \begin{corollary}
+        O problema da correspondência de Post é indecidível.
+    \end{corollary}
+    \begin{proof}
+        Óbvio.
+    \end{proof}
+
+\bibliographystyle{plain}
+\bibliography{bib.bib}
+\end{document}
