@@ -1,0 +1,419 @@
+\documentclass{beamer}
+\usetheme{Boadilla}
+
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc} %Codificação de entrada
+\usepackage[T1]{fontenc} %Codificação do PDF gerado
+\usepackage{amsmath, amsfonts, amsthm}
+\usepackage{textcomp} %Companion fonts
+
+\theoremstyle{definition}
+\newtheorem*{definicao}{Definição}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning} % above = of
+\usetikzlibrary{calc} % Vetores ($ $)
+\usetikzlibrary{fit}
+
+\tikzset{
+    node distance = 2cm,
+    line width = 3pt,
+    vertice/.style = {
+        shape = circle,
+        inner sep = 3pt,
+        fill = #1
+    },
+    vertice/.default = black,
+    flor/.style = {
+        shape = circle,
+        inner sep = 5pt,
+        fill = #1
+    },
+    flor/.default = green,
+    emparelhamento/.style = {
+        color = blue,
+        line width = 1.2pt
+    },
+    aresta/.style = {
+        color = #1,
+        line width = 1.2pt
+    },
+    aresta/.default = black,
+    caminho/.style = {
+        color = #1,
+        line width = 5pt
+    },
+    caminho/.default = yellow
+}
+
+\newcommand{\GrafoExemploXOR}{ % Este comando deve estar dentro de um tikzpicture
+    %     A-----E=====F
+    %   / ||    |
+    %  B  ||    |  As arestas emparelhadas estão desenhadas mais grossas
+    %   \ ||    |
+    %     C-----D    
+
+    % Anatomia deste comando node:
+    % Posição: (0, 0)  -- também pode ser uma coordenada
+    % Operação especial em caminho: node -- Adicionada ao final do desenho. Ignora draw/fill/filldraw/etc.
+    % Atributos da operação especial:
+    %   circle - forma
+    %   inner sep - especifica a separação entre a borda do círculo e o texto.
+    %   fill - ordena ao TikZ desenhar e preencher o círculo na tela de azul
+    % Nome do nodo: Nodo -- este nome pode ser usado na posição também
+    % Label: {A} -- pode ser vazia
+    %\path (0, 0) node [shape=circle, inner sep = 2pt, fill=blue] (A) {};
+
+    \coordinate (Centro); %Centro do triângulo
+
+    \path (Centro) arc [start angle = 0, end angle = 60, radius = 1cm] % Agora, estamos no lugar do nodo do canto superior esquerdo.
+        coordinate (A) %Vamos botar uma coordenada aqui.
+        arc [start angle = 60, end angle = 180, radius = 1cm] % O comando node não adiciona um ponto à curva, então continuamos
+        coordinate (B)                                        % com a referência ao final do arco anterior
+        arc [start angle = 180, end angle = 300, radius = 1cm]
+        coordinate (C);
+
+    %\path node[vertice=green] (D) at ($ (C) + (3, 0) $) {};
+    % Esta coordenada é uma combinação linear. É delimitada por ($ e $); a coordenada será a soma de (C) com (3, 0).
+     
+    \path let \p1 = ($ (A) - (C) $) in %No registrador p1 (ponto 1), armazene a coordenada ($ (C) - (A) $).
+        coordinate (D) at ($ (C) + (\y1, 0) $) {} %\y1 é a coordenada y do registrador p1.
+        coordinate (E) at ($ (A) + (\y1, 0) $) {}
+        coordinate (F) at ($ (A) + 2*(\y1, 0) $) {};
+}
+\newcommand{\ArestasExemploXOR}{
+    \draw [aresta] (A) -- (B) -- (C) -- (D) -- (E) -- (A);
+    \draw [emparelhamento] (A) -- (C) (E) -- (F);
+    \node [shape = circle, inner sep = 3pt, fill = blue] at (A) {};
+    \node [vertice] at (B) {};
+    \node [vertice = blue] at (C) {}; %Este nodo e o primeiro possuem exatamente as mesmas configurações.
+    \node [vertice] at (D) {};
+    \node [vertice = blue] at (E) {};
+    \node [vertice = blue] at (F) {};
+}
+
+\begin{document}
+
+\title{Caminhos, Árvores e Flores}
+\subtitle{Um algoritmo polinomial para emparelhamento}
+\author[Feitosa, Royer, Gascho]{Igor Henrique Grajefe Feitosa \\ Tiago Royer \\ Wagner Fernando Gascho}
+\institute[UFSC]{Universidade Federal de Santa Catarina}
+\frame{\titlepage}
+
+\begin{frame}
+    \frametitle{Definições}
+
+    Um emparelhamento de um grafo é um subconjunto de arestas que não se tocam.
+
+    \begin{figure}[h]
+        \begin{tikzpicture}
+            \GrafoExemploXOR
+
+            \ArestasExemploXOR
+        \end{tikzpicture}
+    \end{figure}
+
+    Vértices que são tocados por arestas do emparelhamento estão \emph{emparelhados}; os demais estão \emph{expostos}.
+\end{frame}
+
+\begin{frame}
+    Dado um emparelhamento M:
+    \begin{itemize}
+        \item Um caminho é \emph{M-alternado} se suas arestas se alternam entre estar fora e dentro do emparelhamento.
+            \begin{figure}[h]
+                \begin{tikzpicture}
+                    \GrafoExemploXOR
+                    \draw[caminho]  (B) -- (C) -- (A) -- (E) -- (F);
+                    \ArestasExemploXOR
+                \end{tikzpicture}
+            \end{figure}
+        \pause
+        \item Um caminho M-alternado é \emph{M-aumentante} se ele ligar dois vértices expostos.
+            \begin{figure}[h]
+                \begin{tikzpicture}
+                    \GrafoExemploXOR
+                    \draw[caminho]  (B) -- (A) -- (C) -- (D);
+                    \ArestasExemploXOR
+                \end{tikzpicture}
+            \end{figure}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Diferença simétrica -- Ou exclusivo}
+    Podemos fazer um ou-exclusivo (XOR) entre um caminho M-aumentante e o emparelhamento M para aumentar sua cardinalidade:
+    \begin{figure}
+        \begin{tikzpicture}
+            \GrafoExemploXOR
+            \draw[caminho]  (B) -- (A) -- (C) -- (D);
+            \ArestasExemploXOR
+        \end{tikzpicture}
+
+        \begin{tikzpicture}
+            \GrafoExemploXOR
+            \draw [aresta] (B) -- (C) -- (A) -- (E) -- (D);
+            \draw [emparelhamento] (A) -- (B) (C) -- (D) (E) -- (F);
+            \node [vertice = blue] at (A) {};
+            \node [vertice = blue] at (B) {};
+            \node [vertice = blue] at (C) {};
+            \node [vertice = blue] at (D) {};
+            \node [vertice = blue] at (E) {};
+            \node [vertice = blue] at (F) {};
+        \end{tikzpicture}
+    \end{figure}
+
+    O algoritmo de Hopcroft-Karp encontra emparelhamento máximo em grafos bipartidos procurando por caminhos M-aumentantes.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Execução: busca em largura}
+    \onslide<1>{Enquanto houverem vértices não-emparelhados, busque um caminho M-aumentante.}
+    \begin{figure}
+        \begin{tikzpicture}
+            % A --- B
+            %||     | \
+            %||     |  E
+            %||     |// \
+            % C --- D    H
+            %  \   /  \ /
+            %    F === G
+            \coordinate (A);
+            \coordinate [right = of A] (B);
+            \coordinate [below = of A] (C);
+            \coordinate [right = of C] (D);
+            \coordinate (E) at ($(B)!1!60:(D)$); % interpole (B) com [(D) rotacionado 60 graus sobre (B)] com 1 (=100%) de preferencia para (D).
+            \coordinate (F) at ($(C)!1!-60:(D)$); 
+            \coordinate [right = of F] (G);
+            \coordinate (H) at ($(G)!1!-90:(D)$); 
+
+            \onslide<1>{
+                \node [above right of = H, align = center] (Texto) {Começaremos\\aqui};
+                \draw[->, shorten >=5pt, line width = 2pt] (Texto) -- (H);
+            }
+
+            \onslide<2->{
+                \draw [caminho] (H) -- (E) (H) -- (G);
+            }
+            \onslide<3->{
+                \draw [caminho] (E) -- (D) (G) -- (F);
+            }
+            \onslide<4->{
+                \draw [caminho] (G) -- (D) -- (C) -- (F) -- (D) -- (B);
+            }
+            \onslide<5->{
+                \draw [caminho = red] (H) -- (E) -- (D) -- (B);
+            }
+
+            \draw [aresta] (A) -- (B) -- (D) -- (C) -- (F) -- (D) -- (G) -- (H) -- (E) -- (B);
+            \draw [emparelhamento] (A) -- (C) (E) -- (D) (F) -- (G);
+            \foreach \posicao in {A, C, F, G, D, E} {
+                \node [vertice = blue] at (\posicao) {};
+            }
+            \foreach \posicao in {B, H} {
+                \node [vertice] at (\posicao) {};
+            }
+        \end{tikzpicture}
+
+        \onslide<6->{Este procedimento basta para grafos bipartidos --- entretanto...}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Contra-exemplo para grafos quaisquer}
+    Ramo de busca possível:
+
+    \begin{figure}
+        \begin{tikzpicture}
+            %       A    B --- C
+            %       |  // |  //
+            %       | //  | //
+            % F --- E ---- D
+            \coordinate (A);
+            \coordinate [right = of A] (B);
+            \coordinate [right = of B] (C);
+            \coordinate [below = of B] (D);
+            \coordinate [left = of D] (E);
+            \coordinate [left = of E] (F);
+
+            \onslide<2-> { \draw[caminho] (A) -- (E); }
+            \onslide<3-> { \draw[caminho] (E) -- (B); }
+            \onslide<4-> { \draw[caminho] (B) -- (D); }
+            \onslide<5-> { \draw[caminho] (D) -- (C); }
+            \onslide<6-> { \draw[caminho] (C) -- (B); }
+            \onslide<7-> { \draw[caminho = red] (B) -- (E); }
+            \onslide<8-> { \draw[caminho = red] (E) -- (F); }
+
+            \draw[aresta] (A) -- (E) -- (F) (E) -- (D) -- (B) -- (C);
+            \draw[emparelhamento] (E) -- (B) (C) -- (D);
+
+            \foreach \posicao in {B, C, D, E} \node [vertice = blue] at (\posicao) {};
+            \foreach \posicao in {A, F} \node [vertice] at (\posicao) {};
+        \end{tikzpicture}
+    \end{figure}
+
+    \onslide<9->{Problema: o ``caminho M-aumentante'' encontrado possui auto-interseção.}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Solução: Flores!}
+    \begin{definicao}
+        Um ciclo de tamanho $2k+1$ é dito ser uma \emph{flor} se $k$ arestas deste ciclo estão no emparelhamento considerado
+        e o único vértice que não é tocado por estas $k$ arestas é conectado por um caminho M-alternado a um vértice exposto.
+    \end{definicao}
+
+    \begin{figure}
+        \begin{tikzpicture}[node distance = 1.2cm]
+            % ABCDE fazem parte da flor, F é emparelhado com A e G é exposto.
+            % G -- F == (ABCDE)
+
+            \coordinate (Centro) at (0, 0); % Centro da flor
+            \foreach \nome/\rotacao in {A/0, B/1, C/2, D/3, E/4}
+                \path (Centro) ++(-1.2cm, 0) arc (180 : 180 + \rotacao * 72 : 1.2cm) coordinate (\nome);
+            \coordinate [left = of A] (F);
+            \coordinate [left = of F] (G);
+            \filldraw[fill = green!50, draw = green!20!black] (0, 0) circle [radius = 1.5cm];
+
+            \draw[aresta] (E) -- (A) -- (B) (C) -- (D) (F) -- (G);
+            \draw[emparelhamento] (B) -- (C) (D) -- (E) (A) -- (F);
+            \foreach \posicao in {A, B, C, D, E, F} \node [vertice = blue] at (\posicao) {};
+            \node [vertice] at (G) {};
+        \end{tikzpicture}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Contração de flores}
+    Podemos contrair as flores num único nodo:
+    \begin{figure}
+        \begin{tikzpicture}[node distance = 1.2cm]
+            \coordinate (Centro) at (0, 0); % Centro da flor
+            \foreach \nome/\rotacao in {A/0, B/1, C/2, D/3, E/4}
+                \path (Centro) ++(-1.2cm, 0) arc (180 : 180 + \rotacao * 72 : 1.2cm) coordinate (\nome);
+            \coordinate [left = of A] (F);
+            \coordinate [left = of F] (G);
+            \filldraw[fill = green!50, draw = green!20!black] (0, 0) circle [radius = 1.5cm];
+
+            \draw[aresta] (E) -- (A) -- (B) (C) -- (D) (F) -- (G);
+            \draw[emparelhamento] (B) -- (C) (D) -- (E) (A) -- (F);
+            \foreach \posicao in {A, B, C, D, E, F} \node [vertice = blue] at (\posicao) {};
+            \node [vertice] at (G) {};
+
+            % X --- Y === Z (Z é uma flor)
+            %\coordinate[below = of Centro, node distance = 5cm] (Z);
+            \path (Centro) -- ++(0, -3cm) coordinate (Z);
+            \coordinate[left = of Z] (Y);
+            \coordinate[left = of Y] (X);
+
+            \draw[aresta] (X) -- (Y);
+            \draw[emparelhamento] (Y) -- (Z);
+            \node[vertice = blue] at (Y) {};
+            \node[flor] at (Z) {};
+            \node[vertice] at (X) {};
+
+            \path (Centro) -- (Z) node[pos=0.6] (S) {} node[pos=0.8] (T) {};
+            \draw[->, color = red, line width = 6pt, >=stealth] (S) -> (T);
+        \end{tikzpicture}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    Recuperar caminho M-aumentante
+    \begin{figure}
+        \begin{tikzpicture}
+        \onslide<2->{
+            \coordinate (Centro) at (0, 0); % Centro da flor
+            \foreach \nome/\rotacao in {A/0, B/1, C/2, D/3, E/4}
+                \path (Centro) ++(-1.2cm, 0) arc (180 : 180 + \rotacao * 72 : 1.2cm) coordinate (\nome);
+            \coordinate [left = of A] (F);
+            \coordinate [left = of F] (G);
+            \coordinate [right = of D] (H);
+            \filldraw[fill = green!50, draw = green!20!black] (0, 0) circle [radius = 1.5cm];
+
+            \draw[caminho] (G) -- (F) -- (A) -- (E) -- (D) -- (H);
+            \draw[emparelhamento] (B) -- (C) (D) -- (E) (A) -- (F);
+            \draw[aresta] (E) -- (A) -- (B) (C) -- (D) -- (H) (F) -- (G);
+            \foreach \posicao in {A, B, C, D, E, F} \node [vertice = blue] at (\posicao) {};
+            \node [vertice] at (G) {};
+            \node [vertice] at (H) {};
+        }
+
+            % X --- Y === Z --- W (Z é uma flor)
+            %\coordinate[below = of Centro, node distance = 5cm] (Z);
+            \path (Centro) -- ++(0, +3cm) coordinate (Z);
+            \coordinate[left = of Z] (Y);
+            \coordinate[left = of Y] (X);
+            \coordinate[right = of Z] (W);
+
+            \draw[caminho] (X) -- (Y) -- (Z) -- (W);
+            \draw[emparelhamento] (Y) -- (Z);
+            \draw[aresta] (X) -- (Y) (Z) -- (W);
+            \node[vertice = blue] at (Y) {};
+            \node[flor] at (Z) {};
+            \node[vertice] at (X) {};
+            \node[vertice] at (W) {};
+
+        \onslide<2->{
+            \path (Centro) -- (Z) node[pos=0.6] (S) {} node[pos=0.8] (T) {};
+            \draw[->, color = red, line width = 6pt, >=stealth] (T) -> (S);
+        }
+        \end{tikzpicture}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{De volta ao contra-exemplo}
+    Encontramos uma flor:
+
+    \begin{figure}
+        \begin{tikzpicture}
+            %       A    B --- C
+            %       |  // |  //
+            %       | //  | //
+            % F --- E ---- D
+            \coordinate (A);
+            \coordinate [right = of A] (B);
+            \coordinate [below = of A] (E);
+            \coordinate [left = of E] (F);
+
+            \onslide<1>{
+                \coordinate [right = of B] (C);
+                \coordinate [below = of B] (D);
+            }
+
+                \onslide<1>{
+                \node[fill = green!50, draw = green!20!black, fit = (B) (C) (D), inner sep = 0.2cm, shape = circle ] {} ;
+            }
+
+            \draw[aresta] (A) -- (E) -- (F);
+            \draw[emparelhamento] (E) -- (B);
+
+                \onslide<1> { 
+                    \draw[aresta] (E) -- (D) -- (B) -- (C);
+                    \draw[emparelhamento] (C) -- (D);
+                    \foreach \posicao in {C, D} \node [vertice = blue] at (\posicao) {};
+                }
+
+            \foreach \posicao in {B, E} \node [vertice = blue] at (\posicao) {};
+            \foreach \posicao in {A, F} \node [vertice] at (\posicao) {};
+            \onslide<2-> { \node [flor] at (B) {}; }
+        \end{tikzpicture}
+
+        \onslide<3->{A busca em largura pode ser modificada para detectar flores enquanto procura por caminhos aumentantes.}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Algoritmo}
+    \begin{itemize}
+        \item Enquanto o emparelhamento não for máximo
+            \begin{itemize}
+                \item Para cada vértice exposto, faça uma busca em largura:
+                    \begin{enumerate}
+                        \item Se encontrar uma flor, contraia.
+                        \item Se encontrar um caminho, faça um ou-exclusivo com o emparelhamento atual e volte para o começo.
+                        \item Se encontrar apenas becos sem saída, desista: este nodo não pode ser emparelhado.
+                    \end{enumerate}
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+\end{document}
