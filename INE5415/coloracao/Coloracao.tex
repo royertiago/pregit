@@ -1,0 +1,239 @@
+\documentclass[12pt]{article}
+
+\usepackage[brazil]{babel}
+\usepackage[latin1]{inputenc} %Codificação de entrada
+\usepackage[T1]{fontenc} %Codificação do PDF gerado
+\usepackage{amsmath, amsfonts, amsthm}
+\usepackage{textcomp} %Companion fonts
+
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+\tikzset{
+    node distance = 1cm,
+    vertice/.style = {
+        shape = circle,
+        draw = #1,
+        text = #1
+    },
+    vertice/.default = black,
+}
+
+\newtheorem*{theorem}{Teorema}
+\newtheorem*{lemma}{Lema}
+\newtheorem*{corollary}{Corolário}
+\theoremstyle{definition}
+\newtheorem*{definition}{Definição}
+
+\newcommand{\NP}{\ensuremath{\mathcal{NP}}}
+
+\begin{document}
+
+\title{INE5415 --- Teoria da Computação --- Trabalho 3: Reduções polinomiais}
+\author{Tiago Royer \and Wagner Gascho}
+\maketitle
+
+\begin{abstract}
+    Apresenta-se uma redução de 3-satisfazibilidade para 3-coloração em grafos.
+    Esta demonstração é inspirada no texto de Dexter Kozen \cite{Kozen} (eu acho que é dele).
+\end{abstract}
+
+\section{Definição dos problemas}
+    Define-se aqui qual o formato dos problemas que será utilizado no decorrer do texto.
+
+    \begin{definition}[3-SAT]
+        \emph{Entrada}: Um conjunto de cláusulas com exatamente três literais cada uma.
+
+        \emph{Saída}: Sim, caso o conjunto dado for satisfazível, ou Não, caso ele não seja.
+    \end{definition}
+
+    É trivial\footnote{Tão trivial que a professora que pediu este trabalho não considera esta redução como válida (para este trabalho).} 
+    reduzir o problema da satisfazibilidade para 3-SAT como descrito acima. Como o problema da satisfazibilidade é \NP-completo, temos o seguinte teorema.
+    \begin{theorem}
+        3-SAT é \NP-completo.
+    \end{theorem}
+        
+    \begin{definition}[3-Coloração]
+        \emph{Entrada}: Um grafo simples (sem arestas duplas nem laços).
+
+        \emph{Saída}: Sim, caso exista uma forma de colorir os vértices do grafo com apenas três cores, de forma que dois vértices adjacentes
+        sempre possuam cores distintas; ou Não, caso não exista.
+    \end{definition}
+
+    Antes de tudo, note que 3-Coloração está em \NP: basta listar todas as colorações com 3 cores (cada cloração num ramo de computação diferente)
+    e testar se todos os pares de vértices adjacentes possuem cores distintas. Como este teste é feito em tempo polinomial por uma máquina
+    de Turing, 3-Coloração está em \NP
+
+    Nosso objetivo é reduzir 3-SAT para 3-Coloração, mostrando que 3-Coloração é \NP-completo.
+
+\section{A Redução}
+
+    Comecemos com três vértices especiais R, G e B. Queremos associar estes três vértices às cores vermelho, verde e azul, respectivamente.
+    Para garantir que eles tenham cores diferentes, conectaremos eles num triângulo (figura \ref{Triangulo}).
+
+    \begin{figure}[h]
+        \center
+        \begin{tikzpicture}
+            \coordinate (Centro);
+            \foreach \nome/\rotacao/\cor in {G/0/green, R/1/red, B/2/blue}
+                \path (Centro) ++(-2cm, 0) arc (180 : 30 + \rotacao * 120 : 2cm) node[vertice = \cor] (\nome) {\nome};
+
+            \draw (R) -- (G) -- (B) -- (R);
+        \end{tikzpicture}
+        \label{Triangulo}
+        \caption{Construção da base do grafo}
+    \end{figure}
+
+    O vértice B mostrado é o vértice azul mostrado acima.
+
+    Assim, esses três vértices receberão cores diferentes, que chamaremos de vermelho, verde e azul. Queremos associar o verde
+    a valores-verdade verdadeiro, e vermelho, a falso. Então, temos de garantir que eles não sejam azuis e literais opostos
+    tenham cores diferentes. Para cada par de literais complementares, adicione ao grafo a estrutura da figura \ref{T4}.
+
+    \begin{figure}[h]
+        \center
+        \begin{tikzpicture}
+            \coordinate (Centro);
+            \foreach \nome/\texto/\rotacao/\cor in {R/$p$/0/red, G/$\neg p$/1/green, B/B/2/blue}
+                \path (Centro) ++(-2cm, 0) arc (180 : 30 + \rotacao * 120 : 2cm) node[vertice = \cor] (\nome) {\texto};
+
+            \draw (R) -- (G) -- (B) -- (R);
+        \end{tikzpicture}
+        \label{T4}
+        \caption{Triângulo que garante que dois literais opostos não se contradigam.}
+    \end{figure}
+
+    Agora vem o truque: como todos os literais estão representados por um nodo, construiremos uma estrutura especial
+    para representar as cláusulas. Por exemplo, para a cláusla $p \vee q \vee \neg r$, construímos a estrutura da
+    figura 3.
+
+    \begin{figure}[h]
+        \center
+        \begin{tikzpicture}
+            \node[vertice = green] (G) {G};
+            \node[vertice, right = 2cm of G] (A) {A};
+            \node[vertice, right = 2cm of A] (B) {B};
+            \node[vertice, right = 2cm of B] (C) {C};
+            \node[vertice = red, right = 2cm of C] (R) {R};
+            \draw (G) -- (A) -- (B) -- (C) -- (R);
+
+            \foreach \nome/\base in {$p$/A, $q$/B, $\neg r$/C} {
+                \node[vertice, above = of \base] (X\base) {x};
+                \node[vertice, above = of X\base] (Y\base) {\nome};
+                \node[vertice = green, left = 0.5cm of X\base] (G\base) {G};
+                \draw (\base) -- (X\base) -- (Y\base) (X\base) -- (G\base);
+            }
+        \end{tikzpicture}
+        \label{Estrutura}
+        \caption{Estrutura que representará uma cláusula.}
+    \end{figure}
+
+    Para que o desenho não fique horrendo, o vértice G foi desenhado várias vezes, e as estruturas das construções anteriores não
+    foram mostradas.
+
+    Sob esta estrutura, podemos ter uma coloração que pinte todos os vértices de vermelho? Digamos que sim. Então, todos os vértices marcados
+    com x tem de ser azuis. Portanto, A terá de ser vermelho, e C, verde (figura 4).
+
+    \begin{figure}[h]
+        \center
+        \begin{tikzpicture}
+            \node[vertice = green] (G) {G};
+            \node[vertice = red, right = 2cm of G] (A) {A};
+            \node[vertice, right = 2cm of A] (B) {B};
+            \node[vertice = green, right = 2cm of B] (C) {C};
+            \node[vertice = red, right = 2cm of C] (R) {R};
+            \draw (G) -- (A) -- (B) -- (C) -- (R);
+
+            \foreach \nome/\base in {$p$/A, $q$/B, $\neg r$/C} {
+                \node[vertice = blue, above = of \base] (X\base) {x};
+                \node[vertice = red, above = of X\base] (Y\base) {\nome};
+                \node[vertice = green, left = 0.5cm of X\base] (G\base) {G};
+                \draw (\base) -- (X\base) -- (Y\base) (X\base) -- (G\base);
+            }
+        \end{tikzpicture}
+        \label{ColorirEstrutura}
+        \caption{Que cor pintar o vértice B?}
+    \end{figure}
+
+    Se pintarmos todos
+    os vértices de cima com a mesma cor do vértice R, não poderíamos pinar o vértice B sem adicionar uma nova cor. Ou seja, para este grafo
+    ser 3-colorível, ao menos um dos literais da cláusula codificada tem de ser verde (verdadeiro). Falta mostrar que esta condição é suficiente. 
+
+    Mas isto não é difícil. Precisamos de apenas um literal verdadeiro. Se for o vértice $q$, basta escolher o x abaixo dele como vermelho para 
+    permitir o B como azul (figura 5). O mesmo truque funciona com $r$ (deixando o X abaixo dele como vermelho, A pode ser azul e B 
+    vermelho --- figura 6) e $\neg r$ (figura 7). 
+    
+    \begin{figure}[h]
+        \center
+        \begin{tikzpicture}
+            \node[vertice = green] (G) {G};
+            \node[vertice = red, right = 2cm of G] (A) {A};
+            \node[vertice = blue, right = 2cm of A] (B) {B};
+            \node[vertice = green, right = 2cm of B] (C) {C};
+            \node[vertice = red, right = 2cm of C] (R) {R};
+            \draw (G) -- (A) -- (B) -- (C) -- (R);
+
+            \foreach \nome/\base/\corL/\corX in {$p$/A/red/blue, $q$/B/green/red, $\neg r$/C/red/blue} {
+                \node[vertice = \corX, above = of \base] (X\base) {x};
+                \node[vertice = \corL, above = of X\base] (Y\base) {\nome};
+                \node[vertice = green, left = 0.5cm of X\base] (G\base) {G};
+                \draw (\base) -- (X\base) -- (Y\base) (X\base) -- (G\base);
+            }
+        \end{tikzpicture}
+        \label{T1}
+        \caption{Se $q$ for verde.}
+    \end{figure}
+
+    \begin{figure}[h]
+        \center
+        \begin{tikzpicture}
+            \node[vertice = green] (G) {G};
+            \node[vertice = blue, right = 2cm of G] (A) {A};
+            \node[vertice = red, right = 2cm of A] (B) {B};
+            \node[vertice = green, right = 2cm of B] (C) {C};
+            \node[vertice = red, right = 2cm of C] (R) {R};
+            \draw (G) -- (A) -- (B) -- (C) -- (R);
+
+            \foreach \nome/\base/\corL/\corX in {$p$/A/green/red, $q$/B/red/blue, $\neg r$/C/red/blue} {
+                \node[vertice = \corX, above = of \base] (X\base) {x};
+                \node[vertice = \corL, above = of X\base] (Y\base) {\nome};
+                \node[vertice = green, left = 0.5cm of X\base] (G\base) {G};
+                \draw (\base) -- (X\base) -- (Y\base) (X\base) -- (G\base);
+            }
+        \end{tikzpicture}
+        \label{T2}
+        \caption{Se $p$ for verde.}
+    \end{figure}
+
+    \begin{figure}[h]
+        \center
+        \begin{tikzpicture}
+            \node[vertice = green] (G) {G};
+            \node[vertice = red, right = 2cm of G] (A) {A};
+            \node[vertice = green, right = 2cm of A] (B) {B};
+            \node[vertice = blue, right = 2cm of B] (C) {C};
+            \node[vertice = red, right = 2cm of C] (R) {R};
+            \draw (G) -- (A) -- (B) -- (C) -- (R);
+
+            \foreach \nome/\base/\corL/\corX in {$p$/A/red/blue, $q$/B/red/blue, $\neg r$/C/green/red} {
+                \node[vertice = \corX, above = of \base] (X\base) {x};
+                \node[vertice = \corL, above = of X\base] (Y\base) {\nome};
+                \node[vertice = green, left = 0.5cm of X\base] (G\base) {G};
+                \draw (\base) -- (X\base) -- (Y\base) (X\base) -- (G\base);
+            }
+        \end{tikzpicture}
+        \label{T3}
+        \caption{Se $\neg r$ for verde.}
+    \end{figure}
+
+    Sucesso: esta estrutura é 3-colorível se, e somente se, a cláusula codificada for satisfazível.
+
+    Podemos construir esta estrutura com todos as cláusulas e juntar num único grafo. Assim, uma atribuição que satisfaz a fórmula
+    lógica base codificará uma 3-coloração para o grafo construído, e uma coloração neste grafo
+    pode ser traduzida numa atribuição que satisfaz o conjunto de cláusulas.
+
+    Como a quantidade de nodos extras é linear no número de variáveis e no número de cláusulas, efetivamente reduzimos 3-SAT para 3-Coloração.
+
+\bibliographystyle{plain}
+\bibliography{bib.bib}
+\end{document}
