@@ -23,3 +23,6 @@ Novos calouros nunca entenderão piadas do tipo
 Devido à exigência do Melgarejo em ver sempre código novo,
 eu consegui recuperar parte do histórico do meu projeto.
 Você pode acessá-la usando as ferramentas de arqueologia do Git.
+
+Os diagramas foram feitos usando ObjectAID.
+Os recursos foram feitos no MS Paint.
